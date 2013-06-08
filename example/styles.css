@@ -1,0 +1,29 @@
+body {
+  width: 650px;
+  margin: 80px auto;
+  font-family: Palatino, Times;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  line-height: 1.3em; }
+
+h1 {
+  font-size: 50px; }
+
+h1, h2, h3 {
+  font-family: Helvetica;
+  letter-spacing: 0em;
+  line-height: 1em; }
+
+@media screen and (max-width: 700px) {
+  body {
+    width: auto;
+    margin-top: 50px;
+    margin-left: 15px;
+    margin-right: 15px; } }
+@media screen and (max-width: 450px) {
+  body {
+    margin-top: 20px;
+    width: auto;
+    font-size: 14px;
+    margin-left: 15px;
+    margin-right: 15px; } }

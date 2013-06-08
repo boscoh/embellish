@@ -1,0 +1,15 @@
+template: example.haml
+title: Example Title for the Title Field
+url: /
+target: example.html
+links:
+  - 
+    - apple
+    - http://apple.com
+  - 
+    - google
+    - http://google.com
+chapter: 3
+---
+
+Really guys.
