@@ -17,6 +17,7 @@ from jinja2_hamlpy import HamlPyExtension
 
 from markdown import markdown
 
+version = '0.9'
 
 usage = '''
 ==================================================
@@ -237,7 +238,7 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
     template_dirs = [
       os.path.dirname(page['filename']),
       site['template_dir'],
-      os.path.dirname(__file__)
+      os.path.join(os.path.dirname(__file__), 'defaults')
     ]
     for template_dir in template_dirs:
       template_fname = os.path.join(

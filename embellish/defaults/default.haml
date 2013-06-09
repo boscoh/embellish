@@ -1,0 +1,71 @@
+%head
+  :css
+    body {
+      width: 650px;
+      margin: 80px auto;
+      font-family: Helvetica;
+      font-size: 18px;
+      color: #333;
+      letter-spacing: 0.1em;
+      line-height: 1.5em; }
+    h1 {
+      font-size: 50px; }
+    h1, h2, h3 {
+      font-family: Helvetica;
+      letter-spacing: 0em;
+      line-height: 1em; }
+    .timestamp {
+      font-size: 14px;
+      color: #999;
+      font-family: Helvetica; }
+    code {
+      background-color: #EEE;
+      font-size: 16px;
+      padding: 2px; 
+    }
+    .codehilite {
+      background-color: #EEE;
+      overflow: auto;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      font-size: 16px; 
+      line-height: 1.1em; 
+      padding-left: 2em;  }
+
+    @media screen and (max-width: 700px) {
+      body {
+        width: auto;
+        margin-top: 50px;
+        margin-left: 30px;
+        margin-right: 30px; } }
+
+    @media screen and (max-width: 450px) {
+      body {
+        margin-top: 20px;
+        width: auto;
+        font-size: 14px;
+        margin-left: 15px;
+        margin-right: 15px; } 
+      code,
+      .codehilite {
+        font-size: 12px;
+      }
+      h1 { 
+        font-size: 26px; }
+      h2, h3 {
+        font-size: 16px; }
+      h1, h2, h3 {
+        line-height: 1em; } }
+
+%body
+
+  .timestamp
+    - if 'category' in page and page.category:
+      {{ page.category }} //
+    {{ page.date.strftime("%d %b %Y") }}
+
+  %h1 {{ page.title }}
+
+  {{ page.content }}
+
+  
