@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import print_function
 import os
 import glob
 import stat
@@ -83,14 +84,14 @@ def open_home_with_delay(url, wait=2, force_refresh=False):
   if force_refresh:
     random_string = ''.join(random.choice(string.lowercase) for i in range(5))
     url += '?force_refresh_with_random_string_' + random_string
-  # threading.Timer(wait, lambda: webbrowser.open(url), ()).start()
-  webbrowser.open(url)
+  threading.Timer(wait, lambda: webbrowser.open(url), ()).start()
+  # webbrowser.open(url)
 
 
 def run(site_dir, monitor_dirs, regenerate_fn):
   app.regenerate = regenerate_fn
   app.site_dir = site_dir
-  app.monitor_dirs = monitor_dirs
+  app.monitor_dirs = list(set(monitor_dirs))
   app.checksum = None
   url = 'http://127.0.0.1:5000/'
   home = os.path.join(app.site_dir, 'index.html')
@@ -99,13 +100,14 @@ def run(site_dir, monitor_dirs, regenerate_fn):
     if htmls:
       url += os.path.basename(htmls[0])
   open_home_with_delay(url, force_refresh=True)
+  print('Will try to open', url)
   app.debug = False
   app.run()
 
 
 if __name__ == "__main__":
   if len(sys.argv) < 2:
-    print usage
+    print(usage)
   else:
     site_dir = os.path.abspath(sys.argv[1])
     run(site_dir, [], None)

@@ -19,23 +19,23 @@ templates (*haml) with a little SASS and HAML processing.
 print(usage)
 parser = argparse.ArgumentParser()
 parser.add_argument(
-  'fname', 
-  help='web directory or a site.yaml configuration file')
+  'target', 
+  help='web directory of source and output, or a site.yaml configuration file')
 parser.add_argument(
   '--monitor', '-m', action="store_true",
   help='triggers a local web-server that monitors the'
-  'contents directory')
+  ' contents directory')
 args = parser.parse_args()
 
-if os.path.isfile(args.fname):
-  site = engine.read_config_yaml(args.fname)
-  config_dir = os.path.dirname(args.fname)
-elif os.path.isdir(args.fname):
-  os.chdir(args.fname)
+if os.path.isfile(args.target):
+  site = engine.read_config_yaml(args.target)
+  config_dir = os.path.dirname(args.target)
+elif os.path.isdir(args.target):
+  os.chdir(args.target)
   site = engine.default_site
-  config_dir = args.fname
+  config_dir = args.target
 else:
-  print('Error: can\'t figure out {0}.'.format(args.fname))
+  print('Error: can\'t figure out {0}.'.format(args.target))
   sys.exit(1)
 
 engine.generate_site_incrementally(site)
@@ -51,9 +51,8 @@ if args.monitor:
   regenerate = lambda: engine.generate_site_incrementally(site)
 
   # get all directories needed to monitor
-  monitor_keys = ['content_dir', 'template_dir', 'media_dir']
-  monitor_dirs = [site[k] for k in monitor_keys]
-  monitor_dirs = list(set(monitor_dirs))
+  keys = ['content_dir', 'template_dir', 'media_dir']
+  monitor_dirs = [site[key] for key in keys]
 
   server.run(site_dir, monitor_dirs, regenerate)
 
