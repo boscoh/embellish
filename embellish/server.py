@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import os
+import glob
 import stat
 import logging
 import sys
@@ -40,6 +41,8 @@ def check_regeneration():
         fnames = [os.path.join(root, f) for f in files]
         checksum += sum(map(os.path.getmtime, fnames))
     # no changes in directories:
+    if app.checksum == None:
+      app.checksum = checksum
     if checksum == app.checksum:
       return
     app.checksum = checksum
@@ -87,8 +90,14 @@ def run(site_dir, monitor_dirs, regenerate_fn):
   app.regenerate = regenerate_fn
   app.site_dir = site_dir
   app.monitor_dirs = monitor_dirs
-  app.checksum = 0
-  open_home_with_delay('http://127.0.0.1:5000/', force_refresh=True)
+  app.checksum = None
+  url = 'http://127.0.0.1:5000/'
+  home = os.path.join(app.site_dir, 'index.html')
+  if not os.path.isfile(home):
+    htmls = glob.glob(os.path.join(app.site_dir, '*html'))
+    if htmls:
+      url += os.path.basename(htmls[0])
+  open_home_with_delay(url, force_refresh=True)
   app.debug = False
   app.run()
 

@@ -29,9 +29,11 @@ setup(
         'jinja2', 
         'hamlpy', 
         'jinja2-hamlpy', 
+        'rapydcss',
+        'scss',
         'flask',
     ],
     packages=['embellish',],
     package_data={"embellish": ['defaults/default.haml',]},
-    scripts=['bin/embellish', 'bin/monitor'],
+    scripts=['bin/embellish'],
 )

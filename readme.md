@@ -1,5 +1,5 @@
 
-# Embellish  
+# Embellish
 
 ## A low-friction static web-site generator
 
@@ -19,11 +19,7 @@ To install:
 
 Python depencencies should be automatically installed. If you want to manually install dependencies:
 
-    pip install markdown pyyaml jinja2 hamlpy jinja2_haml flask
-
-If you have .sass files in your project then you have to install [sass](http://sass-lang.com/):
-   
-    gem install sass
+    pip install markdown pyyaml jinja2 hamlpy jinja2_haml flask rapydcss scss
 
 Now create a `example.mkd` in a temporary directory:
 
@@ -46,12 +42,12 @@ There are many formats for webdesign. For markup text, there's .markdown, .texti
 
 Well, here's what I recommend:
 
-  - markdown for markup 
-  - YAML for metadata
-  - HAML/Jinja2 for templating
-  - SASS for CSS 
+  - markdown for marking-up your prose 
+  - YAML to describe your page metadata
+  - HAML/Jinja2 for templating HTML
+  - SASS for concise CSS 
 
-It is ironic, I know, but all that significant whitespace technology - YAML, HAML and SASS - came from Ruby. But when placed in the context of Python, they fit better than a tuxedo on Daniel Craig.
+It is ironic, I know, but all that significant whitespace technology - YAML, HAML and SASS - is more prevalent in the Ruby world. But when placed in the context of Python, they fit better than a tuxedo on Daniel Craig.
 
 In particular, content is expected as markdown with a YAML header (separated by `---`), call this `example.mkd`:
 

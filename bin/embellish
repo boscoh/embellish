@@ -1,44 +1,60 @@
 #!/usr/bin/env python
-from embellish import engine
+from __future__ import print_function
 import sys
 import os
-import shutil
-import codecs
-import datetime
-from hashlib import md5
-import re
-import copy
+import argparse
 import pprint
 
-import yaml
-
-from jinja2 import Environment, FileSystemLoader
-from jinja2_hamlpy import HamlPyExtension
-
-from markdown import markdown
-
+from embellish import engine, server
 
 usage = '''
-==================================================
-Embellish: a low friction static website generator
-==================================================
+===================================================
+EMBELLISH: a low friction static website generator.
+=================================================== 
 Looks for markdown files (*markdown, *mkd, *md, *txt) and
-converts them into HTML pages. 
-
-Metadata in the markdown files can invoke HAML/jinja2
-templates (*haml), or jinja2 templates(any other extension).
-
-usage: embellish.py web_dir|site.yaml 
+converts them into HTML pages using HAML/jinja2
+templates (*haml) with a little SASS and HAML processing.
 '''
 
-if len(sys.argv) == 1:
-  print(usage)
-else:
-  if os.path.isfile(sys.argv[1]):
-    site = engine.read_config_yaml(sys.argv[1])
-  else:
-    os.chdir(sys.argv[1])
-    site = engine.default_site
-  engine.generate_site_incrementally(site)
+print(usage)
+parser = argparse.ArgumentParser()
+parser.add_argument(
+  'fname', 
+  help='web directory or a site.yaml configuration file')
+parser.add_argument(
+  '--monitor', '-m', action="store_true",
+  help='triggers a local web-server that monitors the'
+  'contents directory')
+args = parser.parse_args()
 
-  
+if os.path.isfile(args.fname):
+  site = engine.read_config_yaml(args.fname)
+  config_dir = os.path.dirname(args.fname)
+elif os.path.isdir(args.fname):
+  os.chdir(args.fname)
+  site = engine.default_site
+  config_dir = args.fname
+else:
+  print('Error: can\'t figure out {0}.'.format(args.fname))
+  sys.exit(1)
+
+engine.generate_site_incrementally(site)
+
+if args.monitor:
+  site_dir = os.path.abspath(
+      os.path.join(config_dir, site['output_dir']))
+  # normalize all paths
+  for key in site.keys():
+    if key.endswith('_dir') or key.startswith('cache'):
+      site[key] = os.path.abspath(os.path.join(site_dir, site[key]))
+
+  regenerate = lambda: engine.generate_site_incrementally(site)
+
+  # get all directories needed to monitor
+  monitor_keys = ['content_dir', 'template_dir', 'media_dir']
+  monitor_dirs = [site[k] for k in monitor_keys]
+  monitor_dirs = list(set(monitor_dirs))
+
+  server.run(site_dir, monitor_dirs, regenerate)
+
+

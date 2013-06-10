@@ -12,6 +12,10 @@ import pprint
 
 import yaml
 
+from rapydcss import SASStoSCSS
+import StringIO
+import scss
+
 from jinja2 import Environment, FileSystemLoader
 from jinja2_hamlpy import HamlPyExtension
 
@@ -270,7 +274,11 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 # transfer functions to copy the static directory
 
 def sass_to_css(src, dst): 
-  os.system('sass {0} {1}'.format(src, dst))
+  scss_buffer = StringIO.StringIO()
+  SASStoSCSS.parse_file(src, scss_buffer)
+  scss_compiler = scss.Scss()
+  scss_text = scss_compiler.compile(scss_buffer.getvalue())
+  write_text(dst, scss_text)
 
 
 def jinjahaml_to_html(src, dst): 
