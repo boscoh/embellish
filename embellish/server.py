@@ -83,7 +83,8 @@ def open_home_with_delay(url, wait=2, force_refresh=False):
   if force_refresh:
     random_string = ''.join(random.choice(string.lowercase) for i in range(5))
     url += '?force_refresh_with_random_string_' + random_string
-  threading.Timer(wait, lambda: webbrowser.open(url), ()).start()
+  # threading.Timer(wait, lambda: webbrowser.open(url), ()).start()
+  webbrowser.open(url)
 
 
 def run(site_dir, monitor_dirs, regenerate_fn):
