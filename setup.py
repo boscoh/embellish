@@ -7,11 +7,9 @@ from setuptools.command import sdist
 del sdist.finders[:]
 
 description = \
-"""Embellish is a static website generator. It's a low
-friction command-line tool that converts markdown text
-files into HTML. 
+"""Embellish is a low-friction static website generator.
 
-See more at httP;;/github.com/boscoh/embellish.
+Docs at http://github.com/boscoh/embellish.
 """
 
 setup(
@@ -30,7 +28,7 @@ setup(
         'hamlpy', 
         'jinja2-hamlpy', 
         'rapydcss',
-        'scss',
+        'pyScss',
         'flask',
     ],
     packages=['embellish',],
