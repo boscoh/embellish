@@ -1,54 +1,57 @@
 
 # Embellish  
 
-## A markdown&rarr;html static web-site generator
+## A low-friction static web-site generator
 
-There are many Python static web generators. Many are opinionated - like where you put your files and what to call them - this one is not. It will run even in a flat directory.
+There are many Python static web generators. Many are opinionated - like how you must name your files - this one is not. `Embellish` is quite happy to convert markdown files in any directory into HTML.
 
-It is also fast. It incrementally rebuilds my blog of ~300 posts, 6 categories and 25MB of images/movies, in about a second on my Macbook air. Writing to file is conservative so you can rely on  modification dates.
+`Embellish` is fast: it incrementally rebuilds my blog of ~300 posts, 6 categories, and 25MB of assets in ~1 second on my Macbook air. 
 
-The data model is transparent. It's not an object, it's a dictionary. Remember those? The main `page` dictionary is populated directly from the yaml metadata in your markdown, which is then passed into your templates.
+The data model in `embellish` is transparent. It's not an object, it's a dictionary. Remember those? The YAML metadata in your markdown is slurped into the primary `page` dictionary which is in turn inserted directly into your templates.
 
-There is no plugin system, but you can extend `embellish` with function hooks. Yes it's a little bit more work, but function hooks allow you to add new logic directly in Python. I think this is ultimately easier than working with Plugin rules, and DSL's of other website generators.
+There is no plugin system: you extend `embellish` with function hooks. Yes it's a little bit more work, but you get to write function hooks directly in Python, which is ultimately easier than futzing around with plugin rules and DSL's.
 
 ## Installation
 
-Here are the dependencies
+To install:
 
-- markdown: a python library that converts plain-text to HTML
-- yaml: a python library that converts a YAML file into a Python dictionary
-- jinja2: a python templating library
-- hamply: a python library for hybrid HAML/django2 templates 
-- jinja2_haml: a hook that lets jinja2 use hamlply templates
-- flask: a minimalist web framework to run our little local web-server
-- sass: a ruby program that converts sass files into CSS
+    pip install embellish
 
-For the python programs, after installing python, easy_install and pip:
+Python depencencies should be automatically installed. If you want to manually install dependencies:
 
-    pip install markdown yaml jinja2 hamlpy jinja2_haml flask
+    pip install markdown pyyaml jinja2 hamlpy jinja2_haml flask
 
-You'll have to install it:
+If you have .sass files in your project then you have to install [sass](http://sass-lang.com/):
    
     gem install sass
 
-Get embellish from github:
+Now create a `example.mkd` in a temporary directory:
 
-    pip install 
+    title: An example file
+    category: silly
+    ---
+    This is an example file.
 
-Now you're good to good.
+Save the file, and do:
+
+    embellish .
+
+You should then find `example.html` in your directory. As no templates were specified, a default responsive-web-design is used (`embellish/defaults/default.haml`).
+
+
 
 ## My choice of formats
 
-There are many formats for webdesign, perhaps too many. For markup text, there's markdown, textile and rsT. For CSS stylings, there's less, scss and sass. For Python templates, there's django, jinja, cheetah and mako. 
+There are many formats for webdesign. For markup text, there's .markdown, .textile and .rsT. For CSS, there's .less, .scss and .sass. For Python templates, there's Django, Jinja, Cheetah and Mako. For metadata, there's JSON, YAML, Python pickle.
 
-Anyway, here's the setup I recommend:
+Well, here's what I recommend:
 
-  - markdown for text 
-  - yaml for metadata
-  - haml/jinja2 to write HTML templates
-  - sass for the CSS styling
+  - markdown for markup 
+  - YAML for metadata
+  - HAML/Jinja2 for templating
+  - SASS for CSS 
 
-It is ironic, I know, but all that significant whitespace technology - yaml, haml and sass - came from Ruby. But when these whitespace-based formats are placed in the context of Python, it fits better than a tuxedo on Daniel Craig.
+It is ironic, I know, but all that significant whitespace technology - YAML, HAML and SASS - came from Ruby. But when placed in the context of Python, they fit better than a tuxedo on Daniel Craig.
 
 In particular, content is expected as markdown with a YAML header (separated by `---`), call this `example.mkd`:
 
@@ -148,16 +151,17 @@ In embellish, there's no need to define 'types' of posts. Simply set the `page.t
 Every page is populated with a set of default metadata. The best way to show this is the default page metadata dictionary from the Python source code:
 
     page = {
+      'template': 'default.haml',  # name of template file
       'filename': fname,  # name of markdown file
       'modified': os.path.getmtime(fname),  # unix time number of file  
-      'excerpt': '', # text to put in excerpt, no tags please!
       'checksum': '', # checksum used to check final output to avoid redundant writes
+      'excerpt': '', # text to put in excerpt, no tags please!
       'content': '',  # main text of article
-      'category': '',  # category of article for indexing 
       'title': '',  # title for indexing and for large display
+      'category': '',  # category of article for indexing 
+      'rel_site_url': '',  # the top site directory relative to this page
       'date': None,  # published date
       'slug': None,  # url-safe name of article used to make url and files
-      'template': 'default.haml',  # name of template file
       'url': '',   # relative url used for links in index files
       'target': '',    # target filename, maybe different to url due to redirection
       'index': False,   # indicates if this is an indexing page
@@ -204,25 +208,27 @@ Your template can access the 'page.subpages' field, and thus create your list of
 On pagination: sorry, but I hate pagination on websites, so I haven't implemented it here. My experience is that most blogs are small and don't have that many articles to archive, so why don't you put all the posts in a category on one page? 
 
 
-## URLS
+## URLs
 
-One of the biggest concerns in building a web-site is putting the files in the right place, so that clean-orderly urls can be generated.
+One of the biggest concerns in building a web-site is putting the files in the right place, so that clean URLs can be generated.
 
-A key design principle of embellish is that it let's you determine the url and file placement as much as possible. Regardless, the page metadata field 'page.target' will contain the filename of the target HTML file. Thus the output HTML will be written in the 'site.output_dir' directory to 'page.target' where 'page.target' may include children directories. 
+A key design principle of embellish is that it lets you determine the URL and file placement as much as possible. No matter what, 'page.target' will contain the filename of the target HTML file, which is written in the 'site.output_dir' directory. Any child sub-directories will be created on the fly.
 
-Most of the time 'page.url' will match 'page.target', and it will kept as a relative 'page.url'. Thus in your template files, you can refer to the page's url in a relative sense:
+Most of the time 'page.url' will match 'page.target', and it will kept as a URL relative to the site's root directory. If no URLs are specified, then it is assumed that the filename of the markdown file with respect to the 'site.content_dir' represents the 'page.target'. In flat-file mode, this means the HTML will appear in the same directory as the markdown file.
 
-    %a{href="{{ page.url }}"} relative link
+An important design principle for `embellish` is that relative URLs should work. That way sites can be placed in any sub-directory on the remote server. 
 
-In an absolute sense:
+To use relative URLs in your templates is easy. Let's say in a `page`, you want to refer to `subpage.url`. You then use the `page.rel_site_url` field to take you from `page` to the root directory of the site. Then to take you down to `subpage`, you use `subpage.url`:
 
-    %a{href="/{{ page.url }}"} absolute link
+    %a{href="{{ page.rel_site_url }}/{{ subpage.url }}"} relative link
 
-And with the full url:
+If you don't care about relative directories, you can just use `subpage.url` from `/`:
 
-    %a{href="{{ site.url }}/{{ page.url }}"} full url link
+    %a{href="/{{ subpage.url }}"} absolute link
 
-If no url's are specified, then it is assumed that the filename of the markdown file with respect to the 'site.content_dir' represents the 'page.target'. In flat-file mode, this means the HTML will appear in the same directory as the markdown file.
+And with the full url in case you are interacting with external javascript libraries:
+
+    %a{href="{{ site.url }}/{{ subpage.url }}"} full url link
 
 Two other fields need to be mentioned. Sometimes legitimate filenames cannot serve as url's, so a conversion is done to turn the basename of the filename into a 'page.slug'. This can be directly overriden if the 'page.slug' field is given.
 

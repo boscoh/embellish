@@ -1,8 +1,19 @@
 #!/usr/bin/env python
 import os
-from distutils.core import setup
+from setuptools import setup
 
-data_dir = os.path.join(os.getcwd(), 'embellish/defaults')
+# This is to disable the 'black magic' surrounding versioned repositories... Terrible!
+from setuptools.command import sdist
+del sdist.finders[:]
+
+description = \
+"""Embellish is a static website generator. It's a low
+friction command-line tool that converts markdown text
+files into HTML. 
+
+See more at httP;;/github.com/boscoh/embellish.
+"""
+
 setup(
     name='embellish',
     version='0.9',
@@ -10,13 +21,16 @@ setup(
     author_email='boscoh@gmail.com',
     url='http://github.com/boscoh/embellish',
     description='Static site generator',
-    long_description=
-        "Embellish is a static website generator. It turns a pile of templates, "
-        "content, and resources (like CSS and images) into a neat stack of "
-        "plain HTML. You run it on your local computer, and it generates a "
-        "directory of web files that you can upload to your web server, or "
-        "serve directly.",
-    requires=['pyyaml', 'jinja2', 'Markdown', 'Flask', 'jinja2_hamlpy', 'hamlpy'],
+    long_description=description,
+    license='BSD',
+    install_requires=[
+        'markdown',
+        'PyYaml',
+        'jinja2', 
+        'hamlpy', 
+        'jinja2-hamlpy', 
+        'flask',
+    ],
     packages=['embellish',],
     package_data={"embellish": ['defaults/default.haml',]},
     scripts=['bin/embellish', 'bin/monitor'],

@@ -86,8 +86,9 @@ def read_page(fname):
     'checksum': '', # checksum used to check final output to avoid redundant writes
     'excerpt': '', # text to put in excerpt, no tags please!
     'content': '',  # main text of article
-    'category': '',  # category of article for indexing 
     'title': '',  # title for indexing and for large display
+    'category': '',  # category of article for indexing 
+    'rel_site_url': '',  # the top site directory relative to this page
     'date': None,  # published date
     'slug': None,  # url-safe name of article used to make url and files
     'url': '',   # relative url used for links in index files
@@ -145,7 +146,6 @@ def parse_metadata(page, site):
     page['date'] = datetime.datetime.combine(
          page['date'], datetime.time(0, 0))
 
-  print(page['template'])
   if not get_dict_val(page, 'template'):
     page['template'] = 'default.haml'
 

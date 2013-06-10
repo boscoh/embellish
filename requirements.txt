@@ -1,7 +1,0 @@
-embellish
-PyYAML
-jinja2
-Markdown
-Flask
-jinja2_hamlpy
-hamlpy
