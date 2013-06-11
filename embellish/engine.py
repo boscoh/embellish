@@ -7,8 +7,8 @@ import codecs
 import datetime
 from hashlib import md5
 import re
-import copy
 import pprint
+from unicodedata import normalize
 
 import yaml
 
@@ -117,6 +117,18 @@ def convert_markdown(text):
   return markdown(text, extensions=['codehilite'])
 
 
+# from http://flask.pocoo.org/snippets/5/
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+def slugify(text, delim=u'-'):
+    """Generates an slightly worse ASCII-only slug."""
+    result = []
+    for word in _punct_re.split(text.lower()):
+        word = normalize('NFKD', word).encode('ascii', 'ignore')
+        if word:
+            result.append(word)
+    return unicode(delim.join(result))
+
+
 # default 'parse_page_fn' used in 'read_page'
 def parse_metadata(page, site):
   # markdown conversion here
@@ -132,8 +144,8 @@ def parse_metadata(page, site):
       page['excerpt'] += ' ...'
 
   if not get_dict_val(page, 'slug'):
-    basename = os.path.basename(page['filename'])
-    page['slug'] = os.path.splitext(basename)[0]
+    basename = os.path.splitext(os.path.basename(page['filename']))[0]
+    page['slug'] = slugify(unicode(basename))
 
   if not get_dict_val(page, 'url'):
     dirname = os.path.dirname(page['filename'])
@@ -272,13 +284,19 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 
 
 # transfer functions to copy the static directory
+_scss_compiler = scss.Scss()
 
-def sass_to_css(src, dst): 
-  scss_buffer = StringIO.StringIO()
-  SASStoSCSS.parse_file(src, scss_buffer)
-  scss_compiler = scss.Scss()
-  scss_text = scss_compiler.compile(scss_buffer.getvalue())
-  write_text(dst, scss_text)
+def scss_to_css(src, dst): 
+  if src.endswith('.sass'):
+    scss_buffer = StringIO.StringIO()
+    SASStoSCSS.parse_file(src, scss_buffer)
+    scss_text = scss_buffer.getvalue()
+  elif src.endswith('.scss'):
+    scss_text = read_text(src)
+  else:
+    return 'Can\'t recognize SCSS file {}'.format(src)
+  css_text = _scss_compiler.compile(scss_text)
+  write_text(dst, css_text)
 
 
 def jinjahaml_to_html(src, dst): 
@@ -299,9 +317,10 @@ def copy_or_process_sass_and_haml(src, dst):
   """
 
   transfer_fn = shutil.copy2
-  if has_extensions(src, '.sass'):
-    dst = dst.replace('.sass', '.css')
-    transfer_fn = sass_to_css
+
+  if has_extensions(src, '.sass', '.scss'):
+    dst = os.path.splitext(dst)[0] + '.css'
+    transfer_fn = scss_to_css
 
   if src.endswith('.haml'):
     # check if it's pure haml and not a haml/jinja template
