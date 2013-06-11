@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import os
 from setuptools import setup
 
 # This is to disable the 'black magic' surrounding versioned repositories... Terrible!
