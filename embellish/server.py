@@ -38,7 +38,7 @@ def check_regeneration():
   if app.monitor_dirs:
     checksum = 0
     for check_dir in app.monitor_dirs:
-      for root, dirs, files in os.walk(check_dir):
+      for root, dirs, files in os.walk(check_dir + '/'):
         fnames = [os.path.join(root, f) for f in files]
         checksum += sum(map(os.path.getmtime, fnames))
     # no changes in directories:

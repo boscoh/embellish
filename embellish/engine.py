@@ -300,12 +300,8 @@ def scss_to_css(src, dst):
 
 
 def jinjahaml_to_html(src, dst): 
-  try:
-    template = get_jinjahaml_template(src)
-    text = template.render()
-  except:
-    print('Couldn\'t parse HAML file', src)
-    return
+  template = get_jinjahaml_template(src)
+  text = template.render()
   write_text(dst, text)
 
 

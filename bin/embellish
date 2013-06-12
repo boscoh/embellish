@@ -42,12 +42,13 @@ else:
 engine.generate_site_incrementally(site)
 
 if args.monitor:
-  # normalize all paths
   site_dir = os.path.abspath(
       os.path.join(config_dir, site['output_dir']))
+
+  # normalize all paths
   for key in site.keys():
     if key.endswith('_dir') or key.startswith('cache'):
-      site[key] = os.path.abspath(os.path.join(site_dir, site[key]))
+      site[key] = os.path.abspath(os.path.join(config_dir, site[key]))
 
   regenerate = lambda: engine.generate_site_incrementally(site)
 
