@@ -26,7 +26,7 @@ setup(
         'jinja2', 
         'hamlpy', 
         'jinja2-hamlpy', 
-        'rapydcss',
+        'sassin',
         'pyScss',
         'flask',
     ],
