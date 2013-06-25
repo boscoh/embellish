@@ -12,8 +12,7 @@ from unicodedata import normalize
 
 import yaml
 
-from rapydcss import SASStoSCSS
-import StringIO
+import sassin
 import scss
 
 from jinja2 import Environment, FileSystemLoader
@@ -284,13 +283,12 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 
 
 # transfer functions to copy the static directory
-_scss_compiler = scss.Scss()
+_scss_compiler = scss.Scss(scss_opts={'compress':False})
 
 def scss_to_css(src, dst): 
   if src.endswith('.sass'):
-    scss_buffer = StringIO.StringIO()
-    SASStoSCSS.parse_file(src, scss_buffer)
-    scss_text = scss_buffer.getvalue()
+    sass_text = open(src).read()
+    scss_text = sassin.compile(sass_text)
   elif src.endswith('.scss'):
     scss_text = read_text(src)
   else:
