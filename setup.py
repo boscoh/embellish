@@ -25,7 +25,6 @@ setup(
         'PyYaml',
         'jinja2', 
         'hamlpy', 
-        'jinja2-hamlpy', 
         'sassin',
         'pyScss',
         'flask',

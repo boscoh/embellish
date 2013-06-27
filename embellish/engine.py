@@ -16,7 +16,7 @@ import sassin
 import scss
 
 from jinja2 import Environment, FileSystemLoader
-from jinja2_hamlpy import HamlPyExtension
+from hamlpy.ext import HamlPyExtension
 
 from markdown import markdown
 
