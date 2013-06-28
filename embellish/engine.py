@@ -10,6 +10,8 @@ import re
 import pprint
 from unicodedata import normalize
 
+import dateutil.parser
+
 import yaml
 
 import sassin
@@ -106,6 +108,8 @@ def read_page(fname):
   parts = text.split('\n---\n')
   if len(parts) > 1:
     page.update(yaml.load(parts[0]))
+    if isinstance(page['date'], str):
+      page['date'] = dateutil.parser.parse(page['date'])
   if len(parts) > 2:
     page['excerpt'] = parts[1]
   page['content'] = parts[-1]
@@ -113,7 +117,7 @@ def read_page(fname):
 
 
 def convert_markdown(text):
-  return markdown(text, extensions=['codehilite'])
+  return markdown(text, extensions=['codehilite(guess_lang=False)'])
 
 
 # from http://flask.pocoo.org/snippets/5/
