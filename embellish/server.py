@@ -79,30 +79,23 @@ def catch_all(path):
     return 'Problem interpreting {0} as local file {1}'.format(path, fname)
 
 
-def open_home_with_delay(url, wait=2, force_refresh=False):
-  'Opens site in browser, forces refresh with random query.'
-  if force_refresh:
-    random_string = ''.join(random.choice(string.lowercase) for i in range(5))
-    url += '?force_refresh_with_random_string_' + random_string
-  threading.Timer(wait, lambda: webbrowser.open(url), ()).start()
-  # webbrowser.open(url)
-
-
 def run(site_dir, monitor_dirs, regenerate_fn):
   app.regenerate = regenerate_fn
   app.site_dir = site_dir
   app.monitor_dirs = list(set(monitor_dirs))
   app.checksum = None
-  url = 'http://127.0.0.1:5000/'
+  port = random.randint(5000, 65535)
+  url = 'http://127.0.0.1:{}/'.format(port)
   home = os.path.join(app.site_dir, 'index.html')
   if not os.path.isfile(home):
     htmls = glob.glob(os.path.join(app.site_dir, '*html'))
     if htmls:
       url += os.path.basename(htmls[0])
-  open_home_with_delay(url, force_refresh=True)
+  wait = 2
+  threading.Timer(wait, lambda: webbrowser.open(url), ()).start()
   print('Will try to open', url)
   app.debug = False
-  app.run()
+  app.run(port=port)
 
 
 if __name__ == "__main__":
