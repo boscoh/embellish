@@ -22,6 +22,9 @@ from hamlpy.ext import HamlPyExtension
 
 from markdown import markdown
 
+import coffeescript
+
+
 version = '0.9'
 
 usage = '''
@@ -291,7 +294,7 @@ _scss_compiler = scss.Scss(scss_opts={'compress':False})
 
 def scss_to_css(src, dst): 
   if src.endswith('.sass'):
-    sass_text = open(src).read()
+    sass_text = read_text(src)
     scss_text = sassin.compile(sass_text)
   elif src.endswith('.scss'):
     scss_text = read_text(src)
@@ -307,6 +310,12 @@ def jinjahaml_to_html(src, dst):
   write_text(dst, text)
 
 
+def coffee_compile(src, dst): 
+  in_text = read_text(src)
+  out_text = coffeescript.compile(in_text)
+  write_text(dst, out_text)
+
+
 # default 'copy_file_fn' used in 'transfer_media_files'
 def copy_or_process_sass_and_haml(src, dst):
   """
@@ -319,6 +328,10 @@ def copy_or_process_sass_and_haml(src, dst):
   if has_extensions(src, '.sass', '.scss'):
     dst = os.path.splitext(dst)[0] + '.css'
     transfer_fn = scss_to_css
+
+  if has_extensions(src, '.coffee'):
+    dst = os.path.splitext(dst)[0] + '.js'
+    transfer_fn = coffee_compile
 
   if src.endswith('.haml'):
     # check if it's pure haml and not a haml/jinja template

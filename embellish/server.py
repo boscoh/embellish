@@ -52,14 +52,16 @@ def check_regeneration():
 
 def send_fname(fname):
   app.logger.info('FETCHING: {0}'.format(fname))
+  if fname.endswith('.html'):
+    check_regeneration()
   return send_from_directory(*os.path.split(fname))
 
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def catch_all(path):
-    check_regeneration()
     fname = os.path.join(app.site_dir, path.split('?')[0])
+
     # handle directory redirects -> index.html
     if os.path.isdir(fname):
       fname = os.path.join(fname, 'index.html')
@@ -91,10 +93,9 @@ def run(site_dir, monitor_dirs, regenerate_fn):
     htmls = glob.glob(os.path.join(app.site_dir, '*html'))
     if htmls:
       url += os.path.basename(htmls[0])
+  print('Will try to open', url)
   wait = 2
   threading.Timer(wait, lambda: webbrowser.open(url), ()).start()
-  print('Will try to open', url)
-  app.debug = False
   app.run(port=port)
 
 
