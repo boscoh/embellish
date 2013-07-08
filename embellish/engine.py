@@ -348,6 +348,7 @@ def copy_or_process_sass_and_haml(src, dst):
       return None
 
   print('{0} -> {1}'.format(src, dst))
+  os.remove(dst)
   transfer_fn(src, dst)
 
 
