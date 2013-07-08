@@ -191,6 +191,8 @@ def get_pages(
           page['content'] = convert_content_fn(page['content'])
           parse_metadata_fn(page, site)
         site['pages'].append(page)
+    if not site['recursive']:
+      break
 
 
 # Writing file functions
@@ -365,7 +367,7 @@ def transfer_media_files(site, copy_file_fn=copy_or_process_sass_and_haml):
     for name in os.listdir(src):
       srcname = os.path.join(src, name)
       dstname = os.path.join(dst, name)
-      if os.path.isdir(srcname):
+      if os.path.isdir(srcname) and site['recursive']:
         copy_tree(srcname, dstname)
       else:
         copy_file_fn(srcname, dstname)
@@ -382,6 +384,7 @@ def generate_site(
     render_template_fn=render_jinjahaml_template,
     copy_file_fn=copy_or_process_sass_and_haml):
 
+  print(">>> Recursion mode:", site['recursive'])
   print(">>> Scanning pages")
   get_pages(site, convert_content_fn, parse_metadata_fn)
 
@@ -424,6 +427,7 @@ default_site = {
   'media_dir': '.',  # files to be correctly directly into the output file
   'cached_pages': 'site.cache',  # if not empty, caching file to spend updates
   'ext': '.html',
+  'recursive': True,
   'pages': [],  # stores all the processed pages found in 'content_dir'
 }
 

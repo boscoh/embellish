@@ -26,6 +26,9 @@ parser.add_argument(
   '--monitor', '-m', action="store_true",
   help='triggers a local web-server that monitors the'
   ' contents directory')
+parser.add_argument(
+  '--flat', '-f', action="store_true",
+  help='looks only in the directory specified')
 args = parser.parse_args()
 
 if os.path.isfile(args.target):
@@ -38,6 +41,9 @@ elif os.path.isdir(args.target):
 else:
   print('Error: can\'t figure out {0}.'.format(args.target))
   sys.exit(1)
+
+if args.flat:
+  site['recursive'] = False
 
 engine.generate_site_incrementally(site)
 
