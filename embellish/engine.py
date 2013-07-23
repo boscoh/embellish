@@ -294,7 +294,7 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 # transfer functions to copy the static directory
 _scss_compiler = scss.Scss(scss_opts={'compress':False})
 
-def scss_to_css(src, dst): 
+def scss_to_css(src, dst, site): 
   if src.endswith('.sass'):
     sass_text = read_text(src)
     scss_text = sassin.compile(sass_text)
@@ -306,20 +306,23 @@ def scss_to_css(src, dst):
   write_text(dst, css_text)
 
 
-def jinjahaml_to_html(src, dst): 
+def jinjahaml_to_html(src, dst, site): 
   template = get_jinjahaml_template(src)
-  text = template.render()
+  page = {
+    'filename': dst,  # name of markdown file
+  }
+  text = template.render({'site':site, 'page':page})
   write_text(dst, text)
 
 
-def coffee_compile(src, dst): 
+def coffee_compile(src, dst, site): 
   in_text = read_text(src)
   out_text = coffeescript.compile(in_text)
   write_text(dst, out_text)
 
 
 # default 'copy_file_fn' used in 'transfer_media_files'
-def copy_or_process_sass_and_haml(src, dst):
+def copy_or_process_sass_and_haml(src, dst, site):
   """
   Copies and/or processes in file transfer.
   Returns (src, dst) or None if skip.
@@ -348,10 +351,11 @@ def copy_or_process_sass_and_haml(src, dst):
   if os.path.isfile(dst):
     if os.path.getmtime(dst) >= os.path.getmtime(src):
       return None
+    else:
+      os.remove(dst)
 
   print('{0} -> {1}'.format(src, dst))
-  os.remove(dst)
-  transfer_fn(src, dst)
+  transfer_fn(src, dst, site)
 
 
 def transfer_media_files(site, copy_file_fn=copy_or_process_sass_and_haml):
@@ -370,7 +374,7 @@ def transfer_media_files(site, copy_file_fn=copy_or_process_sass_and_haml):
       if os.path.isdir(srcname) and site['recursive']:
         copy_tree(srcname, dstname)
       else:
-        copy_file_fn(srcname, dstname)
+        copy_file_fn(srcname, dstname, site)
 
   copy_tree(relpath(site['media_dir']), relpath(site['output_dir']))
 
