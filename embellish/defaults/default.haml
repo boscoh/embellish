@@ -2,40 +2,47 @@
   :css
     body {
       width: 650px;
-      margin: 80px auto;
+      margin: 100px auto 10px auto;
       font-family: Helvetica;
-      font-size: 18px;
-      color: #333;
-      letter-spacing: 0.1em;
+      font-size: 14px;
+      color: #000;
+      letter-spacing: 0.05em;
       line-height: 1.5em; }
     h1 {
-      font-size: 50px; }
+      font-size: 50px; 
+      margin-top: 2em; }
     h1, h2, h3 {
       font-family: Helvetica;
       letter-spacing: 0em;
-      line-height: 1em; }
-    .timestamp {
-      font-size: 14px;
-      color: #999;
-      font-family: Helvetica; }
-    code {
-      background-color: #F9F9F9;
-      border: 1px solid #DDD;
-      font-size: 14px;
-      padding: 2px; 
+      line-height: 1em; 
+      margin-bottom: 0; }
+    h2 {
+      padding-bottom: 0.1em;
+      margin-top: 2em;
+      border-bottom: 1px solid #CCC;
     }
+    .timestamp {
+      margin-top: 6em;
+      text-align: right;
+      border-top: 1px solid #CCC;
+      font-size: 12px;
+      font-family: monospace;
+      color: #999; }
+    code {
+      padding: 0px 5px; }
     pre {
       margin: 0;
     }
     .codehilite {
-      background-color: #F9F9F9;
-      border: 1px solid #DDD;
       overflow: auto;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      font-size: 14px; 
-      line-height: 1.2em; 
-      padding-left: 2em;  }
+      padding: 7px 20px;
+      }
+    code, .codehilite {
+      background-color: #EEE;
+      border: 1px solid #DDD;
+      color: #333;
+      font-size: 12px; 
+      line-height: 1.5em; }
 
     @media screen and (max-width: 700px) {
       body {
@@ -48,12 +55,10 @@
       body {
         margin-top: 20px;
         width: auto;
-        font-size: 14px;
         margin-left: 15px;
         margin-right: 15px; } 
       code,
       .codehilite {
-        font-size: 12px;
       }
       h1 { 
         font-size: 26px; }
@@ -64,13 +69,15 @@
 
 %body
 
-  .timestamp
-    - if 'category' in page and page.category:
-      {{ page.category }} //
-    {{ page.date.strftime("%d %b %Y") }}
-
-  %h1 {{ page.title }}
+  - if page.title:
+    %h1 {{ page.title }}
 
   {{ page.content }}
+
+  .timestamp
+    - if 'category' in page and page.category:
+      category: {{ page.category }},
+    updated: {{ page.date.strftime("%d %b %Y") }}
+
 
   
