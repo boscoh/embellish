@@ -10,7 +10,12 @@ import random
 import webbrowser
 import threading 
 
-from flask import Flask, request, redirect, send_from_directory
+# import gevent
+# import gevent.monkey
+# from gevent.pywsgi import WSGIServer
+# gevent.monkey.patch_all()
+
+from flask import Flask, request, Response, redirect, send_from_directory
 
 
 usage = '''
@@ -32,9 +37,9 @@ handler.setLevel(logging.INFO)
 app.logger.addHandler(handler)  
 
 
-def check_regeneration():
+def is_something_changed():
   if app.regenerate is None:
-    return
+    return False
   if app.monitor_dirs:
     checksum = 0
     for check_dir in app.monitor_dirs:
@@ -45,15 +50,37 @@ def check_regeneration():
     if app.checksum == None:
       app.checksum = checksum
     if checksum == app.checksum:
-      return
+      return False
     app.checksum = checksum
-  app.regenerate()
+  return True
+
+
+def regenerate_site_if_changed():
+  if is_something_changed():
+    app.regenerate()
+
+
+# def event_stream():
+#     count = 0
+#     while True:
+#         gevent.sleep(2)
+#         if is_something_changed():
+#           app.regenerate()
+#           yield 'data: %s\n\n' % count
+#         count += 1
+
+
+# @app.route('/my_event_source')
+# def sse_request():
+#     return Response(
+#             event_stream(),
+#             mimetype='text/event-stream')
 
 
 def send_fname(fname):
   app.logger.info('FETCHING: {0}'.format(fname))
   if fname.endswith('.html'):
-    check_regeneration()
+    regenerate_site_if_changed()
   return send_from_directory(*os.path.split(fname))
 
 

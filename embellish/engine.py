@@ -187,9 +187,13 @@ def get_pages(
             cached_pages[f]['modified'] >= os.path.getmtime(f):
           page = cached_pages[f]
         else:
-          page = read_page(f)
-          page['content'] = convert_content_fn(page['content'])
-          parse_metadata_fn(page, site)
+          try:
+            page = read_page(f)
+            page['content'] = convert_content_fn(page['content'])
+            parse_metadata_fn(page, site)
+          except:
+            print('Problem parsing ' + f)
+            continue
         site['pages'].append(page)
     if not site['recursive']:
       break
@@ -328,7 +332,7 @@ def copy_or_process_sass_and_haml(src, dst, site):
   Returns (src, dst) or None if skip.
   """
 
-  transfer_fn = shutil.copy2
+  transfer_fn = lambda src, dst, site: shutil.copy2(src, dst)
 
   if has_extensions(src, '.sass', '.scss'):
     dst = os.path.splitext(dst)[0] + '.css'
@@ -371,8 +375,10 @@ def transfer_media_files(site, copy_file_fn=copy_or_process_sass_and_haml):
     for name in os.listdir(src):
       srcname = os.path.join(src, name)
       dstname = os.path.join(dst, name)
-      if os.path.isdir(srcname) and site['recursive']:
-        copy_tree(srcname, dstname)
+      print('->', srcname, dstname)
+      if os.path.isdir(srcname):
+        if site['recursive']:
+          copy_tree(srcname, dstname)
       else:
         copy_file_fn(srcname, dstname, site)
 
@@ -431,7 +437,7 @@ default_site = {
   'media_dir': '.',  # files to be correctly directly into the output file
   'cached_pages': 'site.cache',  # if not empty, caching file to spend updates
   'ext': '.html',
-  'recursive': True,
+  'recursive': False,
   'pages': [],  # stores all the processed pages found in 'content_dir'
 }
 

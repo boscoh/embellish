@@ -27,7 +27,7 @@ parser.add_argument(
   help='triggers a local web-server that monitors the'
   ' contents directory')
 parser.add_argument(
-  '--flat', '-f', action="store_true",
+  '--recursive', '-r', action="store_true",
   help='looks only in the directory specified')
 args = parser.parse_args()
 
@@ -42,8 +42,8 @@ else:
   print('Error: can\'t figure out {0}.'.format(args.target))
   sys.exit(1)
 
-if args.flat:
-  site['recursive'] = False
+if args.recursive:
+  site['recursive'] = True
 
 engine.generate_site_incrementally(site)
 
