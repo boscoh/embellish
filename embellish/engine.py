@@ -296,7 +296,7 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 
 
 # transfer functions to copy the static directory
-_scss_compiler = scss.Scss(scss_opts={'compress':False})
+_scss_compiler = scss.Scss(scss_opts={'style':'expanded'})
 
 def scss_to_css(src, dst, site): 
   if src.endswith('.sass'):
@@ -375,7 +375,6 @@ def transfer_media_files(site, copy_file_fn=copy_or_process_sass_and_haml):
     for name in os.listdir(src):
       srcname = os.path.join(src, name)
       dstname = os.path.join(dst, name)
-      print('->', srcname, dstname)
       if os.path.isdir(srcname):
         if site['recursive']:
           copy_tree(srcname, dstname)
