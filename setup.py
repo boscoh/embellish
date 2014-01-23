@@ -14,12 +14,13 @@ setup(
     license='BSD',
     # linking hamlpy dev version requires a bit of rejigging
     dependency_links = [
-        'https://api.github.com/repos/jessemiller/HamlPy/zipball/acb79e14381ce46e6d1cb64e7cb154751ae02dfe#egg=hamlpy-0.82.3'],
+        'https://api.github.com/repos/jessemiller/HamlPy/zipball/acb79e14381ce46e6d1cb64e7cb154751ae02dfe#egg=hamlpy-0.82.2'],
     install_requires=[
         'hamlpy',
         'markdown',
         'PyYaml',
         'jinja2', 
+        'jinja2-hamlpy',
         'python-dateutil',
         'coffeescript',
         'sassin',

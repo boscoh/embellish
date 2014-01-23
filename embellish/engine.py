@@ -19,7 +19,14 @@ from markdown import markdown
 import scss
 import coffeescript
 from jinja2 import Environment, FileSystemLoader
-from hamlpy.ext import HamlPyExtension
+try:
+  from hamlpy.ext import HamlPyExtension
+except:
+  try:
+    from jinja2_hamlpy import HamlPyExtension
+  except:
+    logging.error('Couldn\'t load the Hamlpy extension for jinja2')
+
 
 
 # utility functions
