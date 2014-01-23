@@ -9,20 +9,17 @@ from hashlib import md5
 import re
 import pprint
 from unicodedata import normalize
+import logging
 
+# third-party libraries
 import dateutil.parser
-
 import yaml
-
 import sassin
+from markdown import markdown
 import scss
-
+import coffeescript
 from jinja2 import Environment, FileSystemLoader
 from hamlpy.ext import HamlPyExtension
-
-from markdown import markdown
-
-import coffeescript
 
 
 version = '0.9'
@@ -192,7 +189,7 @@ def get_pages(
             page['content'] = convert_content_fn(page['content'])
             parse_metadata_fn(page, site)
           except:
-            print('Problem parsing ' + f)
+            logging.warning('Problem parsing ' + f)
             continue
         site['pages'].append(page)
     if not site['recursive']:
@@ -274,7 +271,7 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
       if os.path.isfile(template_fname):
         break
     else:
-      print('Error: can\'t find template {0} in {1}'.format(
+      logging.error('Can\'t find template {0} in {1}'.format(
           page['template'], page['filename']))
       continue
 
@@ -292,7 +289,7 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 
     write_text(out_f, final_text)
     page['checksum'] = checksum
-    print("{0} -> {1}".format(page['filename'], out_f))
+    logging.info("{0} -> {1}".format(page['filename'], out_f))
 
 
 # transfer functions to copy the static directory
@@ -393,14 +390,14 @@ def generate_site(
     render_template_fn=render_jinjahaml_template,
     copy_file_fn=copy_or_process_sass_and_haml):
 
-  print(">>> Recursion mode:", site['recursive'])
-  print(">>> Scanning pages")
+  logging.info(">>> Recursion mode:", site['recursive'])
+  logging.info(">>> Scanning pages")
   get_pages(site, convert_content_fn, parse_metadata_fn)
 
-  print(">>> Processing template rendering")
+  logging.info(">>> Processing template rendering")
   write_pages(site, render_template_fn)
   
-  print(">>> Processing media files")
+  logging.info(">>> Processing media files")
   transfer_media_files(site, copy_file_fn)
 
 
@@ -417,13 +414,13 @@ def generate_site_incrementally(
   """
   cached_pages = get_dict_val(site, 'cached_pages')
   if os.path.isfile(cached_pages):
-    print(">>> Loading cached pages")
+    logging.info(">>> Loading cached pages")
     site['pages'] = eval(read_text(cached_pages))
   generate_site(
     site, convert_content_fn, parse_metadata_fn,
     render_template_fn, copy_file_fn)
   if cached_pages:
-    print(">>> Caching pages")
+    logging.info(">>> Caching pages")
     write_text(cached_pages, repr(site['pages']))
 
 
@@ -446,14 +443,15 @@ def read_config_yaml(config):
   for key in load_site:
     if load_site[key] is None:
       load_site[key] = ''
-  print('>>> Site configuration:')
-  pprint.pprint(load_site)
+  logging.info('>>> Site configuration:')
+  logging.info(pprint.pformat(load_site))
   site = default_site
   site.update(load_site)
   return site
 
 
 if __name__ == "__main__":
+  logging.config
   if len(sys.argv) == 1:
     print(usage)
   else:
