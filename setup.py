@@ -14,9 +14,11 @@ Docs at http://github.com/boscoh/embellish.
 # hamlpy dev version requires a bit of rejigging
 # http://stackoverflow.com/questions/3472430/how-can-i-make-setuptools-install-a-package-thats-not-on-pypi/3481388#3481388
 
+version = opn('embellish/_version.py').read().split()[-1][1:-1]
+
 setup(
     name='embellish',
-    version='0.9',
+    version=version,
     author='Bosco Ho',
     author_email='boscoh@gmail.com',
     url='http://github.com/boscoh/embellish',

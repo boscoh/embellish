@@ -22,8 +22,6 @@ from jinja2 import Environment, FileSystemLoader
 from hamlpy.ext import HamlPyExtension
 
 
-version = '0.9'
-
 usage = '''
 ==================================================
 Embellish: a low friction static website generator
@@ -289,7 +287,7 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 
     write_text(out_f, final_text)
     page['checksum'] = checksum
-    logging.info("{0} -> {1}".format(page['filename'], out_f))
+    logging.debug("Content page: {0} -> {1}".format(page['filename'], out_f))
 
 
 # transfer functions to copy the static directory
@@ -355,7 +353,7 @@ def copy_or_process_sass_and_haml(src, dst, site):
     else:
       os.remove(dst)
 
-  print('{0} -> {1}'.format(src, dst))
+  logging.debug('File transfer: {0} -> {1}'.format(src, dst))
   transfer_fn(src, dst, site)
 
 
@@ -390,14 +388,14 @@ def generate_site(
     render_template_fn=render_jinjahaml_template,
     copy_file_fn=copy_or_process_sass_and_haml):
 
-  logging.info(">>> Recursion mode:", site['recursive'])
-  logging.info(">>> Scanning pages")
+  print(">>> Recursion mode:", site['recursive'])
+  print(">>> Scanning pages")
   get_pages(site, convert_content_fn, parse_metadata_fn)
 
-  logging.info(">>> Processing template rendering")
+  print(">>> Processing template rendering")
   write_pages(site, render_template_fn)
   
-  logging.info(">>> Processing media files")
+  print(">>> Processing media files")
   transfer_media_files(site, copy_file_fn)
 
 
@@ -414,13 +412,13 @@ def generate_site_incrementally(
   """
   cached_pages = get_dict_val(site, 'cached_pages')
   if os.path.isfile(cached_pages):
-    logging.info(">>> Loading cached pages")
+    print(">>> Loading cached pages")
     site['pages'] = eval(read_text(cached_pages))
   generate_site(
     site, convert_content_fn, parse_metadata_fn,
     render_template_fn, copy_file_fn)
   if cached_pages:
-    logging.info(">>> Caching pages")
+    print(">>> Caching pages")
     write_text(cached_pages, repr(site['pages']))
 
 
@@ -443,15 +441,14 @@ def read_config_yaml(config):
   for key in load_site:
     if load_site[key] is None:
       load_site[key] = ''
-  logging.info('>>> Site configuration:')
-  logging.info(pprint.pformat(load_site))
+  print('>>> Site configuration:')
+  pprint.pprint(load_site)
   site = default_site
   site.update(load_site)
   return site
 
 
 if __name__ == "__main__":
-  logging.config
   if len(sys.argv) == 1:
     print(usage)
   else:

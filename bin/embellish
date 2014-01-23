@@ -4,17 +4,20 @@ from __future__ import print_function
 import sys
 import os
 import argparse
+import logging
 
-from embellish import engine, server
+from embellish import engine, server, __version__
 
 usage = '''
-===================================================
-EMBELLISH: a low friction static website generator.
-=================================================== 
+=======================================================
+EMBELLISH %s: a low friction static website generator.
+======================================================= 
 Looks for markdown files (*markdown, *mkd, *md, *txt) and
 converts them into HTML pages using HAML/jinja2
 templates (*haml) with a little SASS and HAML processing.
-'''
+''' % __version__
+
+logging.basicConfig(level=logging.INFO)
 
 print(usage)
 
