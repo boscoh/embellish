@@ -1,20 +1,7 @@
 #!/usr/bin/env python
 from setuptools import setup
 
-# This is to disable the 'black magic' surrounding versioned repositories... Terrible!
-from setuptools.command import sdist
-del sdist.finders[:]
-
-description = \
-"""Embellish is a low-friction static website generator.
-
-Docs at http://github.com/boscoh/embellish.
-"""
-
-# hamlpy dev version requires a bit of rejigging
-# http://stackoverflow.com/questions/3472430/how-can-i-make-setuptools-install-a-package-thats-not-on-pypi/3481388#3481388
-
-version = opn('embellish/_version.py').read().split()[-1][1:-1]
+version = open('embellish/_version.py').read().split()[-1][1:-1]
 
 setup(
     name='embellish',
@@ -22,11 +9,12 @@ setup(
     author='Bosco Ho',
     author_email='boscoh@gmail.com',
     url='http://github.com/boscoh/embellish',
-    description='Static site generator',
-    long_description=description,
+    description='static site generator',
+    long_description='Docs at http://github.com/boscoh/embellish',
     license='BSD',
+    # linking hamlpy dev version requires a bit of rejigging
     dependency_links = [
-        'https://api.github.com/repos/jessemiller/HamlPy/zipball/acb79e14381ce46e6d1cb64e7cb154751ae02dfe#egg=hamlpy-0.82.2'],
+        'https://api.github.com/repos/jessemiller/HamlPy/zipball/acb79e14381ce46e6d1cb64e7cb154751ae02dfe#egg=hamlpy-0.82.3'],
     install_requires=[
         'hamlpy',
         'markdown',
@@ -37,6 +25,8 @@ setup(
         'flask',
     ],
     packages=['embellish',],
-    package_data={"embellish": ['defaults/default.haml',]},
+    package_data={
+        "embellish": ['defaults/default.haml',]
+    },
     scripts=['bin/embellish'],
 )
