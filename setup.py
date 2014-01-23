@@ -21,6 +21,7 @@ setup(
         'PyYaml',
         'jinja2', 
         'python-dateutil',
+        'coffeescript',
         'sassin',
         'flask',
     ],
