@@ -22,20 +22,6 @@ from jinja2 import Environment, FileSystemLoader
 from hamlpy.ext import HamlPyExtension
 
 
-usage = '''
-==================================================
-Embellish: a low friction static website generator
-==================================================
-Looks for markdown files (*markdown, *mkd, *md, *txt) and
-converts them into HTML pages. 
-
-Metadata in the markdown files can invoke HAML/jinja2
-templates (*haml), or jinja2 templates(any other extension).
-
-usage: embellish.py web_dir|site.yaml 
-'''
-
-
 # utility functions
 
 def get_dict_val(my_dict, *keys):
@@ -447,16 +433,5 @@ def read_config_yaml(config):
   site.update(load_site)
   return site
 
-
-if __name__ == "__main__":
-  if len(sys.argv) == 1:
-    print(usage)
-  else:
-    if os.path.isfile(sys.argv[1]):
-      site = read_config_yaml(sys.argv[1])
-    else:
-      os.chdir(sys.argv[1])
-      site = default_site
-    generate_site_incrementally(site)
 
   
