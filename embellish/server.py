@@ -60,23 +60,6 @@ def regenerate_site_if_changed():
     app.regenerate()
 
 
-# def event_stream():
-#     count = 0
-#     while True:
-#         gevent.sleep(2)
-#         if is_something_changed():
-#           app.regenerate()
-#           yield 'data: %s\n\n' % count
-#         count += 1
-
-
-# @app.route('/my_event_source')
-# def sse_request():
-#     return Response(
-#             event_stream(),
-#             mimetype='text/event-stream')
-
-
 def send_fname(fname):
   app.logger.info('FETCHING: {0}'.format(fname))
   if fname.endswith('.html'):
