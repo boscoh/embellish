@@ -74,6 +74,13 @@ def read_text(fname):
   return text
 
 
+def is_uptodate(src, dst):
+  return os.path.isfile(dst) and os.path.getmtime(dst) >= os.path.getmtime(src)
+
+
+####
+
+
 def read_page(fname):
   page = {
     'template': 'default.haml',  # name of template file
@@ -284,70 +291,85 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 
 
 # transfer functions to copy the static directory
-_scss_compiler = scss.Scss(scss_opts={'style':'expanded'})
 
-def scss_to_css(src, dst, site): 
-  if src.endswith('.sass'):
+_scss_compiler = scss.Scss(scss_opts={'style':'expanded'})
+def scss_to_css(src, dst_dir, site): 
+  dst = os.path.join(dst_dir, os.path.basename(src))
+  dst = os.path.splitext(dst)[0] + '.css'
+  if not has_extensions(src, '.sass', '.scss') or is_uptodate(src, dst):
+    return False
+  if has_extensions(src, '.sass'):
     sass_text = read_text(src)
     scss_text = sassin.compile(sass_text)
-  elif src.endswith('.scss'):
-    scss_text = read_text(src)
   else:
-    return 'Can\'t recognize SCSS file {}'.format(src)
-  css_text = _scss_compiler.compile(scss_text)
-  write_text(dst, css_text)
+    scss_text = read_text(src)
+  try:
+    css_text = _scss_compiler.compile(scss_text)
+    write_text(dst, css_text)
+    logging.info('compile .sass file: {0} -> {1}'.format(src, dst))
+  except:
+    logging.error('compile .sass file: {0} -> {1}'.format(src, dst))
+  return dst
 
 
-def jinjahaml_to_html(src, dst, site): 
-  template = get_jinjahaml_template(src)
-  page = {
-    'filename': dst,  # name of markdown file
-  }
-  text = template.render({'site':site, 'page':page})
-  write_text(dst, text)
+def jinjahaml_to_html(src, dst_dir, site): 
+  dst = os.path.join(dst_dir, os.path.basename(src))
+  dst = os.path.splitext(dst)[0] + '.html'
+  if not has_extensions(src, '.haml') or is_uptodate(src, dst):
+    return False
+  # check if it's pure haml and not a haml/jinja template
+  text = read_text(src)
+  is_haml_jinja = '{{' in text and '}}' in text
+  if is_haml_jinja:
+    return False
+  try:
+    template = get_jinjahaml_template(src)
+    page = {
+      'filename': dst,  # name of markdown file
+    }
+    text = template.render({'site':site, 'page':page})
+    write_text(dst, text)
+    logging.info('compile .haml file: {0} -> {1}'.format(src, dst))
+  except:
+    logging.error('compile .haml file: {0} -> {1}'.format(src, dst))
+  return dst
 
 
-def coffee_compile(src, dst, site): 
-  in_text = read_text(src)
-  out_text = coffeescript.compile(in_text)
-  write_text(dst, out_text)
+def coffee_compile(src, dst_dir, site): 
+  dst = os.path.join(dst_dir, os.path.basename(src))
+  dst = os.path.splitext(dst)[0] + '.js'
+  if not has_extensions(src, '.coffee') or is_uptodate(src, dst):
+    return False
+  try:
+    in_text = read_text(src)
+    out_text = coffeescript.compile(in_text)
+    write_text(dst, out_text)
+    logging.info('compile .coffee file: {0} -> {1}'.format(src, dst))
+  except:
+    logging.error('compile .coffee file: {0} -> {1}'.format(src, dst))
+  return dst
 
 
-# default 'copy_file_fn' used in 'transfer_media_files'
-def copy_or_process_sass_and_haml(src, dst, site):
-  """
-  Copies and/or processes in file transfer.
-  Returns (src, dst) or None if skip.
-  """
+def direct_copy(src, dst_dir, site):
+  dst = os.path.join(dst_dir, os.path.basename(src))
+  if is_uptodate(src, dst):
+    return False
+  try:
+    shutil.copy2(src, dst)
+    logging.info('File transfer: {0} -> {1}'.format(src, dst))
+  except:
+    logging.debug('File transfer: {0} -> {1}'.format(src, dst))
 
-  transfer_fn = lambda src, dst, site: shutil.copy2(src, dst)
 
-  if has_extensions(src, '.sass', '.scss'):
-    dst = os.path.splitext(dst)[0] + '.css'
-    transfer_fn = scss_to_css
-
-  if has_extensions(src, '.coffee'):
-    dst = os.path.splitext(dst)[0] + '.js'
-    transfer_fn = coffee_compile
-
-  if src.endswith('.haml'):
-    # check if it's pure haml and not a haml/jinja template
-    text = read_text(src)
-    if not ('{{' in text and '}}' in text):
-      dst = dst.replace('.haml', '.html')
-      transfer_fn = jinjahaml_to_html
-
-  if src == dst:
-    return None
-
-  if os.path.isfile(dst):
-    if os.path.getmtime(dst) >= os.path.getmtime(src):
-      return None
-    else:
-      os.remove(dst)
-
-  logging.debug('File transfer: {0} -> {1}'.format(src, dst))
-  transfer_fn(src, dst, site)
+def copy_or_process_sass_and_haml(src, dst_dir, site):
+  if scss_to_css(src, dst_dir, site):
+    return
+  if coffee_compile(src, dst_dir, site):
+    return
+  if jinjahaml_to_html(src, dst_dir, site):
+    return
+  if direct_copy(src, dst_dir, site):
+    return
 
 
 def transfer_media_files(site, copy_file_fn=copy_or_process_sass_and_haml):
@@ -367,7 +389,7 @@ def transfer_media_files(site, copy_file_fn=copy_or_process_sass_and_haml):
         if site['recursive']:
           copy_tree(srcname, dstname)
       else:
-        copy_file_fn(srcname, dstname, site)
+        copy_file_fn(srcname, dst, site)
 
   copy_tree(relpath(site['media_dir']), relpath(site['output_dir']))
 
