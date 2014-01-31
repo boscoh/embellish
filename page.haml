@@ -1,0 +1,15 @@
+%head
+  %link{rel:'stylesheet',href:'styles.css'}
+
+%body
+
+  .timestamp
+    - if 'category' in page and page.category:
+      {{ page.category }} //
+    {{ page.date.strftime("%d %b %Y") }}
+
+  %h1 {{ page.title }}
+
+  {{ page.content }}
+
+  

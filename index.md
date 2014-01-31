@@ -1,5 +1,4 @@
-
-# Embellish
+# PrettyNoGoHabba Embellish
 
 ## A low-friction static web-site generator
 
@@ -19,7 +18,7 @@ To install:
 
 Python depencencies should be automatically installed. If you want to manually install dependencies:
 
-    pip install markdown pyyaml python-dateutil jinja2 hamlpy flask sassin pyScss
+    pip install markdown pyyaml jinja2 hamlpy jinja2_haml flask rapydcss pyScss
 
 Now create a `example.mkd` in a temporary directory:
 

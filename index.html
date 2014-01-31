@@ -1,0 +1,372 @@
+<head>
+<style type='text/css'>
+/*<![CDATA[*/
+    html {
+      background-color: #AAA; }
+    body {
+      background-color: white;
+      width: 650px;
+      margin: 0 auto;
+      padding: 0px 70px 0px 70px;
+      border-left: 1px solid #B8B8B8;
+      border-right: 1px solid #B8B8B8;
+      font-family: Helvetica;
+      font-size: 14px;
+      color: #000;
+      letter-spacing: 0.05em;
+      line-height: 1.5em; }
+    #papermark {
+      border-radius: 7px;
+      background-color: #EAEAEA;
+      border: 1px solid #DDD;
+      margin: -5px;
+      padding-top: 0px;
+      padding-bottom: 0px;
+      width: 14em;
+      text-align: center;
+      font-size: 10px;
+      font-family: monospace; }
+    #papermark, #papermark a:link, #papermark a:visited {
+      color: #888; }
+    #papermark a {
+      text-decoration: underline; }
+    h1 {
+      font-size: 50px; }
+    h1, h2, h3, h4 {
+      font-family: Helvetica;
+      letter-spacing: 0em;
+      line-height: 1em;
+      margin-bottom: 0;
+      margin-top: 2em }
+    h2 {
+      padding-bottom: 0.1em;
+      border-bottom: 1px solid #CCC;
+    }
+    .timestamp {
+      margin-top: 6em;
+      text-align: right;
+      border-top: 1px solid #CCC;
+      font-size: 10px;
+      font-family: monospace; }
+    code {
+      padding: 0px 2px; }
+    pre {
+      margin: 0;
+    }
+    .codehilite {
+      overflow: auto;
+      padding: 7px 20px;
+      }
+    code, .codehilite {
+      background-color: #EEE;
+      border: 1px solid #DDD;
+      color: #333;
+      font-size: 12px;
+      line-height: 1.5em; }
+
+    @media screen and (max-width: 790px) {
+      body {
+        width: auto;
+        margin: 0; } }
+
+    @media screen and (max-width: 550px) {
+      body {
+        padding-left: 20px;
+        padding-right: 20px } }
+
+/*]]>*/
+</style>
+<script type='text/javascript'>
+// <![CDATA[
+    /* window.onload = function() {
+      sse = new EventSource('/my_event_source');
+      sse.onmessage = function(message) {
+        console.log('A message has arrived!');
+        window.location.reload();
+      } */
+    }
+// ]]>
+</script>
+</head>
+<body>
+  <div id='papermark'>
+    made by
+    <a href='https://github.com/boscoh/embellish'>
+      embellish
+    </a>
+  </div>
+  
+  <h1>PrettyNoGoHabba Embellish</h1>
+<h2>A low-friction static web-site generator</h2>
+<p>There are many Python static web generators. Many are opinionated - like how you must name your files - this one is not. <code>Embellish</code> is quite happy to convert markdown files in any directory into HTML.</p>
+<p><code>Embellish</code> is fast: it incrementally rebuilds my blog of ~300 posts, 6 categories, and 25MB of assets in ~1 second on my Macbook air. </p>
+<p>The data model in <code>embellish</code> is transparent. It's not an object, it's a dictionary. Remember those? The YAML metadata in your markdown is slurped into the primary <code>page</code> dictionary which is in turn inserted directly into your templates.</p>
+<p>There is no plugin system: you extend <code>embellish</code> with function hooks. Yes it's a little bit more work, but you get to write function hooks directly in Python, which is ultimately easier than futzing around with plugin rules and DSL's.</p>
+<h2>Installation</h2>
+<p>To install:</p>
+<div class="codehilite"><pre>pip install embellish
+</pre></div>
+
+
+<p>Python depencencies should be automatically installed. If you want to manually install dependencies:</p>
+<div class="codehilite"><pre>pip install markdown pyyaml jinja2 hamlpy jinja2_haml flask rapydcss pyScss
+</pre></div>
+
+
+<p>Now create a <code>example.mkd</code> in a temporary directory:</p>
+<div class="codehilite"><pre>title: An example file
+category: example-of-a-category
+---
+This is an example file.
+</pre></div>
+
+
+<p>Save the file, and do:</p>
+<div class="codehilite"><pre>embellish -m .
+</pre></div>
+
+
+<p>Because of the '-m' option, embellish will attempt to open up the site in a web-browser using a local web-server. </p>
+<p>You should then find <code>example.html</code> in your directory. As no templates were specified, a default responsive-web-design is used (<code>embellish/defaults/default.haml</code>).</p>
+<h2>My choice of formats</h2>
+<p>There are many formats for webdesign. For markup text, there's .markdown, .textile and .rsT. For CSS, there's .less, .scss and .sass. For Python templates, there's Django, Jinja, Cheetah and Mako. For metadata, there's JSON, YAML, Python pickle.</p>
+<p>Well, here's what I recommend:</p>
+<ul>
+<li>markdown for marking-up your prose </li>
+<li>YAML to describe your page metadata</li>
+<li>HAML/Jinja2 for templating HTML</li>
+<li>SASS for concise CSS </li>
+</ul>
+<p>It's ironic, I know, but all that significant whitespace technology - YAML, HAML and SASS - is more prevalent in the Ruby world. When placed in the context of Python, they fit better than a tuxedo on Daniel Craig.</p>
+<p>The structure the markdown content page has 3 sections, separated by <code>---</code>:</p>
+<div class="codehilite"><pre>title: Header section
+new-field: anything that works with YAML
+---
+Excerpt of text
+---
+Main body of the text in markdown
+</pre></div>
+
+
+<p>The excerpt and header are both optional. The text is in the human-readable format <a href="http://daringfireball.net/projects/markdown/basics">markdown</a>.</p>
+<p>In the header, apart from the standard metadata fields, which you can override, you can add pretty much any field that PyYAML can parse (<a href="https://github.com/Animosity/CraftIRC/wiki/Complete-idiot's-introduction-to-yaml">quick guide to YAML</a>). Here's an example that will work with a HAML/Jinja2 template to be described below:</p>
+<div class="codehilite"><pre>template: example.haml
+links:
+  - 
+    name: apple
+    href: http://apple.com
+  - 
+    name: google
+    href: http://google.com 
+---
+This is some content in the example
+</pre></div>
+
+
+<p>Notice the template field. You'd better have a template with that name in either:</p>
+<ul>
+<li>the same directory as the content</li>
+<li>in the <code>template_dir</code> of the site configuration</li>
+<li>in the system's <code>defaults</code> directory. </li>
+</ul>
+<p><code>Embellish</code> understands <code>.haml</code> files as HAML/Jinja2 templates (strictly speaking, it's actually a <a href="https://github.com/jessemiller/HamlPy/blob/master/reference.md">HAML/Django template</a> piped into Jinja2), anything else will be treated as Jinja2 templates. I chose Jinja2 as it's compatible with Django templates, and has a sufficiently regular syntax that allows a HAML/Jinja2 subset to be defined.</p>
+<p>So here's what <code>example.haml</code> might look like:</p>
+<div class="codehilite"><pre>%head
+  %link{rel:&#39;stylesheet&#39;,href:&#39;styles.css&#39;}
+
+%body
+  .nav
+    - for link in page.links:
+      %a{href:&#39;{{ link.href }}&#39;}
+        {{ link.name }}
+  {{ page.content }}
+</pre></div>
+
+
+<p>I think it's extremely easy to read. It's DRY (Don't-Repeat-Yourself) and the control structure look extremely pythonic. Never will you have to go searching for that missing closing tag.</p>
+<p>Notice though that <code>example.haml</code> links a style-sheet <code>styles.css</code>. Now you can provide this directly, or you can create a <a href="http://sass-lang.com/docs/yardoc/file.INDENTED_SYNTAX.html">SASS</a> stylesheet instead <code>styles.sass</code>:</p>
+<div class="codehilite"><pre>body
+  background-color: #FFF
+  font-family: Helvetica
+  width: 700px
+  margin: 0 auto
+.nav
+  a 
+    display:inline
+    padding-right: 1em
+  a:link
+    text-decoration: none
+</pre></div>
+
+
+<p><code>Embellish</code> will convert any <code>.sass</code> file into the equivalent <code>.css</code> file. As you can see, the SASS format with indented spaces provides a consistent mix with YAML, HAML and Python.</p>
+<p>Having saved all these files into your directory, go run:</p>
+<div class="codehilite"><pre>embellish .
+</pre></div>
+
+
+<p>Hopefully, you'll find an <code>example.html</code> that opens in your browser.</p>
+<p>That's all there is.</p>
+<h2>Larger Web-site Projects</h2>
+<p>Obviously for a more complicated website, you might want to separate your content, templates, assets (movies/stylesheets/images) and output. To do this simply create the site configuration file <code>site.yaml</code>:</p>
+<div class="codehilite"><pre>url: http://boscoh.com # if  then use relative urls
+content_dir: content  # look for markdown files
+template_dir: templates  # look for templates
+output_dir: site  # generated files and static files put here
+media_dir: media  # files to be correctly directly into the output file
+ext: .html
+</pre></div>
+
+
+<p>The benefits of this is that all the templates can be placed in the one directory <code>template_dir</code>. As well, production files are then copied into the <code>output_dir</code> as a clean directory with no source files mixed in.</p>
+<p>Currently, in the copying of the assets <code>media_dir</code> into the <code>output_dir</code>, the <code>.sass</code> files are converted into <code>.css</code> files. As well, <code>.haml</code> files that are straight HAML and not HAML/Jinja2 are converted into <code>.html</code> files. This is for the case of special webpages that don't parse well into markdown-HAML/Jinja2 templates, such as pages that provide hooks into other web-services like login pages. You might then simply want to bash out straight HAML for these pages.</p>
+<p>To run <code>embellish</code> against this configuration file:</p>
+<div class="codehilite"><pre>embellish site.yaml
+</pre></div>
+
+
+<h2>Testing on a Local Webserver</h2>
+<p>There is a common problem in building static websites in that most browsers treat a local file system differently from an actual web-server, making it difficult to debug the site properly. In particular, a web-server reads local directories directly and ignores index.html files. To overcome this, most static website generators provide a local server, typically written by subclassing from the crusty python module SimpleHTTPServer, that generates a local website from a local directory. </p>
+<p>Here, a local web-server <code>embellish.server</code> is provided. The code is written against the gorgeous <a href="http://flask.pocoo.org/">Flask</a> library, resulting in much cleaner code. In particular, <code>embellish.server</code> can redirect clean URLs to the corresponding <code>.html</code> file. Specifically, this server can:</p>
+<ul>
+<li>add trailing / to directories</li>
+<li>process implied index.html in directories</li>
+<li>add implied .html to clean urls</li>
+<li>monitor modfiications in directories </li>
+<li>followed-up with a site regeneration hook </li>
+<li>attempts to open the /index.html in the local browser</li>
+</ul>
+<p>To run the webserver, simply run <code>embellish</code> with the <code>--monitor</code> or <code>-m</code> flag:</p>
+<div class="codehilite"><pre>embellish -m site.yaml
+</pre></div>
+
+
+<p>The server will attempt to open the local files as a website on 127.0.0.1:5000 in the local browser. Browsing the static website through the local webserver will allow you to: </p>
+<ol>
+<li>simulate the remote server on your local machine to check your links. </li>
+<li>iterate designs quickly on your blog. Everytime you refresh a page, if changes have been detected on your source file (i.e. you saved the file in a text-editor), the site will be incrementally regenerated, and the updated page will be served.</li>
+</ol>
+<h1>Templating guide</h1>
+<p><code>Embellish</code> is designed to help you play around with templates. In <code>embellish</code>, there's no need to define different types of posts. Simply set the <code>page.template</code> field to the template of your choice, and populate the correspoding metadata in your markdown files. <code>Embellish</code> is quite flexible in looking for template files. And as long as the metadata and the templates match, you're good to go.</p>
+<h2>Metadata</h2>
+<p>In order to make awesome templates, you have to understand the metadata that are piped into them. During rendering, two dictionaries are passed into every template:</p>
+<ul>
+<li><code>page</code>: contains all the information of a given page. For instance, the content is found in <code>page.content</code></li>
+<li><code>site</code>: contains all the settings for the entire site. This includes all the source directories, site url, and is essentially, the information in the <code>site.yaml</code> configuration file.</li>
+</ul>
+<p>Every <code>page</code> dictionary comes equiped with a set of default metadata. The best way to show this is from the Python source code:</p>
+<div class="codehilite"><pre>page = {
+  &#39;template&#39;: &#39;default.haml&#39;,  # name of template file
+  &#39;filename&#39;: fname,  # name of markdown file
+  &#39;modified&#39;: os.path.getmtime(fname),  # unix time number of file  
+  &#39;checksum&#39;: &#39;&#39;, # checksum used to check final output to avoid redundant writes
+  &#39;excerpt&#39;: &#39;&#39;, # text to put in excerpt, no tags please!
+  &#39;content&#39;: &#39;&#39;,  # main text of article
+  &#39;title&#39;: &#39;&#39;,  # title for indexing and for large display
+  &#39;category&#39;: &#39;&#39;,  # category of article for indexing 
+  &#39;rel_site_url&#39;: &#39;&#39;,  # the top site directory relative to this page
+  &#39;date&#39;: None,  # published date
+  &#39;slug&#39;: None,  # url-safe name of article used to make url and files
+  &#39;url&#39;: &#39;&#39;,   # relative url used for links in index files
+  &#39;target&#39;: &#39;&#39;,    # target filename, maybe different to url due to redirection
+  &#39;index&#39;: False,   # indicates if this is an indexing page
+  &#39;sort_key&#39;: None,  # the field on which to sort under in indexing
+  &#39;sort_reverse&#39;: True,  # ascending or descing order for sorting
+  &#39;subpages&#39;: [],   # in indexing, pages belonging to the index placed here
+  &#39;max_subpages&#39;: None,  # a maximum limit of files to put in subpages
+}
+</pre></div>
+
+
+<p>This relevant fields in the <code>page</code> dictionary is then overriden by the YAML header of the corresponding source file. </p>
+<p>In a HAML/Jinja2 template, these fields are accessible in the form of:</p>
+<div class="codehilite"><pre>{{ page.title }}
+</pre></div>
+
+
+<p>In particular, dates are converted to standard Python datetime objects, and can be passed into the jinja templates by calling the datetime string method:</p>
+<div class="codehilite"><pre>{{ page.date.strftime(&quot;%d %b %Y&quot;) }}
+</pre></div>
+
+
+<p>If excerpts are not given, <code>page.excerpt</code> is set to the first 50 non-tag words in the main text.</p>
+<h2>Index Pages</h2>
+<p>One of the most important function of static web generators is to organise blog posts into archives. The  metadata used to generate such pages are: <code>page.index</code>, <code>page.template</code>, <code>page.category</code>, <code>page.sort_key</code>, <code>page.sort_reverse</code>, <code>page.max_subpages</code>. </p>
+<p>The controlling variable is the <code>page.index</code>. If this is set to True, then a group of pages, <code>page.subpages</code>, will be generated. Essentially, <code>page.subpages</code> are a list of pages, that are not themselves index pages. </p>
+<p>Furthermore, only pages with the same <code>page.category</code> as the index page are collected with the number of pages capped to <code>page.max_subpages</code> if this is given. If <code>page.category</code> is empty ('') then pretty much the entire site will be put into <code>page.subpages</code> except of course for other index pages.</p>
+<p>These pages will be sorted by the field given in <code>page.sort_key</code>, and this will be either sorted in ascending order, or if <code>page.sort_reverse</code> is True, it is sorted in descending order. The default is to sort by date, from most recent to oldest:</p>
+<div class="codehilite"><pre>index: True
+sort_key: date
+sort_reverse: True
+</pre></div>
+
+
+<p>You can always populate your own sorting key, with headings, section, chapters, tags etc.</p>
+<p>In your HAML/Jinja2 template, to make a list of items such as in an archive of posts, you simply loop through the <code>page.subpages</code> field. As there already exists  a <code>page</code> dictionary, don't use that variable name! Use <code>subpage</code> instead as your looping variable:</p>
+<div class="codehilite"><pre>- for subpage in page.subpages:
+  .excerpt
+    %a{href:&quot;{{ subpage.url }}&quot;} {{ subpage.title }}
+      {{ subpage.date.strftime(&quot;%d %b %Y &quot;) }}
+</pre></div>
+
+
+<p>On pagination: sorry, but I hate pagination so I haven't implemented it here. My experience is that most blogs are not that big and don't have that many articles to archive. It would be so much easier to browse if all the posts were put in one page.</p>
+<h2>URLs</h2>
+<p>Two design principles of <code>embellish</code> is that it lets you determine the URL and file placement as much as possible, and that relative URLs should work. No matter what, <code>page.target</code> will contain the filename of the target HTML file, which is written in the <code>site.output_dir</code> directory. If <code>page.url</code> or <code>page.target</code> are specified, these will be used.</p>
+<p>Most of the time <code>page.url</code> will match <code>page.target</code>. If <code>page.url</code> is not specified, then it is assumed that the path of the markdown file with respect to the <code>site.content_dir</code> represents the <code>page.url</code> and the <code>page.target</code>. In flat-file mode, this means the <code>.html</code> file will appear in the same directory as the markdown file. </p>
+<p>A common exception to this are index.html files in subdirectories. Because browsers default to <code>dir/</code> for <code>dir/index.html</code>, a useful motif in the header for <code>index.html</code> files is:</p>
+<div class="codehilite"><pre>url: archive/
+target: archive/index.html
+</pre></div>
+
+
+<p>To use relative URLs in your templates is easy. Let's say in a <code>page</code>, you want to refer to the url of another page <code>subpage.url</code>. You then use the <code>page.rel_site_url</code> field to take you from <code>page</code> to the root directory of the site. Then to take you down to <code>subpage</code>, you use <code>subpage.url</code>:</p>
+<div class="codehilite"><pre>%a{href=&quot;{{ page.rel_site_url }}/{{ subpage.url }}&quot;} relative link
+</pre></div>
+
+
+<p>If you don't care about relative directories, you can just use <code>subpage.url</code> from <code>/</code>:</p>
+<div class="codehilite"><pre>%a{href=&quot;/{{ subpage.url }}&quot;} absolute link
+</pre></div>
+
+
+<p>And with the full url in case you are interacting with external javascript libraries:</p>
+<div class="codehilite"><pre>%a{href=&quot;{{ site.url }}/{{ subpage.url }}&quot;} full url link
+</pre></div>
+
+
+<p>Two other fields need to be mentioned. Sometimes legitimate filenames cannot serve as URLs, so a conversion is done to turn the basename of the filename into a <code>page.slug</code>. This can be directly overriden if the <code>page.slug</code> field is given.</p>
+<p>Finally, the extension of the output files are normally assumed to be <code>.html</code> but this can be overriden in <code>site.ext</code> in the configuration file.</p>
+<h1>Extension guide</h1>
+<h2>Architecture</h2>
+<p>Much of the architecture of <code>embellish</code> was inspired by <code>wok</code>: yaml metadata, page and site distinctions, url patterns generated from metadata. However, I spent way too much time patching <code>wok</code> to get it to work for me. The final straw was trying to get the haml/django extension to work with jinja. </p>
+<p>That's when I realized the plugin system does not work well for static web generators. The reason is that most website generators leverage several different templating systems and text renderers. Each templating engine and text renderer have their own plugin system. So the website generator acts as a frazzled middle-man who tries to build yet another plugin system to harmonize the plugin systems of all the other modules.</p>
+<p>So I decided to strip it right down, replacing plugin modules with function hooks. The code is short, as the work-flow of a static website generator is really quite simple, with four major steps:</p>
+<ol>
+<li>converting page content into html</li>
+<li>parsing page metadata</li>
+<li>rendering pages with templates</li>
+<li>copying assets</li>
+</ol>
+<p>At each step, there is a function hook. To change the behavior, simply replace the hooks with your own, adding your own special logic in Python.</p>
+<h2>Caching</h2>
+<p>From profiling embellish, I found that most of the time was taken in </p>
+<ul>
+<li>markdown conversion</li>
+<li>copying assets from the media file</li>
+<li>reading from file</li>
+<li>writing to file</li>
+</ul>
+<p>To spend up incremental updating, all the page metadata, and converted text is stored in a single cached Python file <code>site.cache</code>. On incremental updates, this one file is read and processed before the site is rescanned. </p>
+<p>As the page metadata includes the content file's modification date, content files are only reread and converted by markdown if changed. </p>
+<p>When the rendered HTML is written, a MD5 checksum is stored. In future renderings, the checksum is compared to the stored checksum, and the final file is only written if the checksum is different. </p>
+<p>Assets are only copied if the original asset's modification time is more recent.</p>
+
+  <div class='timestamp'>
+    
+    updated: 08 Dec 2013
+
+
+
+  </div>
+</body>
