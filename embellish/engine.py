@@ -287,7 +287,7 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 
     write_text(out_f, final_text)
     page['checksum'] = checksum
-    logging.debug("Content page: {0} -> {1}".format(page['filename'], out_f))
+    logging.info("Content page: {0} -> {1}".format(page['filename'], out_f))
 
 
 # transfer functions to copy the static directory
