@@ -5,7 +5,7 @@
     - design
     - methods to upload 
 
-# Transferring files
+## Transferring files
 
 An important parameter is the `media` directory. These are files that are to be transferred to the website directory. Now most of the files here will be directly copied, but `embellish` is aware of limited number of files that will be processed in some ways. 
 
@@ -32,6 +32,49 @@ You make a change to your source file, and you save it. Then you click on the br
       - markdown
       - hamlpy site
       - coffeescript 
+
+# embellish
+
+This is really a nice way to edit files. Using so much connectivity.
+
+- not tied to any directory structure
+- run in any directory
+-turn recrsion on-off
+
+## simple example
+
+run through - 'embellish .'
+'embellish -m .'
+simple wraps MD with a default HTML template that's responsive and not too ugly.
+
+## second example - a template
+
+simple static site,
+some content files, links
+one template
+
+## blog - with categories - two templates
+
+group things together under categories
+use dates, titles, slugs
+site.yaml
+
+## plugin processor for media files
+
+.sass files 
+.coffeescript files
+
+## monitor function using flask 
+
+.htaccess for clean url's
+allows the trouble-some index.html / directory 
+since processes media files, great to detect changes
+
+## how to write templates
+
+tags using jinja2, however
+tags using hamlpy
+
 
 # Examples
       - readme doc
