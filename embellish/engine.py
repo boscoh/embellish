@@ -103,11 +103,21 @@ def read_page(fname):
     'max_subpages': None,  # a maximum limit of files to put in subpages
   }
   text = read_text(fname)
-  parts = text.split('\n---\n')
+
+  # a little hack to allow adjacent --- to denote sections
+  text = text.replace('\n---\n---\n', '\n---\n@@@haha@@@\n---\n')
+  parts = re.split(r'\n---\n', text)
+  if len(parts) >= 3:
+    parts[2] = '\n---\n'.join(parts[2:])
+    del parts[3:]
+  for i in range(len(parts)):
+    parts[i] = parts[i].replace('@@@haha@@@', '')
+
   if len(parts) > 1:
     page.update(yaml.load(parts[0]))
     if isinstance(page['date'], str):
       page['date'] = dateutil.parser.parse(page['date'])
+  logging.info('parts {}'.format([p[:15] for p in parts]))
   if len(parts) > 2:
     page['excerpt'] = parts[1]
   page['content'] = parts[-1]
