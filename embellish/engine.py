@@ -104,7 +104,11 @@ def read_page(fname):
     'subpages': [],   # in indexing, pages belonging to the index placed here
     'max_subpages': None,  # a maximum limit of files to put in subpages
   }
-  text = read_text(fname)
+  try:
+    text = read_text(fname)
+  except:
+    logger.warning('Problem reading ' + relpath(fname))
+    raise IOError()
 
   # a little hack to allow adjacent --- to denote sections
   text = text.replace('\n---\n---\n', '\n---\n@@@haha@@@\n---\n')
@@ -116,10 +120,14 @@ def read_page(fname):
     parts[i] = parts[i].replace('@@@haha@@@', '')
 
   if len(parts) > 1:
-    page.update(yaml.load(parts[0]))
+    try:
+      yaml_metadata = yaml.load(parts[0])
+    except:
+      logger.warning('Problem reading YAML metadata from ' + relpath(fname))
+      raise IOError()
+    page.update(yaml_metadata)
     if isinstance(page['date'], str):
       page['date'] = dateutil.parser.parse(page['date'])
-  logger.info('parts {}'.format([p[:15] for p in parts]))
   if len(parts) > 2:
     page['excerpt'] = parts[1]
   page['content'] = parts[-1]
@@ -196,11 +204,15 @@ def get_pages(
         else:
           try:
             page = read_page(f)
-            page['content'] = convert_content_fn(page['content'])
-            parse_metadata_fn(page, site)
           except:
-            logger.warning('Problem parsing ' + f)
+            logger.warning('Skipping ' + relpath(f))
             continue
+          try:
+            page['content'] = convert_content_fn(page['content'])
+          except:
+            logger.warning('Skipping due to problem converting markdown ' + f)
+            continue
+          parse_metadata_fn(page, site)
         site['pages'].append(page)
     if not site['recursive']:
       break
@@ -299,7 +311,8 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 
     write_text(out_f, final_text)
     page['checksum'] = checksum
-    logger.info("Content page: {0} -> {1}".format(page['filename'], out_f))
+    logger.info("Content page: {0} -> {1}".format(
+         relpath(page['filename']), relpath(out_f)))
 
 
 # transfer functions to copy the static directory
@@ -395,8 +408,8 @@ def transfer_media_files(site, copy_file_fn=copy_or_process_sass_and_haml):
       os.makedirs(dst)
     errors = []
     for name in os.listdir(src):
-      srcname = os.path.join(src, name)
-      dstname = os.path.join(dst, name)
+      srcname = relpath(os.path.join(src, name))
+      dstname = relpath(os.path.join(dst, name))
       if os.path.isdir(srcname):
         if site['recursive']:
           copy_tree(srcname, dstname)

@@ -98,11 +98,12 @@ def run(site_dir, monitor_dirs, regenerate_fn):
   app.checksum = None
   port = random.randint(5000, 65535)
   url = 'http://127.0.0.1:{}/'.format(port)
-  home = os.path.join(app.site_dir, 'index.html')
-  if not os.path.isfile(home):
-    htmls = glob.glob(os.path.join(app.site_dir, '*html'))
-    if htmls:
-      url += os.path.basename(htmls[0])
+  htmls = glob.glob(os.path.join(app.site_dir, '*html'))
+  if htmls:
+    htmls = [os.path.basename(h) for h in htmls]
+    htmls.sort(key=lambda h: -1 if h.lower().startswith('readme') else 1)
+    htmls.sort(key=lambda h: -1 if h.lower().startswith('index') else 1)
+    url += htmls[0]
   print('Will try to open', url)
   wait = 2
   threading.Timer(wait, lambda: webbrowser.open(url), ()).start()
