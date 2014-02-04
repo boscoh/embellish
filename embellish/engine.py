@@ -11,6 +11,8 @@ import pprint
 from unicodedata import normalize
 import logging
 
+logger = logging.getLogger('embellish')
+
 # third-party libraries
 import dateutil.parser
 import yaml
@@ -25,7 +27,7 @@ except:
   try:
     from jinja2_hamlpy import HamlPyExtension
   except:
-    logging.error('Couldn\'t load the Hamlpy extension for jinja2')
+    logger.error('Couldn\'t load the Hamlpy extension for jinja2')
 
 
 
@@ -117,7 +119,7 @@ def read_page(fname):
     page.update(yaml.load(parts[0]))
     if isinstance(page['date'], str):
       page['date'] = dateutil.parser.parse(page['date'])
-  logging.info('parts {}'.format([p[:15] for p in parts]))
+  logger.info('parts {}'.format([p[:15] for p in parts]))
   if len(parts) > 2:
     page['excerpt'] = parts[1]
   page['content'] = parts[-1]
@@ -197,7 +199,7 @@ def get_pages(
             page['content'] = convert_content_fn(page['content'])
             parse_metadata_fn(page, site)
           except:
-            logging.warning('Problem parsing ' + f)
+            logger.warning('Problem parsing ' + f)
             continue
         site['pages'].append(page)
     if not site['recursive']:
@@ -279,7 +281,7 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
       if os.path.isfile(template_fname):
         break
     else:
-      logging.error('Can\'t find template {0} in {1}'.format(
+      logger.error('Can\'t find template {0} in {1}'.format(
           page['template'], page['filename']))
       continue
 
@@ -297,7 +299,7 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 
     write_text(out_f, final_text)
     page['checksum'] = checksum
-    logging.info("Content page: {0} -> {1}".format(page['filename'], out_f))
+    logger.info("Content page: {0} -> {1}".format(page['filename'], out_f))
 
 
 # transfer functions to copy the static directory
@@ -316,9 +318,9 @@ def scss_to_css(src, dst_dir, site):
   try:
     css_text = _scss_compiler.compile(scss_text)
     write_text(dst, css_text)
-    logging.info('compile .sass file: {0} -> {1}'.format(src, dst))
+    logger.info('compile .sass file: {0} -> {1}'.format(src, dst))
   except:
-    logging.error('compile .sass file: {0} -> {1}'.format(src, dst))
+    logger.error('compile .sass file: {0} -> {1}'.format(src, dst))
   return dst
 
 
@@ -339,9 +341,9 @@ def jinjahaml_to_html(src, dst_dir, site):
     }
     text = template.render({'site':site, 'page':page})
     write_text(dst, text)
-    logging.info('compile .haml file: {0} -> {1}'.format(src, dst))
+    logger.info('compile .haml file: {0} -> {1}'.format(src, dst))
   except:
-    logging.error('compile .haml file: {0} -> {1}'.format(src, dst))
+    logger.error('compile .haml file: {0} -> {1}'.format(src, dst))
   return dst
 
 
@@ -354,9 +356,9 @@ def coffee_compile(src, dst_dir, site):
     in_text = read_text(src)
     out_text = coffeescript.compile(in_text)
     write_text(dst, out_text)
-    logging.info('compile .coffee file: {0} -> {1}'.format(src, dst))
+    logger.info('compile .coffee file: {0} -> {1}'.format(src, dst))
   except:
-    logging.error('compile .coffee file: {0} -> {1}'.format(src, dst))
+    logger.error('compile .coffee file: {0} -> {1}'.format(src, dst))
   return dst
 
 
@@ -366,9 +368,9 @@ def direct_copy(src, dst_dir, site):
     return False
   try:
     shutil.copy2(src, dst)
-    logging.info('File transfer: {0} -> {1}'.format(src, dst))
+    logger.info('File transfer: {0} -> {1}'.format(src, dst))
   except:
-    logging.debug('File transfer: {0} -> {1}'.format(src, dst))
+    logger.debug('File transfer: {0} -> {1}'.format(src, dst))
 
 
 def copy_or_process_sass_and_haml(src, dst_dir, site):
