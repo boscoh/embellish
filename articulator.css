@@ -1,3 +1,14 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.touchscroll {
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
 .page-filler {
   height: 100%;
 }
