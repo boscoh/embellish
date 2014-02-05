@@ -11,7 +11,7 @@
       overflow: hidden;
     }
     body {
-      background-image: url(grey_wash_wall.png);
+      background-image: url(texture.png);
       background-repeat: repeat;
       font-family: 'Helvetica Neue', sans-serif;
       letter-spacing: 0.1em;
@@ -245,12 +245,12 @@ body
 <p>To do this, we simply add some flags to the header in a text file <code>index.txt</code> <a href="#fig-index-mkd"></a>:</p>
 <div id="fig-index-mkd"> <code>index.mkd</code> - example of a markdown file that generates a blog index file
 <pre class="codehilite">
-    template: index.haml
-    index: True
-    sort_key: date
-    sort_reverse: True
-    title: My Blog Posts in Reverse Chronological Order
-    ---
+template: index.haml
+index: True
+sort_key: date
+sort_reverse: True
+title: My Blog Posts in Reverse Chronological Order
+---
 </pre>
 </div>
 
@@ -258,10 +258,10 @@ body
 <p>Then we create the template file for the index <code>index.haml</code> <a href="#fig-index-haml"></a>:</p>
 <div id="fig-index-haml"> <code>index.haml</code> - example of a HAML template that generates the HTML code for an index markdown file
 <pre class="codehilite">
-    - for subpage in page.subpages:
-      .excerpt
-        %a{href:"{{ subpage.url }}"} {{ subpage.title }}
-          {{ subpage.date.strftime("%d %b %Y ") }}
+- for subpage in page.subpages:
+  .excerpt
+    %a{href:"{{ subpage.url }}"} {{ subpage.title }}
+      {{ subpage.date.strftime("%d %b %Y ") }}
 </pre>
 </div>
 
@@ -397,26 +397,26 @@ ext: .html
 <p>Every <code>page</code> dictionary comes equiped with a set of default metadata. The best way to show this is from the Python source code <a href="#fig-page-dictionary"></a>:</p>
 <div id="fig-page-dictionary"> <code>page</code> - the python dictionary that is piped into every template
 <pre class="codehilite">
-    page = {
-      'template': 'default.haml',  # name of template file
-      'filename': fname,  # name of markdown file
-      'modified': os.path.getmtime(fname),  # unix time number of file  
-      'checksum': '', # checksum used to check final output to avoid redundant writes
-      'excerpt': '', # text to put in excerpt, no tags please!
-      'content': '',  # main text of article
-      'title': '',  # title for indexing and for large display
-      'category': '',  # category of article for indexing 
-      'rel_site_url': '',  # the top site directory relative to this page
-      'date': None,  # published date
-      'slug': None,  # url-safe name of article used to make url and files
-      'url': '',   # relative url used for links in index files
-      'target': '',    # target filename, maybe different to url due to redirection
-      'index': False,   # indicates if this is an indexing page
-      'sort_key': None,  # the field on which to sort under in indexing
-      'sort_reverse': True,  # ascending or descing order for sorting
-      'subpages': [],   # in indexing, pages belonging to the index placed here
-      'max_subpages': None,  # a maximum limit of files to put in subpages
-    }
+page = {
+  'template': 'default.haml',  # name of template file
+  'filename': fname,  # name of markdown file
+  'modified': os.path.getmtime(fname),  # unix time number of file  
+  'checksum': '', # checksum used to check final output to avoid redundant writes
+  'excerpt': '', # text to put in excerpt, no tags please!
+  'content': '',  # main text of article
+  'title': '',  # title for indexing and for large display
+  'category': '',  # category of article for indexing 
+  'rel_site_url': '',  # the top site directory relative to this page
+  'date': None,  # published date
+  'slug': None,  # url-safe name of article used to make url and files
+  'url': '',   # relative url used for links in index files
+  'target': '',    # target filename, maybe different to url due to redirection
+  'index': False,   # indicates if this is an indexing page
+  'sort_key': None,  # the field on which to sort under in indexing
+  'sort_reverse': True,  # ascending or descing order for sorting
+  'subpages': [],   # in indexing, pages belonging to the index placed here
+  'max_subpages': None,  # a maximum limit of files to put in subpages
+}
 </pre>
 </div>
 
