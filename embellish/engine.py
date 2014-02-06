@@ -106,9 +106,10 @@ def read_page(fname):
   }
   try:
     text = read_text(fname)
-  except:
-    logger.warning('Problem reading ' + relpath(fname))
-    raise IOError()
+  except Exception, e:
+    logger.error('error reading "{}"'.format(relpath(fname)))
+    logger.error('codecs:' + str(e))
+    raise e
 
   # a little hack to allow adjacent --- to denote sections
   text = text.replace('\n---\n---\n', '\n---\n@@@haha@@@\n---\n')
@@ -122,9 +123,10 @@ def read_page(fname):
   if len(parts) > 1:
     try:
       yaml_metadata = yaml.load(parts[0])
-    except:
-      logger.warning('Problem reading YAML metadata from ' + relpath(fname))
-      raise IOError()
+    except Exception, e:
+      logger.error('YAML:error reading metadata from "{}"'.format(relpath(fname)))
+      logger.error('YAML:' + str(e))
+      raise e
     page.update(yaml_metadata)
     if isinstance(page['date'], str):
       page['date'] = dateutil.parser.parse(page['date'])
@@ -141,13 +143,13 @@ def convert_markdown(text):
 # from http://flask.pocoo.org/snippets/5/
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
 def slugify(text, delim=u'-'):
-    """Generates an slightly worse ASCII-only slug."""
-    result = []
-    for word in _punct_re.split(text.lower()):
-        word = normalize('NFKD', word).encode('ascii', 'ignore')
-        if word:
-            result.append(word)
-    return unicode(delim.join(result))
+  """Generates an slightly worse ASCII-only slug."""
+  result = []
+  for word in _punct_re.split(text.lower()):
+      word = normalize('NFKD', word).encode('ascii', 'ignore')
+      if word:
+          result.append(word)
+  return unicode(delim.join(result))
 
 
 # default 'parse_page_fn' used in 'read_page'
@@ -205,12 +207,13 @@ def get_pages(
           try:
             page = read_page(f)
           except:
-            logger.warning('Skipping ' + relpath(f))
+            logger.error('skipping ' + relpath(f))
             continue
           try:
             page['content'] = convert_content_fn(page['content'])
-          except:
-            logger.warning('Skipping due to problem converting markdown ' + f)
+          except Exception, e:
+            logger.error('text conversion: error in "{}"'.format(f))
+            logger.error('text conversion:' + str(e))
             continue
           parse_metadata_fn(page, site)
         site['pages'].append(page)
@@ -293,7 +296,7 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
       if os.path.isfile(template_fname):
         break
     else:
-      logger.error('Can\'t find template {0} in {1}'.format(
+      logger.error('Can\'t find template "{0}" in "{1}"'.format(
           page['template'], page['filename']))
       continue
 
@@ -311,7 +314,7 @@ def write_pages(site, render_template_fn=render_jinjahaml_template):
 
     write_text(out_f, final_text)
     page['checksum'] = checksum
-    logger.info("Content page: {0} -> {1}".format(
+    logger.info('compiled .html: "{0}" -> "{1}"'.format(
          relpath(page['filename']), relpath(out_f)))
 
 
@@ -330,10 +333,13 @@ def scss_to_css(src, dst_dir, site):
     scss_text = read_text(src)
   try:
     css_text = _scss_compiler.compile(scss_text)
+    if os.path.isfile(dst):
+      os.remove(dst)
     write_text(dst, css_text)
-    logger.info('compile .sass file: {0} -> {1}'.format(src, dst))
-  except:
-    logger.error('compile .sass file: {0} -> {1}'.format(src, dst))
+    logger.info('compiled .sass file: "{0}" -> "{1}"'.format(src, dst))
+  except Exception, e:
+    logger.error('sassin:in "{0}"'.format(src))
+    logger.error('sassin:' + str(e))
   return dst
 
 
@@ -353,10 +359,13 @@ def jinjahaml_to_html(src, dst_dir, site):
       'filename': dst,  # name of markdown file
     }
     text = template.render({'site':site, 'page':page})
+    if os.path.isfile(dst):
+      os.remove(dst)
     write_text(dst, text)
-    logger.info('compile .haml file: {0} -> {1}'.format(src, dst))
-  except:
-    logger.error('compile .haml file: {0} -> {1}'.format(src, dst))
+    logger.info('compiled .haml file: "{0}" -> "{1}"'.format(src, dst))
+  except Exception, e:
+    logger.error('hamlpy:in file "{0}"'.format(src))
+    logger.error('hamlpy:' + str(e))
   return dst
 
 
@@ -368,10 +377,13 @@ def coffee_compile(src, dst_dir, site):
   try:
     in_text = read_text(src)
     out_text = coffeescript.compile(in_text)
+    if os.path.isfile(out_text):
+      os.remove(out_text)
     write_text(dst, out_text)
-    logger.info('compile .coffee file: {0} -> {1}'.format(src, dst))
-  except:
-    logger.error('compile .coffee file: {0} -> {1}'.format(src, dst))
+    logger.info('compiled .coffee file: "{0}" -> "{1}"'.format(src, dst))
+  except Exception, e:
+    logger.error('coffeescript:in file "{0}"'.format(src))
+    logger.error('coffeescript:' + str(e))
   return dst
 
 
