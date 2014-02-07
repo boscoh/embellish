@@ -38,6 +38,10 @@ Have `python` and `pip`? Then:
 
 	  > pip install embellish
 
+The project is hosted at [github](https://github.com/boscoh/embellish) and you can install the [zip file](https://github.com/boscoh/embellish/archive/master.zip) with:
+
+    > python setup.py install
+
 Dependencies (which should have been installed by `pip`): 
 
 - markdown
@@ -64,14 +68,11 @@ Any litmus test for a static website generator is to make a blog. Here's a quick
 The structure of a content page has three sections, separated by `---`, such as this `post.txt` [](#fig-post).
 
 
-
 <div id="fig-post">
   <code>post.mkd</code> - example of a Markdown Post
   <pre class="codehilite">
 title: The Title of this Post
 template: post.haml
-category: promotion
-other: anything you want in YAML
 ---
 Excerpt of post
 ---
@@ -85,7 +86,6 @@ written in markdown
 </div>
 
 
-
 Both the header and the excerpt are optional, and if only two sections are given, it is assumed that the first is the header. If no excerpt is given, an excerpt is automatically generated.
 
 `embellish` reads the header as YAML metadata. There are a few fields used by `embellish` but you can add anything you want. This metadata will be made available to you in the template as a dictionary called `page`.
@@ -95,7 +95,7 @@ If no `template` is given, a default one is used that is located in the embllish
 
 ### Templates
 
-Of course you want to make your own template for the HTML in your page. `embellish` uses the `jinja2-haml` format. This is called so because, it uses the `haml` format to represent the HTML, and uses `jinja2` to input the templating variables and control strucutres.
+Of course you want to make your own template for the HTML in your page. `embellish` uses the [`jinja2-haml`](https://github.com/jessemiller/HamlPy/blob/master/reference.md) format. This is called so because, it uses the `haml` format to represent the HTML, and uses `jinja2` to input the templating variables and control strucutres.
 
 A simple template for a blog page is `post.haml` in [](#fig-template).
 
@@ -147,7 +147,7 @@ And now, we do:
 This will combine `example.txt` with `post.haml` to make `example.html`, and also convert `styles.sass` into `styles.css`.
 
 
-### Setting up an Index Page
+### Index Pages
 
 To really get the blog going, we need to build an index page.
 
@@ -178,7 +178,7 @@ And of course, we'd like to do it in reverse order `sort_reverse: True` as fits 
 
 
 
-### Template for an Index Page
+### Templating an Index Page
 
 Okay now the text file is done, let's make the template `index.haml` [](#fig-index-haml) that will process all the posts that will be passed into the index during compilation.
 
@@ -227,7 +227,7 @@ You might have noticed that there is no pagination. I really detest pagination, 
 
 
 
-### URLs
+### Referring to URLs in templates
 
 It's important to get URL's right to show up in the template, especially if you want to use relative URL's, which you should.
 
@@ -246,10 +246,49 @@ But as for internal links, relative URL's are more robust:
 
     %a{href="{{ page.rel_site_url }}/{{ page.url }}"} 
 
-As can be seen in `index.haml`, relative links are used for the `subpage` when looping through all the posts: 
+As can be seen in `index.haml` [](#fig-index-haml), relative links are used for the `subpage` when looping through all the posts: 
 
     %a{href:"{{ page.rel_site_url }}/{{ subpage.url }}"} 
         {{ subpage.title }}
+
+
+
+### Blog With Categories
+
+Now with blog posts, you'll want to add `categories` to collect different posts together. The way to do this is to add a category to the header, such as `category: vampire` in this `vampire.mkd` [](#fig-vampire-post).
+
+<div id="fig-vampire-post"> <code>vampire.mkd</code> - a post with a category of vampire.
+<pre class="codehilite">
+title: The Vampire Post
+template: post.haml
+category: vampire
+---
+Excerpt of vampire post
+---
+# This is Vampire Post
+
+## There's Vampire as Category!
+
+This is also in __markdown__.
+</pre>
+</div>
+
+Then you can collect the posts with an archive file [](#fig-archive-index).
+
+<div id="fig-archive-index"> <code>archive.mkd</code> - a post with a category of vampire.
+<pre class="codehilite">
+template: index.haml
+index: True
+sort_key: date
+category: vampire
+sort_reverse: True
+title: Archive of Posts about Vampires
+---
+</pre>
+</div>
+
+
+
 
 
 
@@ -326,7 +365,9 @@ As will the directory structure of `media_dir` is replicated in the `output_dir`
 
 
 
-### Local Webserver to Debug Website
+## Debugging Websites
+
+### Local Webserver
 
 To iterate designs quickly, it's important you see the compiled websites easily. Like many other generators, `embellish` provides a local webserver to do this.
 
@@ -361,13 +402,24 @@ Meaning, if you refresh the page in the browser, the local web-server will scan 
 The local web-server will pick a random port so that you can run different servers for different websites at the same time.
 
 
+### Coffeescript/SASS/Haml files
+
+Because of the media processing, I use the `embellish` server to set-up my environment for debugging `.coffeescript`, `.sass` and `.haml` files.
+
+Just run the server over my directory:
+
+    embellish -m .
+
+Then edit the source files and refresh in the browser to compile.
+
+I see the server output in the terminal for errors. And I debug the javascript by looking at the `console.log` output of the javascript in a CHROME developer console on the refreshed web-page.
 
 
 ## Templating guide
 
 `Embellish` is designed to help you play around with templates. In `embellish`, there's no need to define different types of posts. Simply set the `page.template` field to the template of your choice, and populate the correspoding metadata in your markdown files. `Embellish` is quite flexible in looking for template files. And as long as the metadata and the templates match, you're good to go.
 
-### Metadata
+### Page Metadata
 
 In order to make awesome templates, you have to understand the metadata that are piped into them. During rendering, two dictionaries are passed into every template:
 
@@ -415,7 +467,7 @@ If excerpts are not given, `page.excerpt` is set to the first 50 non-tag words i
 
 
 
-### URLs
+### Filenames and Directory Structure 
 
 Two design principles of `embellish` is that it lets you determine the URL and file placement as much as possible, and that relative URLs should work. No matter what, `page.target` will contain the filename of the target HTML file, which is written in the `site.output_dir` directory. If `page.url` or `page.target` are specified, these will be used.
 
@@ -426,6 +478,11 @@ A common exception to this are index.html files in subdirectories. Because brows
     url: archive/
     target: archive/index.html
 
+Two other fields need to be mentioned. Sometimes legitimate filenames cannot serve as URLs, so a conversion is done to turn the basename of the filename into a `page.slug`. This can be directly overriden if the `page.slug` field is given.
+
+Finally, the extension of the output files are normally assumed to be `.html` but this can be overriden in `site.ext` in the configuration file.
+
+### Relative URLs
 
 To use relative URLs in your templates is easy. Let's say in a `page`, you want to refer to the url of another page `subpage.url`. You then use the `page.rel_site_url` field to take you from `page` to the root directory of the site. Then to take you down to `subpage`, you use `subpage.url`:
 
@@ -435,13 +492,12 @@ If you don't care about relative directories, you can just use `subpage.url` fro
 
     %a{href="/{{ subpage.url }}"} absolute link
 
+
+### Absolute URLs
+
 And with the full url in case you are interacting with external javascript libraries:
 
     %a{href="{{ site.url }}/{{ subpage.url }}"} full url link
-
-Two other fields need to be mentioned. Sometimes legitimate filenames cannot serve as URLs, so a conversion is done to turn the basename of the filename into a `page.slug`. This can be directly overriden if the `page.slug` field is given.
-
-Finally, the extension of the output files are normally assumed to be `.html` but this can be overriden in `site.ext` in the configuration file.
 
 
 
