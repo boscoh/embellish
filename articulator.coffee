@@ -22,6 +22,7 @@ class FigureList
     @selected_header = null
     @selected_headerlink = null
     @is_autodetect_figlink = true
+    @is_autodetect_header = true
     @headers = []
     @figlinks = []
     
@@ -39,7 +40,7 @@ class FigureList
       $(@toc_href).append(
           $('<div>').addClass('page-filler'))
 
-    $(@text_href).scroll(() => @text_scroll_fn())
+    $(@text_href).scroll(() => @scroll_in_text())
 
     # handle initial hash code
     hash = window.location.hash
@@ -52,7 +53,7 @@ class FigureList
           # wait till all assets have been loaded!
           fig.ready(@select_figlink_and_scroll_to_fig_fn(figlink))
     else
-      @text_scroll_fn()
+      @scroll_in_text()
 
   select_figlink: (figlink) ->
     if @selected_figlink != null
@@ -93,7 +94,10 @@ class FigureList
     @selected_headerlink = @headerlinks[header_id]
     @selected_headerlink.addClass('active')
 
+    # hack required to stop the jump to the header_id 
+    text_scrollTop = $(@text_href).scrollTop()
     window.location.hash = '#' + header_id
+    $(@text_href).scrollTop(text_scrollTop)
 
   scroll_to_href_in_text: (href, is_autodetect_figlink, callback) ->
     @is_autodetect_figlink = is_autodetect_figlink
@@ -112,7 +116,8 @@ class FigureList
   scroll_to_href_in_text_fn: (href, is_autodetect_figlink) ->
     (e) =>
       e.preventDefault()
-      @scroll_to_href_in_text(href, is_autodetect_figlink, ()=>@text_scroll_fn())
+      console.log('scrollt_href_in_text', href)
+      @scroll_to_href_in_text(href, is_autodetect_figlink, ()=>@scroll_in_text())
       false
 
   transfer_figs: () ->
@@ -209,7 +214,7 @@ class FigureList
       headerlink.click(@scroll_to_href_in_text_fn(header_href, false))
       div.append(headerlink)
 
-  text_scroll_fn: () ->
+  scroll_in_text: () ->
     # $(@text_href) must be position:relative to work
     text = $(@text_href)
 
@@ -290,7 +295,7 @@ resize_img_dom = (img_dom, width) ->
     img_elem.css('width': '100%')
 
 
-# Link to outside world
+# Public API!
 
 window.articulator = {
   set_figures_and_toc: (toc_href, text_href, figlist_href) ->

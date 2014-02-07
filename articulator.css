@@ -18,10 +18,12 @@ html, body {
 }
 
 .toc h1, .toc h2, .toc h3, .toc h4, .toc h5, .toc h6, .toc h7 {
-  font-size: 12px;
+  font-size: 1em;
   padding: 0;
   margin: 0;
-  font-weight: 500;
+  font-weight: normal;
+  letter-spacing: 0.1em;
+  line-height: 1.2em;
   text-transform: none;
 }
 .toc h1 {
@@ -33,19 +35,31 @@ html, body {
 }
 .toc h3 {
   padding-left: 0.5em;
-  font-style: italic;
+}
+.toc h4 {
+  padding-left: 1em;
+}
+.toc h5 {
+  padding-left: 1.5em;
+}
+.toc h6 {
+  padding-left: 2em;
+}
+.toc h7 {
+  padding-left: 2.5em;
 }
 .toc a, .toc a:visited {
   display: block;
   padding: 3px 5px;
-  border-right: 10px solid transparent;
-  border-left: 10px solid transparent;
+  border-left: 3px solid transparent;
   text-decoration: none;
   color: #333;
+  padding-left: 10px;
+  padding-right: 20px;
 }
 .toc a.active {
-  border-left: 10px solid #669;
-  background-color: #AAE;
+  border-left: 3px solid #8181F7;
+  background-color: #CECEF6;
 }
 
 a.figlink {
@@ -53,7 +67,7 @@ a.figlink {
 }
 
 a.figlink.active {
-  background-color: #DDF;
+  background-color: #CECEF6;
 }
 
 a.figlink.active:link, a.figlink.active:visited {
@@ -69,11 +83,13 @@ a.figlink.active:link, a.figlink.active:visited {
   padding-right: 20px;
   padding-top: 20px;
   padding-bottom: 10px;
+  border-right: 3px solid transparent;
 }
 
 .fig-in-figlist.active {
-  background-color: #DDF;
+  background-color: #CECEF6;
   color: #339;
+  border-right: 3px solid #8181F7;
 }
 
 .fig-in-figlist a {

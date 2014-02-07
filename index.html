@@ -11,41 +11,52 @@
       overflow: hidden;
     }
     body {
-      background-image: url(texture.png);
-      background-repeat: repeat;
       font-family: 'Helvetica Neue', sans-serif;
       letter-spacing: 0.1em;
       font-size: 14px;
       color: #333;
-      line-height: 1.5em; }
+      line-height: 1.5em;
+    }
     .main {
+      background-image: url(texture2.png);
+      background-repeat: repeat;
       height: 100%;
       width: 100%;
     }
     .sidebar {
+      display: none;
       position: absolute;
       top: 0;
-      background-color: #99F;
+      background-color: #EEE;
       width: 180px;
       text-align: left;
       padding-top: 140px;
       overflow: auto;
       height: 100%;
+      font-size: 12px;
+      line-height: 1.2em;
     }
     .figures {
       position: absolute;
+      display: none;
       top: 0;
       width: 460px;
       height: 100%;
+      font-size: 12px;
+      line-height: 1.2em;
       overflow: auto;
-      background-color: #EEF;
+      background-color: #EEE;
+    }
+    .sidebar, .figures {
+      background-image: url(texture.png);
+      background-repeat: repeat;
     }
     .text {
       position: absolute;
       top: 0;
       background-color: white;
       float: left;
-      width: 430px;
+      width: 450px;
       padding: 0px 40px;
       height: 100%;
       overflow: auto;
@@ -57,18 +68,21 @@
       font-weight: 500;
       line-height: 1em;
       padding-top: 2em;
-      padding-bottom: 0 }
+      padding-bottom: 0
+    }
     h1 {
       font-size: 45px;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       padding-top: 100px;
-      padding-bottom: 0em }
+      padding-bottom: 0em
+    }
     h2 {
       font-size: 23px;
       letter-spacing: 0.1em;
       padding-top: 2em;
-      padding-bottom: 0em; }
+      padding-bottom: 0em;
+    }
     h3 {
       font-size: 14px;
       font-weight: 900;
@@ -77,49 +91,74 @@
     .timestamp {
       margin-top: 6em;
       text-align: right;
-      color: #999;
       border-top: 1px solid #CCC;
-      font-size: 10px }
+      font-size: 12px
+    }
     .timestamp,
     .timestamp a:link,
     .timestamp a:visited {
-      color: #888; }
+      color: #666;
+    }
     .timestamp a {
-      text-decoration: underline; }
+      text-decoration: underline;
+    }
     blockquote {
       border-left: 5px solid #DDD;
       margin-left: 0;
       padding-left: 2em;
-      color: #888; }
+      color: #888;
+    }
     code {
-      padding: 0px 2px; }
+      padding: 1px 4px;
+    }
     pre {
-      margin: 0; }
-    .codehilite {
       overflow: auto;
-      padding: 7px 20px; }
-    pre {
-      border: none  }
-    .codehilite, code  {
-      background-color: #F9F9FF;
-      border: 2px solid #EEF; }
-    .codehilite code {
-      border: none }
-    code, .codehilite {
-      color: #777;
+      padding: 5px 20px;
+    }
+    code, pre {
+      background-color: #EEE;
+      border: 1px solid #DDD;
+      border-radius: 5px;
+      color: #333;
       font-size: 12px;
-      line-height: 1.5em; }
+      line-height: 1.5em;
+    }
+    .fig-in-text pre,
+    .fig-in-text code,
+    .figures .active pre,
+    .figures .active code {
+      border: 1px solid #BBE;
+      background-color: #DDDDF9;
+    }
 
     @media screen and (max-width: 600px) {
       body {
         width: auto;
         margin: 0;
         padding-left: 20px;
-        padding-right: 20px}
+        padding-right: 20px;
+      }
+      body, code, pre {
+        font-size: 8px;
+      }
+      .text {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      h1 {
+        padding-top: 2em;
+        font-size: 28px;
+      }
+      h2 {
+        font-size: 12px;
+      }
+      h3, h4, h5, h6, h7 {
+        font-size: 8px;
+      }
       .fig-in-text {
         display: block;
         background-color: #DDF;
-        padding: 10px;
+        padding: 5px;
       }
     }
 
@@ -168,11 +207,12 @@
 <p>Any litmus test for a static website generator is to make a blog. Here's a quick guide using <code>embellish</code> where <code>markdown</code> is used for the text, <code>YAML</code> for metadata, and <code>haml</code> to write the HTML.</p>
 <p><code>embellish</code> will recognize files with extensions <code>.txt</code>, <code>.md</code>, <code>.mkd</code> and <code>.markdown</code> as post/article pages.</p>
 <h3>Article page</h3>
-<p>The structure of a content page has three sections, separated by <code>---</code>, such as this <code>example.txt</code> <a href="#fig-post"></a>:</p>
-<div id="fig-post"><code>example.mkd</code> - example of a Markdown Post
-<pre class="codehilite">
-title: The Title of this Great Post
-template: template.haml
+<p>The structure of a content page has three sections, separated by <code>---</code>, such as this <code>post.txt</code> <a href="#fig-post"></a>.</p>
+<div id="fig-post">
+  <code>post.mkd</code> - example of a Markdown Post
+  <pre class="codehilite">
+title: The Title of this Post
+template: post.haml
 category: promotion
 other: anything you want in YAML
 ---
@@ -184,53 +224,51 @@ Excerpt of post
 
 This is the _body_ of the text 
 written in markdown
-</pre>
+  </pre>
 </div>
 
-<p>Both the header and the excerpt are optional. </p>
-<p>If only two sections are given, it is assumed that the first is the header.</p>
-<p>If no excerpt is given, an excerpt is generated, made up of the first 50 non-tag words in the main text.</p>
+<p>Both the header and the excerpt are optional, and if only two sections are given, it is assumed that the first is the header. If no excerpt is given, an excerpt is automatically generated.</p>
 <p><code>embellish</code> reads the header as YAML metadata. There are a few fields used by <code>embellish</code> but you can add anything you want. This metadata will be made available to you in the template as a dictionary called <code>page</code>.</p>
 <p>If no <code>template</code> is given, a default one is used that is located in the embllish directory under <code>defaults/default.haml</code>.</p>
 <h3>Templates</h3>
 <p>Of course you want to make your own template for the HTML in your page. <code>embellish</code> uses the <code>jinja2-haml</code> format. This is called so because, it uses the <code>haml</code> format to represent the HTML, and uses <code>jinja2</code> to input the templating variables and control strucutres.</p>
-<p>A simple template for a blog page is <code>template.haml</code> in <a href="#fig-template"></a>.</p>
+<p>A simple template for a blog page is <code>post.haml</code> in <a href="#fig-template"></a>.</p>
 <div id="fig-template"> 
-  <code>template.haml</code> - example of a simple HAML template to generate an article HTML
+  <code>post.haml</code> - example of a simple HAML template to generate an article HTML
   <pre class="codehilite">
 %head
-  %link{rel:'stylesheet',href:'styles.css'}
-
+  %link{href:'styles.css', rel:'stylesheet'}
 %body
-  %h1 
+  .title
     {{ page.title }}
-  %i 
+  .nav
     category: 
-    {{ page.category }}; 
+    {{ page.category }} &#183;
     published: 
     {{ page.date.strftime("%d %b %Y") }}
-
+  %hr
   {{ page.content }}
   </pre>
 </div>
 
-<p>For more information, go to the Template Guide below.</p>
-<p>Notice that there is a link to a style sheet <code>styles.css</code>, which you should make and include in the directory.</p>
-<p>However, I strongly recommend you learn to write <code>.sass</code> style sheets, which <code>embellish</code> will happily compile into <code>.css</code> for you. For instance, here's a sample <code>styles.sass</code> <a href="#fig-sass"></a>:</p>
+<p>For details on how to write templates to <code>embellish</code> posts, see the Template Guide below.</p>
+<p>Notice that there is a link to a style sheet <code>styles.css</code>. Now you can include your style sheet, but I strongly recommend you learn to write <code>.sass</code> style sheets, such as <code>styles.sass</code> <a href="#fig-sass"></a> that <code>embellish</code> will automatically compile into <code>styles.css</code> for you.</p>
 <div id="fig-sass"> 
   <code>style.sass</code> - a SASS file to generate <code>style.css</code>
   <pre class="codehilite">
 body
   background-color: #FFF
   font-family: Helvetica
-  width: 700px
-  margin: 0 auto
+  width: 450px
+  margin: 40px auto
+.title
+  text-transform: uppercase
+  font-weight: 900
+  font-size: 18px
+  letter-spacing: 0.1em
 .nav
-  a 
-    display:inline
-    padding-right: 1em
-  a:link
-    text-decoration: none
+  font-style: italic
+  font-size: 12px
   </pre>
 </div>
 
@@ -239,65 +277,95 @@ body
 </pre></div>
 
 
-<p>This will combine <code>example.txt</code> with <code>template.haml</code> to make <code>example.html</code>, and also convert <code>styles.sass</code> into <code>styles.css</code>.</p>
-<h3>Index Pages</h3>
-<p>To really get the blog going, we need to build index pages and/or archives. </p>
-<p>To do this, we simply add some flags to the header in a text file <code>index.txt</code> <a href="#fig-index-mkd"></a>:</p>
+<p>This will combine <code>example.txt</code> with <code>post.haml</code> to make <code>example.html</code>, and also convert <code>styles.sass</code> into <code>styles.css</code>.</p>
+<h3>Setting up an Index Page</h3>
+<p>To really get the blog going, we need to build an index page.</p>
+<p>To do this, we create a markdown file <code>index.mkd</code> <a href="#fig-index-mkd"></a> where in the header, we put some extra flags.</p>
 <div id="fig-index-mkd"> <code>index.mkd</code> - example of a markdown file that generates a blog index file
 <pre class="codehilite">
 template: index.haml
 index: True
 sort_key: date
 sort_reverse: True
-title: My Blog Posts in Reverse Chronological Order
+max_subpages: 5
+title: Blog Posts
 ---
+Short excerpt of this post.
+---
+Some words to describe the following list of 
+posts that are arranged in reverse chronological 
+order.
 </pre>
 </div>
 
-<p>The key field is <code>index</code> and if it's set to true, then an index of all posts will be pumped into the page when the template is compiled. </p>
-<p>Then we create the template file for the index <code>index.haml</code> <a href="#fig-index-haml"></a>:</p>
+<p>The key flag is <code>index: True</code> that tells <code>embellish</code> that we will be building an index page with this file. Since in this case, no <code>category</code> is given, all the posts found by <code>embellish</code> will be sent to this page during compilation.</p>
+<p>The posts will be sorted by date as indicated by <code>sort_key: date</code>. We could tell it to sort by any other key in the header, but let's start with date.</p>
+<p>And of course, we'd like to do it in reverse order <code>sort_reverse: True</code> as fits blogging convention.</p>
+<h3>Template for an Index Page</h3>
+<p>Okay now the text file is done, let's make the template <code>index.haml</code> <a href="#fig-index-haml"></a> that will process all the posts that will be passed into the index during compilation.</p>
 <div id="fig-index-haml"> <code>index.haml</code> - example of a HAML template that generates the HTML code for an index markdown file
 <pre class="codehilite">
-- for subpage in page.subpages:
-  .excerpt
-    %a{href:"{{ subpage.url }}"} {{ subpage.title }}
-      {{ subpage.date.strftime("%d %b %Y ") }}
+%head
+  %link{href:'styles.css', rel:'stylesheet'}
+%body
+  .title
+    {{ page.title }}
+  {{ page.content }}
+  %ul  
+    - for subpage in page.subpages:
+      %li
+        %b
+          %a{href:"{{ page.rel_site_url }}/{{ subpage.url }}"} 
+            {{ subpage.title }}
+        %br
+        %i {{ subpage.excerpt }}
+        %br
+       .nav
+          - if subpage['category']:
+            category: {{ subpage.category }}
+            %br
+          date: {{ subpage.date.strftime("%d %b %Y") }}    
+        %br
+        %br
 </pre>
 </div>
 
-<p>The  metadata used to generate such pages are: <code>page.index</code>, <code>page.template</code>, <code>page.category</code>, <code>page.sort_key</code>, <code>page.sort_reverse</code>, <code>page.max_subpages</code>. </p>
-<p>The controlling variable is the <code>page.index</code>. If this is set to True, then a group of pages, <code>page.subpages</code>, will be generated. Essentially, <code>page.subpages</code> are a list of pages, that are not themselves index pages. </p>
-<p>Furthermore, only pages with the same <code>page.category</code> as the index page are collected with the number of pages capped to <code>page.max_subpages</code> if this is given. If <code>page.category</code> is empty ('') then pretty much the entire site will be put into <code>page.subpages</code> except of course for other index pages.</p>
-<p>These pages will be sorted by the field given in <code>page.sort_key</code>, and this will be either sorted in ascending order, or if <code>page.sort_reverse</code> is True, it is sorted in descending order. The default is to sort by date, from most recent to oldest: <code>sort_key: date</code> and <code>sort_reverse: True</code>.</p>
-<p>You can always populate your own sorting key, with headings, section, chapters, tags etc.</p>
-<p>In your HAML/Jinja2 template, to make a list of items such as in an archive of posts, you simply loop through the <code>page.subpages</code> field. As there already exists  a <code>page</code> dictionary, don't use that variable name! Use <code>subpage</code> instead as your looping variable:</p>
-<p>On pagination: sorry, but I hate pagination so I haven't implemented it here. My experience is that most blogs are not that big and don't have that many articles to archive. It would be so much easier to browse if all the posts were put in one page.</p>
+<p>How it works is that during compilation, <code>embellish</code> will package the metadata data and the content into a dictionary <code>page</code> that will be sent into the template. The structure of <code>page</code> will be described in the Templating Guide.</p>
+<p>The important variable here is <code>page.subpages</code> that gives the list of pages that belong to the index page. If a <code>category</code> was given, then only pages with the same <code>category</code> are found in the list, otherwise all pages are given.</p>
+<p>Now the jinja2-haml code for looping through the pages is really nice. It is essentially this:</p>
+<div class="codehilite"><pre>- for subpage in page.subpages:
+    {{ subpage.title }}
+    {{ subpage.excerpt }}
+</pre></div>
+
+
+<p>It's important you use <code>subpage</code> as the looping variable, as <code>page</code> would otherwise clash with the main <code>page</code> dictionary!</p>
+<p>Now if you did not provide an excerpt, an automatic 20 word excerpt will be generated for you from the text.</p>
+<p>You might have noticed that there is no pagination. I really detest pagination, so I did not implement it; put all your posts on one page.</p>
 <h3>URLs</h3>
-<p>Two design principles of <code>embellish</code> is that it lets you determine the URL and file placement as much as possible, and that relative URLs should work. No matter what, <code>page.target</code> will contain the filename of the target HTML file, which is written in the <code>site.output_dir</code> directory. If <code>page.url</code> or <code>page.target</code> are specified, these will be used.</p>
-<p>Most of the time <code>page.url</code> will match <code>page.target</code>. If <code>page.url</code> is not specified, then it is assumed that the path of the markdown file with respect to the <code>site.content_dir</code> represents the <code>page.url</code> and the <code>page.target</code>. In flat-file mode, this means the <code>.html</code> file will appear in the same directory as the markdown file. </p>
-<p>A common exception to this are index.html files in subdirectories. Because browsers default to <code>dir/</code> for <code>dir/index.html</code>, a useful motif in the header for <code>index.html</code> files is:</p>
-<div class="codehilite"><pre>url: archive/
-target: archive/index.html
+<p>It's important to get URL's right to show up in the template, especially if you want to use relative URL's, which you should.</p>
+<p>First, you'll need the site's URL, and there are two ways to get it:</p>
+<ol>
+<li>The site's absolute URL, which is <code>{{ site.url }}</code></li>
+<li>The site's URL relative to the page in question <code>{{ page.rel_site_url }}</code></li>
+</ol>
+<p>The URL of a page thus requires combining the site's URL and the page's URL. Depending on which site URL you use, you will get a relative or absolute URL.</p>
+<p>Say if you need to interact with external libraries, you might want the absolute URL:</p>
+<div class="codehilite"><pre>%a{href=&quot;{{ site.url }}/{{ page.url }}&quot;}
 </pre></div>
 
 
-<p>To use relative URLs in your templates is easy. Let's say in a <code>page</code>, you want to refer to the url of another page <code>subpage.url</code>. You then use the <code>page.rel_site_url</code> field to take you from <code>page</code> to the root directory of the site. Then to take you down to <code>subpage</code>, you use <code>subpage.url</code>:</p>
-<div class="codehilite"><pre>%a{href=&quot;{{ page.rel\_site\_url }}/{{ subpage.url }}&quot;} relative link
+<p>But as for internal links, relative URL's are more robust:</p>
+<div class="codehilite"><pre>%a{href=&quot;{{ page.rel_site_url }}/{{ page.url }}&quot;}
 </pre></div>
 
 
-<p>If you don't care about relative directories, you can just use <code>subpage.url</code> from <code>/</code>:</p>
-<div class="codehilite"><pre>%a{href=&quot;/{{ subpage.url }}&quot;} absolute link
+<p>As can be seen in <code>index.haml</code>, relative links are used for the <code>subpage</code> when looping through all the posts: </p>
+<div class="codehilite"><pre>%a{href:&quot;{{ page.rel_site_url }}/{{ subpage.url }}&quot;} 
+    {{ subpage.title }}
 </pre></div>
 
 
-<p>And with the full url in case you are interacting with external javascript libraries:</p>
-<div class="codehilite"><pre>%a{href=&quot;{{ site.url }}/{{ subpage.url }}&quot;} full url link
-</pre></div>
-
-
-<p>Two other fields need to be mentioned. Sometimes legitimate filenames cannot serve as URLs, so a conversion is done to turn the basename of the filename into a <code>page.slug</code>. This can be directly overriden if the <code>page.slug</code> field is given.</p>
-<p>Finally, the extension of the output files are normally assumed to be <code>.html</code> but this can be overriden in <code>site.ext</code> in the configuration file.</p>
 <h2>Larger Websites</h2>
 <h3>Configuration Files</h3>
 <p>Obviously for a more complicated website, you want to separate your content, templates, assets, and output into different directories.</p>
@@ -432,12 +500,37 @@ page = {
 
 
 <p>If excerpts are not given, <code>page.excerpt</code> is set to the first 50 non-tag words in the main text.</p>
+<h3>URLs</h3>
+<p>Two design principles of <code>embellish</code> is that it lets you determine the URL and file placement as much as possible, and that relative URLs should work. No matter what, <code>page.target</code> will contain the filename of the target HTML file, which is written in the <code>site.output_dir</code> directory. If <code>page.url</code> or <code>page.target</code> are specified, these will be used.</p>
+<p>Most of the time <code>page.url</code> will match <code>page.target</code>. If <code>page.url</code> is not specified, then it is assumed that the path of the markdown file with respect to the <code>site.content_dir</code> represents the <code>page.url</code> and the <code>page.target</code>. In flat-file mode, this means the <code>.html</code> file will appear in the same directory as the markdown file. </p>
+<p>A common exception to this are index.html files in subdirectories. Because browsers default to <code>dir/</code> for <code>dir/index.html</code>, a useful motif in the header for <code>index.html</code> files is:</p>
+<div class="codehilite"><pre>url: archive/
+target: archive/index.html
+</pre></div>
 
+
+<p>To use relative URLs in your templates is easy. Let's say in a <code>page</code>, you want to refer to the url of another page <code>subpage.url</code>. You then use the <code>page.rel_site_url</code> field to take you from <code>page</code> to the root directory of the site. Then to take you down to <code>subpage</code>, you use <code>subpage.url</code>:</p>
+<div class="codehilite"><pre>%a{href=&quot;{{ page.rel\_site\_url }}/{{ subpage.url }}&quot;} relative link
+</pre></div>
+
+
+<p>If you don't care about relative directories, you can just use <code>subpage.url</code> from <code>/</code>:</p>
+<div class="codehilite"><pre>%a{href=&quot;/{{ subpage.url }}&quot;} absolute link
+</pre></div>
+
+
+<p>And with the full url in case you are interacting with external javascript libraries:</p>
+<div class="codehilite"><pre>%a{href=&quot;{{ site.url }}/{{ subpage.url }}&quot;} full url link
+</pre></div>
+
+
+<p>Two other fields need to be mentioned. Sometimes legitimate filenames cannot serve as URLs, so a conversion is done to turn the basename of the filename into a <code>page.slug</code>. This can be directly overriden if the <code>page.slug</code> field is given.</p>
+<p>Finally, the extension of the output files are normally assumed to be <code>.html</code> but this can be overriden in <code>site.ext</code> in the configuration file.</p>
         <div class='timestamp'>
           generated by
           <a href='http://github.com/boscoh/embellish'>embellish</a>
           
-          on 05 Feb 2014
+          on 07 Feb 2014
         </div>
       </div>
     </div>

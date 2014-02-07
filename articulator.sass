@@ -11,6 +11,8 @@ body
   /* inertial scrolling on OSX
   -webkit-overflow-scrolling: touch
 
+$highlight-color: #CECEF6
+$dark-highlight-color: #8181F7
 
 .page-filler
   height: 100%
@@ -26,10 +28,12 @@ body
   h5,
   h6,
   h7 
-    font-size: 12px
+    font-size: 1em
     padding: 0
     margin: 0
-    font-weight: 500
+    font-weight: normal
+    letter-spacing: 0.1em
+    line-height: 1.2em
     text-transform: none
   h1
     text-transform: uppercase
@@ -38,23 +42,31 @@ body
     padding-top: 0.5em
   h3
     padding-left: 0.5em
-    font-style: italic
+  h4
+    padding-left: 1.0em
+  h5
+    padding-left: 1.5em
+  h6
+    padding-left: 2.0em
+  h7
+    padding-left: 2.5em
   a,
   a:visited
     display: block
     padding: 3px 5px
-    border-right: 10px solid transparent
-    border-left: 10px solid transparent
+    border-left: 3px solid transparent
     text-decoration: none
     color: #333
+    padding-left: 10px
+    padding-right: 20px
   a.active
-    border-left: 10px solid #669
-    background-color: #AAE
+    border-left: 3px solid $dark-highlight-color
+    background-color: $highlight-color
 
 a.figlink
   text-decoration: none
 a.figlink.active
-  background-color: #DDF
+  background-color: $highlight-color
 a.figlink.active:link,
 a.figlink.active:visited
   color: #339
@@ -67,9 +79,11 @@ a.figlink.active:visited
   padding-right: 20px
   padding-top: 20px
   padding-bottom: 10px
+  border-right: 3px solid transparent
 .fig-in-figlist.active
-  background-color: #DDF
+  background-color: $highlight-color
   color: #339
+  border-right: 3px solid $dark-highlight-color
 .fig-in-figlist a
   text-decoration: none
 

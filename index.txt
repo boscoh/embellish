@@ -61,13 +61,15 @@ Any litmus test for a static website generator is to make a blog. Here's a quick
 
 ### Article page
 
-The structure of a content page has three sections, separated by `---`, such as this `example.txt` [](#fig-post):
+The structure of a content page has three sections, separated by `---`, such as this `post.txt` [](#fig-post).
 
 
-<div id="fig-post"><code>example.mkd</code> - example of a Markdown Post
-<pre class="codehilite">
-title: The Title of this Great Post
-template: template.haml
+
+<div id="fig-post">
+  <code>post.mkd</code> - example of a Markdown Post
+  <pre class="codehilite">
+title: The Title of this Post
+template: post.haml
 category: promotion
 other: anything you want in YAML
 ---
@@ -79,14 +81,12 @@ Excerpt of post
 
 This is the _body_ of the text 
 written in markdown
-</pre>
+  </pre>
 </div>
 
-Both the header and the excerpt are optional. 
 
-If only two sections are given, it is assumed that the first is the header.
 
-If no excerpt is given, an excerpt is generated, made up of the first 50 non-tag words in the main text.
+Both the header and the excerpt are optional, and if only two sections are given, it is assumed that the first is the header. If no excerpt is given, an excerpt is automatically generated.
 
 `embellish` reads the header as YAML metadata. There are a few fields used by `embellish` but you can add anything you want. This metadata will be made available to you in the template as a dictionary called `page`.
 
@@ -97,32 +97,29 @@ If no `template` is given, a default one is used that is located in the embllish
 
 Of course you want to make your own template for the HTML in your page. `embellish` uses the `jinja2-haml` format. This is called so because, it uses the `haml` format to represent the HTML, and uses `jinja2` to input the templating variables and control strucutres.
 
-A simple template for a blog page is `template.haml` in [](#fig-template).
+A simple template for a blog page is `post.haml` in [](#fig-template).
 
 <div id="fig-template"> 
-  <code>template.haml</code> - example of a simple HAML template to generate an article HTML
+  <code>post.haml</code> - example of a simple HAML template to generate an article HTML
   <pre class="codehilite">
 %head
-  %link{rel:'stylesheet',href:'styles.css'}
-
+  %link{href:'styles.css', rel:'stylesheet'}
 %body
-  %h1 
+  .title
     {{ page.title }}
-  %i 
+  .nav
     category: 
-    {{ page.category }}; 
+    {{ page.category }} &#183;
     published: 
     {{ page.date.strftime("%d %b %Y") }}
-
+  %hr
   {{ page.content }}
   </pre>
 </div>
 
-For more information, go to the Template Guide below.
+For details on how to write templates to `embellish` posts, see the Template Guide below.
 
-Notice that there is a link to a style sheet `styles.css`, which you should make and include in the directory.
-
-However, I strongly recommend you learn to write `.sass` style sheets, which `embellish` will happily compile into `.css` for you. For instance, here's a sample `styles.sass` [](#fig-sass):
+Notice that there is a link to a style sheet `styles.css`. Now you can include your style sheet, but I strongly recommend you learn to write `.sass` style sheets, such as `styles.sass` [](#fig-sass) that `embellish` will automatically compile into `styles.css` for you.
 
 <div id="fig-sass"> 
   <code>style.sass</code> - a SASS file to generate <code>style.css</code>
@@ -130,14 +127,16 @@ However, I strongly recommend you learn to write `.sass` style sheets, which `em
 body
   background-color: #FFF
   font-family: Helvetica
-  width: 700px
-  margin: 0 auto
+  width: 450px
+  margin: 40px auto
+.title
+  text-transform: uppercase
+  font-weight: 900
+  font-size: 18px
+  letter-spacing: 0.1em
 .nav
-  a 
-    display:inline
-    padding-right: 1em
-  a:link
-    text-decoration: none
+  font-style: italic
+  font-size: 12px
   </pre>
 </div>
 
@@ -145,14 +144,14 @@ And now, we do:
 
     > embellish .
 
-This will combine `example.txt` with `template.haml` to make `example.html`, and also convert `styles.sass` into `styles.css`.
+This will combine `example.txt` with `post.haml` to make `example.html`, and also convert `styles.sass` into `styles.css`.
 
 
-### Index Pages
+### Setting up an Index Page
 
-To really get the blog going, we need to build index pages and/or archives. 
+To really get the blog going, we need to build an index page.
 
-To do this, we simply add some flags to the header in a text file `index.txt` [](#fig-index-mkd):
+To do this, we create a markdown file `index.mkd` [](#fig-index-mkd) where in the header, we put some extra flags.
 
 <div id="fig-index-mkd"> <code>index.mkd</code> - example of a markdown file that generates a blog index file
 <pre class="codehilite">
@@ -160,68 +159,97 @@ template: index.haml
 index: True
 sort_key: date
 sort_reverse: True
-title: My Blog Posts in Reverse Chronological Order
+max_subpages: 5
+title: Blog Posts
 ---
+Short excerpt of this post.
+---
+Some words to describe the following list of 
+posts that are arranged in reverse chronological 
+order.
 </pre>
 </div>
 
-The key field is `index` and if it's set to true, then an index of all posts will be pumped into the page when the template is compiled. 
+The key flag is `index: True` that tells `embellish` that we will be building an index page with this file. Since in this case, no `category` is given, all the posts found by `embellish` will be sent to this page during compilation.
 
-Then we create the template file for the index `index.haml` [](#fig-index-haml):
+The posts will be sorted by date as indicated by `sort_key: date`. We could tell it to sort by any other key in the header, but let's start with date.
+
+And of course, we'd like to do it in reverse order `sort_reverse: True` as fits blogging convention.
+
+
+
+### Template for an Index Page
+
+Okay now the text file is done, let's make the template `index.haml` [](#fig-index-haml) that will process all the posts that will be passed into the index during compilation.
 
 <div id="fig-index-haml"> <code>index.haml</code> - example of a HAML template that generates the HTML code for an index markdown file
 <pre class="codehilite">
-- for subpage in page.subpages:
-  .excerpt
-    %a{href:"{{ subpage.url }}"} {{ subpage.title }}
-      {{ subpage.date.strftime("%d %b %Y ") }}
+%head
+  %link{href:'styles.css', rel:'stylesheet'}
+%body
+  .title
+    {{ page.title }}
+  {{ page.content }}
+  %ul  
+    - for subpage in page.subpages:
+      %li
+        %b
+          %a{href:"{{ page.rel_site_url }}/{{ subpage.url }}"} 
+            {{ subpage.title }}
+        %br
+        %i {{ subpage.excerpt }}
+        %br
+       .nav
+          - if subpage['category']:
+            category: {{ subpage.category }}
+            %br
+          date: {{ subpage.date.strftime("%d %b %Y") }}    
+        %br
+        %br
 </pre>
 </div>
 
-The  metadata used to generate such pages are: `page.index`, `page.template`, `page.category`, `page.sort_key`, `page.sort_reverse`, `page.max_subpages`. 
+How it works is that during compilation, `embellish` will package the metadata data and the content into a dictionary `page` that will be sent into the template. The structure of `page` will be described in the Templating Guide.
 
-The controlling variable is the `page.index`. If this is set to True, then a group of pages, `page.subpages`, will be generated. Essentially, `page.subpages` are a list of pages, that are not themselves index pages. 
+The important variable here is `page.subpages` that gives the list of pages that belong to the index page. If a `category` was given, then only pages with the same `category` are found in the list, otherwise all pages are given.
 
-Furthermore, only pages with the same `page.category` as the index page are collected with the number of pages capped to `page.max_subpages` if this is given. If `page.category` is empty ('') then pretty much the entire site will be put into `page.subpages` except of course for other index pages.
+Now the jinja2-haml code for looping through the pages is really nice. It is essentially this:
 
-These pages will be sorted by the field given in `page.sort_key`, and this will be either sorted in ascending order, or if `page.sort_reverse` is True, it is sorted in descending order. The default is to sort by date, from most recent to oldest: `sort_key: date` and `sort_reverse: True`.
+    - for subpage in page.subpages:
+        {{ subpage.title }}
+        {{ subpage.excerpt }}
 
-You can always populate your own sorting key, with headings, section, chapters, tags etc.
+It's important you use `subpage` as the looping variable, as `page` would otherwise clash with the main `page` dictionary!
 
-In your HAML/Jinja2 template, to make a list of items such as in an archive of posts, you simply loop through the `page.subpages` field. As there already exists  a `page` dictionary, don't use that variable name! Use `subpage` instead as your looping variable:
+Now if you did not provide an excerpt, an automatic 20 word excerpt will be generated for you from the text.
 
+You might have noticed that there is no pagination. I really detest pagination, so I did not implement it; put all your posts on one page.
 
-On pagination: sorry, but I hate pagination so I haven't implemented it here. My experience is that most blogs are not that big and don't have that many articles to archive. It would be so much easier to browse if all the posts were put in one page.
 
 
 ### URLs
 
-Two design principles of `embellish` is that it lets you determine the URL and file placement as much as possible, and that relative URLs should work. No matter what, `page.target` will contain the filename of the target HTML file, which is written in the `site.output_dir` directory. If `page.url` or `page.target` are specified, these will be used.
+It's important to get URL's right to show up in the template, especially if you want to use relative URL's, which you should.
 
-Most of the time `page.url` will match `page.target`. If `page.url` is not specified, then it is assumed that the path of the markdown file with respect to the `site.content_dir` represents the `page.url` and the `page.target`. In flat-file mode, this means the `.html` file will appear in the same directory as the markdown file. 
+First, you'll need the site's URL, and there are two ways to get it:
 
-A common exception to this are index.html files in subdirectories. Because browsers default to `dir/` for `dir/index.html`, a useful motif in the header for `index.html` files is:
+1. The site's absolute URL, which is `{{ site.url }}`
+2. The site's URL relative to the page in question `{{ page.rel_site_url }}`
 
-    url: archive/
-    target: archive/index.html
+The URL of a page thus requires combining the site's URL and the page's URL. Depending on which site URL you use, you will get a relative or absolute URL.
 
+Say if you need to interact with external libraries, you might want the absolute URL:
 
-To use relative URLs in your templates is easy. Let's say in a `page`, you want to refer to the url of another page `subpage.url`. You then use the `page.rel_site_url` field to take you from `page` to the root directory of the site. Then to take you down to `subpage`, you use `subpage.url`:
+    %a{href="{{ site.url }}/{{ page.url }}"} 
 
-    %a{href="{{ page.rel\_site\_url }}/{{ subpage.url }}"} relative link
+But as for internal links, relative URL's are more robust:
 
-If you don't care about relative directories, you can just use `subpage.url` from `/`:
+    %a{href="{{ page.rel_site_url }}/{{ page.url }}"} 
 
-    %a{href="/{{ subpage.url }}"} absolute link
+As can be seen in `index.haml`, relative links are used for the `subpage` when looping through all the posts: 
 
-And with the full url in case you are interacting with external javascript libraries:
-
-    %a{href="{{ site.url }}/{{ subpage.url }}"} full url link
-
-Two other fields need to be mentioned. Sometimes legitimate filenames cannot serve as URLs, so a conversion is done to turn the basename of the filename into a `page.slug`. This can be directly overriden if the `page.slug` field is given.
-
-Finally, the extension of the output files are normally assumed to be `.html` but this can be overriden in `site.ext` in the configuration file.
-
+    %a{href:"{{ page.rel_site_url }}/{{ subpage.url }}"} 
+        {{ subpage.title }}
 
 
 
@@ -384,6 +412,38 @@ In particular, dates are converted to standard Python datetime objects, and can 
     {{ page.date.strftime("%d %b %Y") }}
 
 If excerpts are not given, `page.excerpt` is set to the first 50 non-tag words in the main text.
+
+
+
+### URLs
+
+Two design principles of `embellish` is that it lets you determine the URL and file placement as much as possible, and that relative URLs should work. No matter what, `page.target` will contain the filename of the target HTML file, which is written in the `site.output_dir` directory. If `page.url` or `page.target` are specified, these will be used.
+
+Most of the time `page.url` will match `page.target`. If `page.url` is not specified, then it is assumed that the path of the markdown file with respect to the `site.content_dir` represents the `page.url` and the `page.target`. In flat-file mode, this means the `.html` file will appear in the same directory as the markdown file. 
+
+A common exception to this are index.html files in subdirectories. Because browsers default to `dir/` for `dir/index.html`, a useful motif in the header for `index.html` files is:
+
+    url: archive/
+    target: archive/index.html
+
+
+To use relative URLs in your templates is easy. Let's say in a `page`, you want to refer to the url of another page `subpage.url`. You then use the `page.rel_site_url` field to take you from `page` to the root directory of the site. Then to take you down to `subpage`, you use `subpage.url`:
+
+    %a{href="{{ page.rel\_site\_url }}/{{ subpage.url }}"} relative link
+
+If you don't care about relative directories, you can just use `subpage.url` from `/`:
+
+    %a{href="/{{ subpage.url }}"} absolute link
+
+And with the full url in case you are interacting with external javascript libraries:
+
+    %a{href="{{ site.url }}/{{ subpage.url }}"} full url link
+
+Two other fields need to be mentioned. Sometimes legitimate filenames cannot serve as URLs, so a conversion is done to turn the basename of the filename into a `page.slug`. This can be directly overriden if the `page.slug` field is given.
+
+Finally, the extension of the output files are normally assumed to be `.html` but this can be overriden in `site.ext` in the configuration file.
+
+
 
 
 

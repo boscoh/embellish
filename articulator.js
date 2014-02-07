@@ -34,6 +34,7 @@
       this.selected_header = null;
       this.selected_headerlink = null;
       this.is_autodetect_figlink = true;
+      this.is_autodetect_header = true;
       this.headers = [];
       this.figlinks = [];
       $(this.text_href).append($('<div>').addClass('page-filler'));
@@ -47,7 +48,7 @@
         $(this.toc_href).append($('<div>').addClass('page-filler'));
       }
       $(this.text_href).scroll(function() {
-        return _this.text_scroll_fn();
+        return _this.scroll_in_text();
       });
       hash = window.location.hash;
       if (hash.slice(0, 5) === '#header') {
@@ -62,7 +63,7 @@
           }
         }
       } else {
-        this.text_scroll_fn();
+        this.scroll_in_text();
       }
     }
 
@@ -105,7 +106,7 @@
     };
 
     FigureList.prototype.select_header = function(header) {
-      var header_id;
+      var header_id, text_scrollTop;
       this.selected_header = header;
       header_id = header.attr('id');
       if (this.selected_headerlink !== null) {
@@ -113,7 +114,9 @@
       }
       this.selected_headerlink = this.headerlinks[header_id];
       this.selected_headerlink.addClass('active');
-      return window.location.hash = '#' + header_id;
+      text_scrollTop = $(this.text_href).scrollTop();
+      window.location.hash = '#' + header_id;
+      return $(this.text_href).scrollTop(text_scrollTop);
     };
 
     FigureList.prototype.scroll_to_href_in_text = function(href, is_autodetect_figlink, callback) {
@@ -140,8 +143,9 @@
       var _this = this;
       return function(e) {
         e.preventDefault();
+        console.log('scrollt_href_in_text', href);
         _this.scroll_to_href_in_text(href, is_autodetect_figlink, function() {
-          return _this.text_scroll_fn();
+          return _this.scroll_in_text();
         });
         return false;
       };
@@ -258,7 +262,7 @@
       return _results;
     };
 
-    FigureList.prototype.text_scroll_fn = function() {
+    FigureList.prototype.scroll_in_text = function() {
       var figlink, header, onscreen_figlink, onscreen_header, text, _i, _j, _len, _len1, _ref, _ref1;
       text = $(this.text_href);
       onscreen_header = null;
