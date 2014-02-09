@@ -8,7 +8,7 @@ LOW FRICTION WEBSITE GENERATION
 
 ## Quick & Dirty Websites
 
-Other generators dictate your directories to be structured their way. Embellish does not. Go to the `embellish` directory and type:
+Other generators dictate your directories to be structured their way. `embellish` does not. Go to the `embellish` directory and type:
 
     > embellish -m .
 
