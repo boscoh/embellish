@@ -42,7 +42,7 @@ elif os.path.isdir(args.target):
   site = engine.default_site
   config_dir = args.target
 else:
-  print('Error: can\'t figure out {0}.'.format(args.target))
+  logging.error('can\'t figure out {0}.'.format(args.target))
   sys.exit(1)
 
 if args.recursive:
@@ -62,8 +62,11 @@ if args.monitor:
   regenerate = lambda: engine.generate_site_incrementally(site)
 
   # get all directories needed to monitor
+  embellish_dir = os.path.split(engine.__file__)[0]
+  defaults_dir = os.path.join(embellish_dir, 'defaults')
   keys = ['content_dir', 'template_dir', 'media_dir']
   monitor_dirs = [site[key] for key in keys]
+  monitor_dirs.append(defaults_dir)
 
   server.run(site_dir, monitor_dirs, regenerate)
 
