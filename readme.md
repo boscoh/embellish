@@ -1,27 +1,35 @@
 
 # Embellish
 
-A LOW-FRICTION WEBSITE GENERATOR
+low friction website generator
 
 
-## Making Quick & Dirty Websites
+## What is Embellish
 
-Most Python website generators are highly opinionated.
+Embellish builds a working static website from a bunch of text files, with optional HTML templates.
 
-This one is not.
+It is designed to work with static websites in many forms, even in an existing directory. 
+
+
+## Quick & Dirty Websites
 
 Other generators dictate your directories to be structured their way.
 
-embellish can make a website out of any directory.
+Embellish does not.
 
-Go to a directory (e.g. the embellish directory) with a markdown file (e.g. readme.txt):
+Go to a directory (the embellish directory) with a markdown file (readme.md),  and:
 
-> embellish -m .
-Boom!
+    > embellish -m .
 
-readme.html is generated and opened in a browser.
+Boom! readme.html is generated and opened in a browser.
 
 Now edit readme.txt, save, and refresh the browser.
+
+
+## Docs
+
+Go to <http://boscoh.github.io/embellish>
+
 
 
 ## Installation
@@ -30,27 +38,7 @@ To install:
 
     pip install embellish
 
-Python depencencies should be automatically installed. If you want to manually install dependencies:
+Python depencencies should be automatically installed. 
 
-    pip install markdown pyyaml python-dateutil jinja2 hamlpy flask sassin pyScss
-
-Now create a `example.mkd` in a temporary directory:
-
-    title: An example file
-    category: example-of-a-category
-    ---
-    This is an example file.
-
-Save the file, and do:
-
-    embellish -m .
-
-Because of the '-m' option, embellish will attempt to open up the site in a web-browser using a local web-server. 
-
-You should then find `example.html` in your directory. As no templates were specified, a default responsive-web-design is used (`embellish/defaults/default.haml`).
-
-
-## Documentation
-
-Further documentation is found at <http://boscoh.github.io/embellish>
+But if you want them manually, they are: markdown, pyyaml, python-dateutil, jinja2, hamlpy, jinja2_hamlpy, flask, sassin
 
