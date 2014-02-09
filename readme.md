@@ -3,9 +3,6 @@
 
 LOW FRICTION WEBSITE GENERATION
 
-
-## What is Embellish
-
 `embellish` builds a working static website from a bunch of text files, with optional HTML templates. It is designed to work with static websites in many forms, even in an existing directory. 
 
 
