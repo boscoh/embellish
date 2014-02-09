@@ -25,7 +25,7 @@ To install:
 
 Python depencencies should be automatically installed. 
 
-But if you want them manually, they are: `markdown`, `pyyaml`, `python-dateutil`, `jinja2`, `hamlpy`, `jinja2-hamlpy`, `flask` abd `sassin`
+But if you want them manually, they are: `markdown`, `pyyaml`, `python-dateutil`, `jinja2`, `hamlpy`, `jinja2-hamlpy`, `flask` & `sassin`
 
 
 ## Docs
