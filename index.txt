@@ -8,17 +8,13 @@ A LOW-FRICTION WEBSITE GENERATOR
 
 
 
-## Making Quick & Dirty Websites
+## Quick & Dirty Websites
 
-Most Python website generators are highly opinionated.
-
-This one is not.
-
-Other generators dictate your directories to be structured their way. 
+Most Python website generators are highly opinionated; they dictate exactly how you must arrange your directories. This one is not.
 
 `embellish` can make a website out of any directory.
 
-Go to a directory (e.g. the `embellish` directory)  with a `markdown` file (e.g. `readme.txt`):
+Go to a directory with a `markdown` file (e.g. the `embellish` directory):
 
 	> embellish -m .
 
@@ -34,13 +30,17 @@ Now edit `readme.txt`, save, and refresh the browser.
 
 ## Installation
 
+The project is hosted at [github](https://github.com/boscoh/embellish).
+
 Have `python` and `pip`? Then:
 
 	  > pip install embellish
 
-The project is hosted at [github](https://github.com/boscoh/embellish) and you can install the [zip file](https://github.com/boscoh/embellish/archive/master.zip) with:
+Or install manually using the [zip file](https://github.com/boscoh/embellish/archive/master.zip):
 
     > python setup.py install
+
+All the following examples can be found in the `examples` directory of the zip file.
 
 Dependencies (which should have been installed by `pip`): 
 
@@ -65,7 +65,13 @@ Any litmus test for a static website generator is to make a blog. Here's a quick
 
 ### Article page
 
-The structure of a content page has three sections, separated by `---`, such as this `post.txt` [](#fig-post).
+The structure of a content page has three sections separated by `---`:
+
+1. header
+2. excerpt
+3. markdown text
+
+such as in `post.mkd` [](#fig-post).
 
 
 <div id="fig-post">
@@ -86,18 +92,18 @@ written in markdown
 </div>
 
 
-Both the header and the excerpt are optional, and if only two sections are given, it is assumed that the first is the header. If no excerpt is given, an excerpt is automatically generated.
+Both the header and the excerpt are optional. If only two sections are given, then it's assumed that it's a header and body, and an excerpt is auto-generated.
 
-`embellish` reads the header as YAML metadata. There are a few fields used by `embellish` but you can add anything you want. This metadata will be made available to you in the template as a dictionary called `page`.
+`embellish` reads the header as [YAML](https://github.com/Animosity/CraftIRC/wiki/Complete-idiot's-introduction-to-yaml) metadata. There are a few fields used by `embellish` but you can add anything you want. This metadata will be made available to you in the template as a dictionary called `page`.
 
-If no `template` is given, a default one is used that is located in the embllish directory under `defaults/default.haml`.
+To generate an HTML page from this article post, a template is required. In this case, the template referred to in the header is `post.haml`. If no template is given, a default one is used that is located in the embllish directory under `defaults/default.haml`.
 
 
-### Templates
+### Templates and Style Sheets
 
-Of course you want to make your own template for the HTML in your page. `embellish` uses the [`jinja2-haml`](https://github.com/jessemiller/HamlPy/blob/master/reference.md) format. This is called so because, it uses the `haml` format to represent the HTML, and uses `jinja2` to input the templating variables and control strucutres.
+Templates are used to generate HTML files from text files and their attendant header information.
 
-A simple template for a blog page is `post.haml` in [](#fig-template).
+`embellish` uses the [jinja2-haml](https://github.com/jessemiller/HamlPy/blob/master/reference.md) format for templates. A simple example is `post.haml` [](#fig-template), which was referred in `post.txt` above.
 
 <div id="fig-template"> 
   <code>post.haml</code> - example of a simple HAML template to generate an article HTML
@@ -117,9 +123,9 @@ A simple template for a blog page is `post.haml` in [](#fig-template).
   </pre>
 </div>
 
-For details on how to write templates to `embellish` posts, see the Template Guide below.
+For details on how templates work in `embellish`, see the Template Guide below.
 
-Notice that there is a link to a style sheet `styles.css`. Now you can include your style sheet, but I strongly recommend you learn to write `.sass` style sheets, such as `styles.sass` [](#fig-sass) that `embellish` will automatically compile into `styles.css` for you.
+Notice that there is a link to a style sheet `styles.css` [](#fig-template). Now, you could simply creat your own `styles.css` and put it in the directory, but I strongly recommend you to write [SASS](https://github.com/boscoh/sassin) style sheets such as `styles.sass` [](#fig-sass), which will be automatically compiled into `styles.css` for you.
 
 <div id="fig-sass"> 
   <code>style.sass</code> - a SASS file to generate <code>style.css</code>
@@ -140,18 +146,16 @@ body
   </pre>
 </div>
 
-And now, we do:
+With the post, the template, and the style sheet done, we are now ready to make the blog:
 
     > embellish .
 
-This will combine `example.txt` with `post.haml` to make `example.html`, and also convert `styles.sass` into `styles.css`.
+Open `index.html` and `archive.html` in your browser.
 
 
 ### Index Pages
 
-To really get the blog going, we need to build an index page.
-
-To do this, we create a markdown file `index.mkd` [](#fig-index-mkd) where in the header, we put some extra flags.
+To really get the blog going, though, we will need to build an index page. First, we create a text file that will generate an index of posts `index.mkd` [](#fig-index-mkd).
 
 <div id="fig-index-mkd"> <code>index.mkd</code> - example of a markdown file that generates a blog index file
 <pre class="codehilite">
@@ -170,17 +174,29 @@ order.
 </pre>
 </div>
 
-The key flag is `index: True` that tells `embellish` that we will be building an index page with this file. Since in this case, no `category` is given, all the posts found by `embellish` will be sent to this page during compilation.
+In the header of the post, the key flag is:
 
-The posts will be sorted by date as indicated by `sort_key: date`. We could tell it to sort by any other key in the header, but let's start with date.
+    index: True
 
-And of course, we'd like to do it in reverse order `sort_reverse: True` as fits blogging convention.
+which tells `embellish` to send a list of posts into the template during compilation of the HTML file. Since in this case, no `category` was given, all the posts found by `embellish` will be used.
+
+The posts will be sorted by date as indicated by:
+    
+    sort_key: date
+
+Other fields could have been used, but let's start with date. We'd also like to do it in reverse order as fits blogging convention:
+
+    sort_reverse: True
+
+And we don't want too many posts, so
+ 
+    max_subpages: 5
 
 
 
-### Templating an Index Page
+### Templating Index Pages
 
-Okay now the text file is done, let's make the template `index.haml` [](#fig-index-haml) that will process all the posts that will be passed into the index during compilation.
+Okay now the text file is done, let's make the template for an index file `index.haml` [](#fig-index-haml).
 
 <div id="fig-index-haml"> <code>index.haml</code> - example of a HAML template that generates the HTML code for an index markdown file
 <pre class="codehilite">
@@ -209,53 +225,58 @@ Okay now the text file is done, let's make the template `index.haml` [](#fig-ind
 </pre>
 </div>
 
-How it works is that during compilation, `embellish` will package the metadata data and the content into a dictionary `page` that will be sent into the template. The structure of `page` will be described in the Templating Guide.
+How it works is that during compilation, `embellish` will package all the information for the page into a dictionary `page` and send it into the template. As well another dictionary `site` will also be sent that includes the site configuration finformation. These will be described in detail below in the Templating Guide.
 
-The important variable here is `page.subpages` that gives the list of pages that belong to the index page. If a `category` was given, then only pages with the same `category` are found in the list, otherwise all pages are given.
+The header of the template is pretty similar to `post.haml` [](#fig-template) above, with the big difference in that `index.haml` [](#fig-index-haml) can handle a special field called `page.subpages`. 
 
-Now the jinja2-haml code for looping through the pages is really nice. It is essentially this:
+`page.subpages` holds a list of all the pages found by `embellish` that belong to this index page. If a `category` was given, then only pages with the same `category` are found in the list. And since no `category` was given here, all pages are given.
+
+To handle the display of all the `page.subpages`, there is a jinja2-haml loop:
 
     - for subpage in page.subpages:
         {{ subpage.title }}
         {{ subpage.excerpt }}
 
-It's important you use `subpage` as the looping variable, as `page` would otherwise clash with the main `page` dictionary!
+Note: it's important you use `subpage` as the looping variable, as `page` would otherwise clash with the main `page` dictionary.
 
-Now if you did not provide an excerpt, an automatic 20 word excerpt will be generated for you from the text.
+Now if you did not provide an excerpt, an automatic 50 word excerpt will be generated for you from the text.
 
-You might have noticed that there is no pagination. I really detest pagination, so I did not implement it; put all your posts on one page.
+You might have noticed that there is no pagination. I detest pagination, so did not implement it. Just put them all in one page. Please.
 
 
 
-### Referring to URLs in templates
+### Referring to URLs 
 
-It's important to get URL's right to show up in the template, especially if you want to use relative URL's, which you should.
+It's important to get the URL's right to show up in the template.
 
-First, you'll need the site's URL, and there are two ways to get it:
+First we need the site URL, and there are two ways to get it:
 
 1. The site's absolute URL, which is `{{ site.url }}`
-2. The site's URL relative to the page in question `{{ page.rel_site_url }}`
+2. The site's relative URL which depends on the location of the page in question `{{ page.rel_site_url }}`
 
-The URL of a page thus requires combining the site's URL and the page's URL. Depending on which site URL you use, you will get a relative or absolute URL.
+The URL of a page thus combines the site's URL with the page's URL. 
 
-Say if you need to interact with external libraries, you might want the absolute URL:
+If you want the absolute URL, you do this:
 
-    %a{href="{{ site.url }}/{{ page.url }}"} 
+    {{ site.url }}/{{ page.url }} 
 
-But as for internal links, relative URL's are more robust:
+For the relative URL of a page, which is more flexible, but more prone to breaking during deployment :
 
-    %a{href="{{ page.rel_site_url }}/{{ page.url }}"} 
+    {{ page.rel_site_url }}/{{ page.url }}
 
-As can be seen in `index.haml` [](#fig-index-haml), relative links are used for the `subpage` when looping through all the posts: 
+In `index.haml` [](#fig-index-haml), relative links are used for the `subpage` in the looping through the collected posts, so the link is:
 
-    %a{href:"{{ page.rel_site_url }}/{{ subpage.url }}"} 
-        {{ subpage.title }}
-
+    {{ subpage.rel_site_url }}/{{ subpage.url }}
 
 
-### Blog With Categories
 
-Now with blog posts, you'll want to add `categories` to collect different posts together. The way to do this is to add a category to the header, such as `category: vampire` in this `vampire.mkd` [](#fig-vampire-post).
+### Archiving With Categories
+
+Now with blog posts, you might want to archive posts under different categories. 
+
+Let's say you have a post about vampires `vampire.mkd` [](#fig-vampire-post). You give it a category in the header by:
+
+    category: vampire
 
 <div id="fig-vampire-post"> <code>vampire.mkd</code> - a post with a category of vampire.
 <pre class="codehilite">
@@ -273,8 +294,6 @@ This is also in __markdown__.
 </pre>
 </div>
 
-Then you can collect the posts with an archive file [](#fig-archive-index).
-
 <div id="fig-archive-index"> <code>archive.mkd</code> - a post with a category of vampire.
 <pre class="codehilite">
 template: index.haml
@@ -286,6 +305,16 @@ title: Archive of Posts about Vampires
 ---
 </pre>
 </div>
+
+Then, to collect all your vampire posts in an archive, you can create an index file `archive.mkd` [](#fig-archive-index), where the only difference from `index.mkd` [](#fig-index-mkd), is that a category is given:
+
+    category: vampire
+
+And then you run:
+
+    > embellish .
+
+Which will generate an archive page for vampir posts `archive.html`.
 
 
 
@@ -313,12 +342,12 @@ ext: .html
 
 To whit:
 
-- `url`: the hard-coded URL of your website. If given, this is available in any templates you make.
+- `url`: the hard-coded URL of your website. If given, this is available in any templates you make as `site.url`.
 - `content_dir`: the directory where you put all your posts and index files.
-- `template_dir`: put all templates here
-- `media_dir`: your supporting files - javascript, css style sheets, images and movies
-- `output_dir`: the directory where all compiled contents and contents of media_dir are put
-- `ext`: the extension for the html files, typically `.html` or `.html`
+- `template_dir`: for holding templates
+- `media_dir`: your supporting files - javascript, css style sheets, images, movies, etc. These will be copied directly into the `output_dir`
+- `output_dir`: the directory where all compiled contents and contents of `media_dir` are put
+- `ext`: the extension for the html files, typically `.html` or `.htm`
 
 To run `embellish` against this configuration file:
 
@@ -326,11 +355,11 @@ To run `embellish` against this configuration file:
 
 And the result will be in the `output_dir`.
 
-When using `embellish` with a directory as the argument, such as:
+Note: when using `embellish` with a directory as the argument, such as:
 
      > embellish .
 
-the directories - `content_dir`, `template_dir`, `media_dir`, `output_dir` - are implicitly set to that directory. The website is made in place!
+Internally, `embellish` sets these fields in `site` - `content_dir`, `template_dir`, `media_dir`, `output_dir` - to the current directory. `embellish` will skip the copying of files, and thus the website is made in place!
 
 
 
@@ -348,7 +377,7 @@ But you can tell `embellish` to exhaustively process all subdirectories with the
 
 ### A Bit of Media Processing
 
-Now one useful thing that `embellish` does in copying over the `media_dir` files is to do some file processing. Currently the following files are automatically processed:
+Another useful thing that `embellish` does during the copying from  the `media_dir` files, some extra file processing is done:
 
   - `.sass` files are compiled to `.css` style sheets
   - `.scss` files are compiled to `.css` style sheets
@@ -361,23 +390,21 @@ So potentially, your directory could just consist of `.haml` files and
 
 will make a nice website consisting of compiled `.html` files.
 
-As will the directory structure of `media_dir` is replicated in the `output_dir`. Obviously, if they're the same, there is no copying, but files will be processed.
-
 
 
 ## Debugging Websites
 
 ### Local Webserver
 
-To iterate designs quickly, it's important you see the compiled websites easily. Like many other generators, `embellish` provides a local webserver to do this.
+To iterate designs quickly, it's important you see the compiled websites easily. Like other static website generators, `embellish` provides a local webserver to do this.
 
 Why? 
 
-Opening local `.html` pages through a browser is a crippled process. Browsers can't figure out `index.html` files from directory names and relative URL's get all messed up. On your actual server, these features are typically enabled in the Apache `.htaccess` file. 
+Opening local `.html` pages through a browser is a crippled process. Browsers can't figure out `index.html` files from directory names and relative URL's get all messed up. These are features that are typically available through your remote webserver, your ultimate destination.
 
-Basically, if you test relative URLs, it's a nightmare. If you use test absolute URLs, it's also a nightmare.
+So, if you test relative URLs, it's a nightmare. If you use test absolute URLs, it's also a nightmare.
 
-To help with that, `embellish` has a local web-server written in `flask` to emulate common `.htaccess` features such as:
+To help with that, `embellish` comes with a local web-server written in `flask` that emulates common Apache `.htaccess` features such as:
 
  - adding trailing `/` to directories
  - processing implied `index.html` in directories
@@ -391,18 +418,20 @@ Or if you have a configuration file:
 
     embellish -m site.yaml
 
+The local web-server will pick a random port so that you can run different servers for different websites at the same time.
+
 As well the `embellish` server:
 
  - monitors modfications in directories 
  - regenerates site if modifications detected
- - opens `./index.html` in browser on startup
+ - caches previous regenerations, for faster iterations
+ - opens `index.html`, or `readme.html` in browser on startup
 
 Meaning, if you refresh the page in the browser, the local web-server will scan the source files for changes, recompile, and serve you the new `.html` page.
 
-The local web-server will pick a random port so that you can run different servers for different websites at the same time.
 
 
-### Coffeescript/SASS/Haml files
+### Debugging Coffeescript/SASS/Haml files
 
 Because of the media processing, I use the `embellish` server to set-up my environment for debugging `.coffeescript`, `.sass` and `.haml` files.
 
@@ -410,21 +439,23 @@ Just run the server over my directory:
 
     embellish -m .
 
-Then edit the source files and refresh in the browser to compile.
+Then edit the source files and refresh in the browser to compile. The server output in the terminal will show compilation errors. And the developer console is opened in the refreshed page, showing `console.log` messages from the javascript.
 
-I see the server output in the terminal for errors. And I debug the javascript by looking at the `console.log` output of the javascript in a CHROME developer console on the refreshed web-page.
 
 
 ## Templating guide
 
-`Embellish` is designed to help you play around with templates. In `embellish`, there's no need to define different types of posts. Simply set the `page.template` field to the template of your choice, and populate the correspoding metadata in your markdown files. `Embellish` is quite flexible in looking for template files. And as long as the metadata and the templates match, you're good to go.
+To write custom templates in `jinja2-haml`, you'll have to understand the data model `embellish` uses to compile templates.
+
+
+During compilation, two dictionaries are passed into every template:
+
+1. `site`: contains all the settings for the entire site. This includes all the source directories, site url, and is essentially, the information in the `site.yaml` [](#fig-config) configuration file.
+
+2. `page`: contains all the information of a given page, including `subpages` when the `page` is an index.
+
 
 ### Page Metadata
-
-In order to make awesome templates, you have to understand the metadata that are piped into them. During rendering, two dictionaries are passed into every template:
-
-  - `page`: contains all the information of a given page. For instance, the content is found in `page.content`
-  - `site`: contains all the settings for the entire site. This includes all the source directories, site url, and is essentially, the information in the `site.yaml` configuration file.
 
 Every `page` dictionary comes equiped with a set of default metadata. The best way to show this is from the Python source code [](#fig-page-dictionary):
 
@@ -455,7 +486,7 @@ page = {
 
 This relevant fields in the `page` dictionary is then overriden by the YAML header of the corresponding source file. 
 
-In a HAML/Jinja2 template, these fields are accessible in the form of:
+In a `jinja2-haml` template, these fields are accessible in the form of:
 
     {{ page.title }}
 
@@ -482,23 +513,21 @@ Two other fields need to be mentioned. Sometimes legitimate filenames cannot ser
 
 Finally, the extension of the output files are normally assumed to be `.html` but this can be overriden in `site.ext` in the configuration file.
 
-### Relative URLs
+### Absolute & Relative URLs
 
-To use relative URLs in your templates is easy. Let's say in a `page`, you want to refer to the url of another page `subpage.url`. You then use the `page.rel_site_url` field to take you from `page` to the root directory of the site. Then to take you down to `subpage`, you use `subpage.url`:
+To reiterate, the site's URL is given in:
 
-    %a{href="{{ page.rel\_site\_url }}/{{ subpage.url }}"} relative link
+1. an absolute form {{ site.url }}
+2. a relative form, relative to the page {{ page.rel_site_url }}
 
-If you don't care about relative directories, you can just use `subpage.url` from `/`:
+Where for instance if `embellish` was run in the current directory, and so is the file, then:
 
-    %a{href="/{{ subpage.url }}"} absolute link
+    page.rel_site_url = ''
 
+The page's URL is thus a combination of the site URL and the page's relative URL:
 
-### Absolute URLs
-
-And with the full url in case you are interacting with external javascript libraries:
-
-    %a{href="{{ site.url }}/{{ subpage.url }}"} full url link
-
+1. absolute: {{ site.url }}/{{ page.url }}
+2. relative {{ page.rel_site_url }}/{{ page.url }}
 
 
 

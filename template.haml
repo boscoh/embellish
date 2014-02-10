@@ -16,6 +16,9 @@
       color: #333;
       line-height: 1.5em; 
     }
+    ul {
+      list-style-type: square;
+    }
     .main {
       background-image: url(texture2.png);
       background-repeat: repeat;
@@ -128,6 +131,30 @@
     .figures .active code {
       border: 1px solid #BBE;
       background-color: #DDDDF9;
+    }
+
+    @media screen and (max-width: 1200px) {
+      body, .timestamp {
+        font-size: 12px;
+      }
+      code, pre {
+        font-size: 10px;
+      }
+      .text,
+      .figures {
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+      h1 {
+        padding-top: 2em;
+        font-size: 35px;
+      } 
+      h2 {
+        font-size: 18px;
+      }
+      h3, h4, h5, h6, h7 {
+        font-size: 12px;
+      }
     }
 
     @media screen and (max-width: 600px) {

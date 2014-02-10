@@ -44,7 +44,7 @@ class FigureList
 
     # handle initial hash code
     hash = window.location.hash
-    if hash.slice(0, 5) == '#header'
+    if hash.slice(0, 7) == '#header'
       @select_header($(hash))
     else if hash.slice(0, 4) == '#fig'
       for figlink in @figlinks

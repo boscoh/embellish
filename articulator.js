@@ -23,7 +23,6 @@
   };
 
   FigureList = (function() {
-
     function FigureList(toc_href, text_href, figlist_href) {
       var fig, figlink, hash, _i, _len, _ref,
         _this = this;
@@ -51,7 +50,7 @@
         return _this.scroll_in_text();
       });
       hash = window.location.hash;
-      if (hash.slice(0, 5) === '#header') {
+      if (hash.slice(0, 7) === '#header') {
         this.select_header($(hash));
       } else if (hash.slice(0, 4) === '#fig') {
         _ref = this.figlinks;
