@@ -1,0 +1,11 @@
+title: The Title of this Post
+template: post.haml
+---
+Excerpt of post
+---
+# Great Post in Markdown
+
+## Markdown Sub-headers!
+
+This is the _body_ of the text 
+written in markdown

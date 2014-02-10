@@ -1,0 +1,12 @@
+%head
+  %link{href:'styles.css', rel:'stylesheet'}
+%body
+  .title
+    {{ page.title }}
+  .nav
+    category: 
+    {{ page.category }} &#183;
+    published: 
+    {{ page.date.strftime("%d %b %Y") }}
+  %hr
+  {{ page.content }}
