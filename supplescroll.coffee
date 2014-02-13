@@ -1,3 +1,14 @@
+
+
+# # PageSlab: a module to create
+# 1. integrated Table of Contents
+# 2. integrated figures
+# 3. linked list of figures
+# 4. clean resizing of columns
+# 5. touchscroll for elems
+
+
+
 is_onscreen = (parent_div, div) ->
   x1 = parent_div.scrollTop()
   x2 = x1 + parent_div.height()
@@ -94,10 +105,11 @@ class FigureList
     @selected_headerlink = @headerlinks[header_id]
     @selected_headerlink.addClass('active')
 
-    # hack required to stop the jump to the header_id 
-    text_scrollTop = $(@text_href).scrollTop()
-    window.location.hash = '#' + header_id
-    $(@text_href).scrollTop(text_scrollTop)
+    hash = '#' + header_id
+    if history.pushState
+      history.pushState(null, null, hash)
+    else
+      window.location.hash = hash
 
   scroll_to_href_in_text: (href, is_autodetect_figlink, callback) ->
     @is_autodetect_figlink = is_autodetect_figlink
@@ -243,6 +255,12 @@ class FigureList
         @select_figlink_and_scroll_to_fig(onscreen_figlink)
 
 
+set_figures_and_toc = (toc_href, text_href, figlist_href) ->
+    window.figure_list = new FigureList(toc_href, text_href, figlist_href)
+
+
+# convenience resizing functions with regular API to
+# do resizing of elements
 
 set_outer_height = (div, height) ->
   margin = div.outerHeight(true) - div.innerHeight()
@@ -295,15 +313,41 @@ resize_img_dom = (img_dom, width) ->
     img_elem.css('width': '100%')
 
 
+# routines to handle the touchscroll on iOS devices
+
+# figure out the DOM element that has triggered
+# and scroll it away from the top or bottom of elem
+shift_from_edge = (e) ->
+  target = e.currentTarget
+  bottom = target.scrollTop + target.offsetHeight
+  if target.scrollTop == 0
+    target.scrollTop = 1
+  else if target.scrollHeight == bottom
+    target.scrollTop -= 1
+
+
+init_touchscroll = () ->
+  # block whole document from bouncing
+  $(document).on(
+    'touchmove', 
+    (e)->e.preventDefault())
+  # allow elements with .touchscroll to bounce
+  $('body').on(
+      'touchmove', 
+      '.touchscroll', 
+      (e)->e.stopPropagation())
+  # add hack to stop .touchscroll elems from hitting 
+  # extremities to avoid triggering the whole page to bounce
+  $('body').on(
+      'touchstart', 
+      '.touchscroll', 
+      (e)-> shift_from_edge(e))
+
+
 # Public API!
 
-window.articulator = {
-  set_figures_and_toc: (toc_href, text_href, figlist_href) ->
-    window.figure_list = new FigureList(toc_href, text_href, figlist_href)
-}
-
-
-window.resize = {
+window.supplescroll = {
+  set_figures_and_toc: set_figures_and_toc,
   set_outer_height: set_outer_height, 
   set_outer_width: set_outer_width,
   get_outer_width: get_outer_width,
@@ -317,32 +361,9 @@ window.resize = {
   get_top: get_top,
   set_top: set_top, 
   set_left: set_left, 
-  resize_img_dom: resize_img_dom 
+  resize_img_dom: resize_img_dom,
+  init_touchscroll: init_touchscroll
 }
 
 
 
-window.touchscroll = {
-  init: () ->
-    # block whole document from bouncing
-    $(document).on('touchmove', (e)->e.preventDefault())
-
-    # allow elements with .touchscroll to bounce
-    $('body').on(
-        'touchmove', '.touchscroll', 
-        (e)->e.stopPropagation())
-
-    # useful hack: shift a little from edge to avoid parent
-    # from bouncing, which normally can't be disabled
-    shift_from_edge = (e) ->
-      target = e.currentTarget
-      bottom = target.scrollTop + target.offsetHeight
-      if target.scrollTop == 0
-        target.scrollTop = 1
-      else if target.scrollHeight == bottom
-        target.scrollTop -= 1
- 
-    $('body').on(
-        'touchstart', '.touchscroll', 
-        (e)-> shift_from_edge(e))
-}

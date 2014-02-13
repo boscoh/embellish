@@ -1,5 +1,5 @@
 (function() {
-  var FigureList, get_bottom, get_content_height, get_content_width, get_left, get_outer_height, get_outer_width, get_right, get_spacing_width, get_top, is_onscreen, resize_img_dom, set_left, set_outer_height, set_outer_width, set_top;
+  var FigureList, get_bottom, get_content_height, get_content_width, get_left, get_outer_height, get_outer_width, get_right, get_spacing_width, get_top, init_touchscroll, is_onscreen, resize_img_dom, set_figures_and_toc, set_left, set_outer_height, set_outer_width, set_top, shift_from_edge;
 
   is_onscreen = function(parent_div, div) {
     var x1, x2, y1, y2;
@@ -23,6 +23,7 @@
   };
 
   FigureList = (function() {
+
     function FigureList(toc_href, text_href, figlist_href) {
       var fig, figlink, hash, _i, _len, _ref,
         _this = this;
@@ -105,7 +106,7 @@
     };
 
     FigureList.prototype.select_header = function(header) {
-      var header_id, text_scrollTop;
+      var hash, header_id;
       this.selected_header = header;
       header_id = header.attr('id');
       if (this.selected_headerlink !== null) {
@@ -113,9 +114,12 @@
       }
       this.selected_headerlink = this.headerlinks[header_id];
       this.selected_headerlink.addClass('active');
-      text_scrollTop = $(this.text_href).scrollTop();
-      window.location.hash = '#' + header_id;
-      return $(this.text_href).scrollTop(text_scrollTop);
+      hash = '#' + header_id;
+      if (history.pushState) {
+        return history.pushState(null, null, hash);
+      } else {
+        return window.location.hash = hash;
+      }
     };
 
     FigureList.prototype.scroll_to_href_in_text = function(href, is_autodetect_figlink, callback) {
@@ -303,6 +307,10 @@
 
   })();
 
+  set_figures_and_toc = function(toc_href, text_href, figlist_href) {
+    return window.figure_list = new FigureList(toc_href, text_href, figlist_href);
+  };
+
   set_outer_height = function(div, height) {
     var margin;
     margin = div.outerHeight(true) - div.innerHeight();
@@ -385,13 +393,31 @@
     }
   };
 
-  window.articulator = {
-    set_figures_and_toc: function(toc_href, text_href, figlist_href) {
-      return window.figure_list = new FigureList(toc_href, text_href, figlist_href);
+  shift_from_edge = function(e) {
+    var bottom, target;
+    target = e.currentTarget;
+    bottom = target.scrollTop + target.offsetHeight;
+    if (target.scrollTop === 0) {
+      return target.scrollTop = 1;
+    } else if (target.scrollHeight === bottom) {
+      return target.scrollTop -= 1;
     }
   };
 
-  window.resize = {
+  init_touchscroll = function() {
+    $(document).on('touchmove', function(e) {
+      return e.preventDefault();
+    });
+    $('body').on('touchmove', '.touchscroll', function(e) {
+      return e.stopPropagation();
+    });
+    return $('body').on('touchstart', '.touchscroll', function(e) {
+      return shift_from_edge(e);
+    });
+  };
+
+  window.supplescroll = {
+    set_figures_and_toc: set_figures_and_toc,
     set_outer_height: set_outer_height,
     set_outer_width: set_outer_width,
     get_outer_width: get_outer_width,
@@ -405,32 +431,8 @@
     get_top: get_top,
     set_top: set_top,
     set_left: set_left,
-    resize_img_dom: resize_img_dom
-  };
-
-  window.touchscroll = {
-    init: function() {
-      var shift_from_edge;
-      $(document).on('touchmove', function(e) {
-        return e.preventDefault();
-      });
-      $('body').on('touchmove', '.touchscroll', function(e) {
-        return e.stopPropagation();
-      });
-      shift_from_edge = function(e) {
-        var bottom, target;
-        target = e.currentTarget;
-        bottom = target.scrollTop + target.offsetHeight;
-        if (target.scrollTop === 0) {
-          return target.scrollTop = 1;
-        } else if (target.scrollHeight === bottom) {
-          return target.scrollTop -= 1;
-        }
-      };
-      return $('body').on('touchstart', '.touchscroll', function(e) {
-        return shift_from_edge(e);
-      });
-    }
+    resize_img_dom: resize_img_dom,
+    init_touchscroll: init_touchscroll
   };
 
 }).call(this);
