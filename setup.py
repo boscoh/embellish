@@ -9,7 +9,7 @@ setup(
     author='Bosco Ho',
     author_email='boscoh@gmail.com',
     url='http://github.com/boscoh/embellish',
-    description='static site generator',
+    description='a lightweight static website generator',
     long_description='Docs at http://github.com/boscoh/embellish',
     license='BSD',
     # linking hamlpy dev version requires a bit of rejigging
