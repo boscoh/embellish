@@ -2,15 +2,18 @@ template: lucidity.haml
 ---
 ---
 
+
+
 # Embellish
 
-A LOW-FRICTION WEBSITE GENERATOR
+_a lightweight static website generator_
+
+
+Most Python website generators are highly opinionated; they dictate exactly how you must arrange your directories. This one is not.
 
 
 
 ## Quick & Dirty Websites
-
-Most Python website generators are highly opinionated; they dictate exactly how you must arrange your directories. This one is not.
 
 `embellish` can make a website out of any directory.
 
