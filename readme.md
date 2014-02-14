@@ -1,7 +1,7 @@
 
 # Embellish
 
-LOW FRICTION WEBSITE GENERATION
+_a lightweight static website generator_
 
 `embellish` builds a working static website from a bunch of text files, with optional `HTML` templates and other goodies. It is a lightweight generator, designed to build websites from any directory, allowing you to organically grow your websites.
 
