@@ -34,7 +34,6 @@ class FigureList
     @selected_headerlink = null
     @is_autodetect_figlink = true
     @is_autodetect_header = true
-    @is_scrolling = false
     @headers = []
     @figlinks = []
     
@@ -180,18 +179,33 @@ class FigureList
     selected_fig_href = @selected_figlink.attr('href')
     $(selected_fig_href).addClass('active')
 
-  select_figlink_and_scroll_to_fig: (figlink) ->
-    if @selected_figlink == figlink
-      return
-    @select_figlink(figlink)
-    fig_href = @selected_figlink.attr('href')
+  scroll_to_next_figlink: () ->
+    if @is_scrolling_figlist
+      # already scrolling so cancel
+        return
+    finish = () =>
+      window.location.hash = @selected_figlink.attr('href')
+      @is_scrolling_figlist = false
+      # we've stopped scrolling now
+      if @selected_figlink != @next_figlink
+        # but @next_figlink has changed, so do again
+        @scroll_to_next_figlink()
     figlist = $(@figlist_href)
-    callback = () ->
-        window.location.hash = figlink.attr('href')
+    text = $(@text_href)
     if figlist.css('display') == 'none'
-      $(@text_href).scrollTo(fig_href, 500, callback)
+      target = text
     else
-      figlist.scrollTo(fig_href, 500, callback)
+      target = figlist
+    @is_scrolling_figlist = true
+    @select_figlink(@next_figlink)
+    fig_href = @selected_figlink.attr('href')
+    target.scrollTo(fig_href, 500, finish)
+
+  select_figlink_and_scroll_to_fig: (figlink) ->
+    @next_figlink = figlink
+    if @selected_figlink == @next_figlink
+      return
+    @scroll_to_next_figlink()
 
   select_figlink_fn: (figlink) ->
     (e) => 
@@ -200,8 +214,6 @@ class FigureList
       @select_figlink_and_scroll_to_fig(figlink)
 
   select_header: (header) ->
-    if @selected_header == header
-      return
     @selected_header = header
     header_id = header.attr('id')
 
@@ -220,23 +232,19 @@ class FigureList
       window.location.hash = hash
 
   scroll_to_href_in_text: (href, is_autodetect_figlink, callback) ->
-    if @is_scrolling
-      return
-    @is_scrolling = true
     @is_autodetect_figlink = is_autodetect_figlink
     finish = () => 
       @is_autodetect_figlink=true
-      @is_scrolling = false
       if callback?
         callback()
-    settings = {onAfter:()->setTimeout(finish, 250), offset: { top:-15 }}
+    delayed_finish = ()->setTimeout(finish, 250)
+    settings = { onAfter:delayed_finish, offset:{ top:-15 }}
     $(@text_href).scrollTo(href, 500, settings)
 
   scroll_to_href_in_text_fn: (href, is_autodetect_figlink, callback) ->
     (e) =>
       e.preventDefault()
       @scroll_to_href_in_text(href, is_autodetect_figlink, callback)
-      false
 
   select_onscreen_figlink_and_figure: () ->
     text = $(@text_href)
@@ -263,7 +271,8 @@ class FigureList
         onscreen_header = header
         break
     if onscreen_header? 
-      @select_header(onscreen_header)
+      if @selected_header != onscreen_header
+        @select_header(onscreen_header)
 
   scroll_in_text: () ->
     # $(@text_href) must be position:relative to work

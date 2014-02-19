@@ -91,3 +91,9 @@ a.figlink.active:link, a.figlink.active:visited {
 .fig-in-figlist a {
   text-decoration: none;
 }
+
+.fig-in-text img, .fig-in-figlist img {
+  display: block;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

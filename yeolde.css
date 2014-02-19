@@ -1,0 +1,220 @@
+.fig-in-text pre, .fig-in-text code, border: 1px solid #BBE;
+.fig-in-text pre, .fig-in-text code, border-background-color: #DDDDF9;
+
+body {
+  padding-left: 3px;
+  padding-right: 3px;
+  background-image: url(crossword.png);
+}
+
+#table-of-contents {
+  display: none;
+  position: absolute;
+  overflow: auto;
+  width: 180px;
+  height: 100%;
+  padding-top: 140px;
+  border-left: 1px solid #CCC;
+  border-right: 1px solid #CCC;
+  margin-left: 3px;
+}
+
+#main-text {
+  position: absolute;
+  background-color: white;
+  width: 500px;
+  padding: 0px 40px;
+  height: 100%;
+  overflow: auto;
+  border-left: 1px solid #CCC;
+  border-right: 1px solid #CCC;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+#figure-list {
+  position: absolute;
+  display: none;
+  height: 100%;
+  overflow: auto;
+  border-left: 1px solid #CCC;
+  border-right: 1px solid #CCC;
+  margin-right: 3px;
+}
+
+body {
+  font-family: Garamond, serif;
+  letter-spacing: 0.05em;
+  font-size: 16px;
+  color: 0;
+  line-height: 1.3em;
+}
+
+a, a:link, a:visited {
+  color: #333;
+  text-decoration: underline;
+}
+
+ul {
+  list-style-type: dot;
+}
+
+h1, h2, h3, h4, h5, h6, h7 {
+  font-family: Cardo, Palatino, serif;
+  color: #333;
+  letter-spacing: 0.1em;
+  font-weight: 300;
+  line-height: 1.1em;
+  padding-top: 2em;
+  padding-bottom: 0;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 4 3px;
+  letter-spacing: 0.1em;
+  padding-top: 100px;
+  padding-bottom: 0em;
+}
+
+h2 {
+  font-size: 20px;
+  border-bottom: 1px solid #CCC;
+}
+
+h3, h4, h5, h6, h7 {
+  font-size: 16px;
+}
+
+blockquote {
+  border-left: 3px solid #DDD;
+  margin-left: 0;
+  padding-left: 2em;
+  color: #888;
+}
+
+code {
+  padding: 1px 4px;
+}
+
+pre {
+  overflow: auto;
+  padding: 3px 20px;
+}
+
+code, pre {
+  background-color: #FCFCFC;
+  border: 1px solid #DDD;
+  border-radius: 3px;
+  font-style: normal;
+  color: #333;
+  font-family: courier;
+  font-size: 12px;
+  line-height: 1.5em;
+}
+
+#table-of-contents h1, #table-of-contents h2, #table-of-contents h3,
+#table-of-contents h4, #table-of-contents h5, #table-of-contents h6,
+#table-of-contents h7 {
+  font-size: 12px;
+  line-height: 1.2em;
+  border: none;
+  text-transform: uppercase;
+}
+
+.toc a h1 {
+  border: none;
+}
+
+.toc a {
+  border: none;
+  text-decoration: none;
+}
+
+.toc a.active {
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+a.figlink.active {
+  background-color: #F0F0FF;
+}
+
+a.figlink.active:link, a.figlink.active:visited {
+  color: #666;
+}
+
+.timestamp {
+  margin-top: 6em;
+  text-align: right;
+  border-top: 1px solid #CCC;
+}
+
+#figure-list {
+  line-height: 1.2em;
+  font-style: italic;
+}
+#figure-list .fig-in-figlist {
+  border-top: 1px solid #CCC;
+  border-bottom: 1px solid #CCC;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+#figure-list .active {
+  background-color: #F0F0FF;
+  color: #666;
+}
+#figure-list .active pre, #figure-list .active code {
+  border: 1px solid #CCE;
+  background-color: #F0F0FF;
+}
+
+@media screen and (max-width: 1200px) {
+  body {
+    font-size: 12px;
+  }
+  code, pre {
+    font-size: 10px;
+  }
+  #main-text {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  h1 {
+    padding-top: 2em;
+    font-size: 35px;
+  }
+  h2 {
+    font-size: 18px;
+  }
+  h3, h4, h5, h6, h7 {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  body {
+    font-size: 8px;
+  }
+  code, pre {
+    font-size: 7px;
+  }
+  h1 {
+    padding-top: 2em;
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 12px;
+  }
+  h3, h4, h5, h6, h7 {
+    font-size: 10px;
+  }
+  .fig-in-text {
+    display: block;
+    background-color: #F0F0FF;
+    padding: 3px;
+  }
+  .fig-in-text img {
+    width: 100%;
+  }
+}

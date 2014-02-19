@@ -35,7 +35,6 @@
       this.selected_headerlink = null;
       this.is_autodetect_figlink = true;
       this.is_autodetect_header = true;
-      this.is_scrolling = false;
       this.headers = [];
       this.figlinks = [];
       $(this.text_href).append($('<div>').addClass('page-filler'));
@@ -203,22 +202,38 @@
       return $(selected_fig_href).addClass('active');
     };
 
-    FigureList.prototype.select_figlink_and_scroll_to_fig = function(figlink) {
-      var callback, fig_href, figlist;
-      if (this.selected_figlink === figlink) {
+    FigureList.prototype.scroll_to_next_figlink = function() {
+      var fig_href, figlist, finish, target, text,
+        _this = this;
+      if (this.is_scrolling_figlist) {
         return;
       }
-      this.select_figlink(figlink);
-      fig_href = this.selected_figlink.attr('href');
-      figlist = $(this.figlist_href);
-      callback = function() {
-        return window.location.hash = figlink.attr('href');
+      finish = function() {
+        window.location.hash = _this.selected_figlink.attr('href');
+        _this.is_scrolling_figlist = false;
+        if (_this.selected_figlink !== _this.next_figlink) {
+          return _this.scroll_to_next_figlink();
+        }
       };
+      figlist = $(this.figlist_href);
+      text = $(this.text_href);
       if (figlist.css('display') === 'none') {
-        return $(this.text_href).scrollTo(fig_href, 500, callback);
+        target = text;
       } else {
-        return figlist.scrollTo(fig_href, 500, callback);
+        target = figlist;
       }
+      this.is_scrolling_figlist = true;
+      this.select_figlink(this.next_figlink);
+      fig_href = this.selected_figlink.attr('href');
+      return target.scrollTo(fig_href, 500, finish);
+    };
+
+    FigureList.prototype.select_figlink_and_scroll_to_fig = function(figlink) {
+      this.next_figlink = figlink;
+      if (this.selected_figlink === this.next_figlink) {
+        return;
+      }
+      return this.scroll_to_next_figlink();
     };
 
     FigureList.prototype.select_figlink_fn = function(figlink) {
@@ -233,9 +248,6 @@
 
     FigureList.prototype.select_header = function(header) {
       var hash, header_id;
-      if (this.selected_header === header) {
-        return;
-      }
       this.selected_header = header;
       header_id = header.attr('id');
       if (this.selected_headerlink !== null) {
@@ -252,24 +264,20 @@
     };
 
     FigureList.prototype.scroll_to_href_in_text = function(href, is_autodetect_figlink, callback) {
-      var finish, settings,
+      var delayed_finish, finish, settings,
         _this = this;
-      if (this.is_scrolling) {
-        return;
-      }
-      this.is_scrolling = true;
       this.is_autodetect_figlink = is_autodetect_figlink;
       finish = function() {
         _this.is_autodetect_figlink = true;
-        _this.is_scrolling = false;
         if (callback != null) {
           return callback();
         }
       };
+      delayed_finish = function() {
+        return setTimeout(finish, 250);
+      };
       settings = {
-        onAfter: function() {
-          return setTimeout(finish, 250);
-        },
+        onAfter: delayed_finish,
         offset: {
           top: -15
         }
@@ -281,8 +289,7 @@
       var _this = this;
       return function(e) {
         e.preventDefault();
-        _this.scroll_to_href_in_text(href, is_autodetect_figlink, callback);
-        return false;
+        return _this.scroll_to_href_in_text(href, is_autodetect_figlink, callback);
       };
     };
 
@@ -321,7 +328,9 @@
         }
       }
       if (onscreen_header != null) {
-        return this.select_header(onscreen_header);
+        if (this.selected_header !== onscreen_header) {
+          return this.select_header(onscreen_header);
+        }
       }
     };
 
