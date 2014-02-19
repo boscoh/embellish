@@ -1,0 +1,11 @@
+template: index.haml
+index: True
+sort_key: date
+sort_reverse: True
+title: Blog Posts
+---
+Short excerpt of this post.
+---
+Some words to describe the following list of 
+posts that are arranged in reverse chronological 
+order.

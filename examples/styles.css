@@ -1,0 +1,18 @@
+body {
+  background-color: #FFF;
+  font-family: Helvetica;
+  width: 450px;
+  margin: 40px auto;
+}
+
+.title {
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+}
+
+.nav {
+  font-style: italic;
+  font-size: 10px;
+}

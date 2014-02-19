@@ -1,0 +1,11 @@
+title: The Vampire Post
+template: post.haml
+category: vampire
+---
+Excerpt of vampire post
+---
+# This is Vampire Post
+
+## There's Vampire as Category!
+
+This is also in __markdown__.

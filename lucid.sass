@@ -4,25 +4,37 @@ body
   font-size: 14px
   color: #333
   line-height: 1.5em 
-  # from http://subtlepatterns.com/paper/
+  /* from http://subtlepatterns.com/paper/
   background-image: url(paper.png)
   background-repeat: repeat
+  padding-left: 15px
+  padding-right: 15px
+
+$dark-highlight-color: #99D
 
 ul 
   list-style-type: square
 
-.sidebar 
+#table-of-contents 
   display: none
   position: absolute
   background-color: #EEE
-  width: 180px
+  width: 200px
   padding-top: 140px
   overflow: auto
   height: 100%
   font-size: 12px
   line-height: 1.2em
 
-.figures 
+#main-text 
+  position: absolute
+  background-color: white
+  width: 500px
+  padding: 0px 60px
+  height: 100%
+  overflow: auto
+
+#figure-list 
   position: absolute
   display: none
   height: 100%
@@ -31,17 +43,10 @@ ul
   overflow: auto
   background-color: #EEE
 
-.text 
-  position: absolute
-  background-color: white
-  width: 450px
-  padding: 0px 40px
-  height: 100%
-  overflow: auto
 
-.sidebar, 
-.figures 
-  # from http://subtlepatterns.com/crossword/
+#table-of-contents, 
+#figure-list 
+  /* from http://subtlepatterns.com/crossword/
   background-image: url(crossword.png)
   background-repeat: repeat
 
@@ -94,11 +99,9 @@ blockquote
 
 code 
   padding: 1px 4px 
-
 pre 
   overflow: auto
   padding: 5px 20px 
-
 code, pre 
   background-color: #EEE
   border: 1px solid #DDD
@@ -107,12 +110,31 @@ code, pre
   font-size: 12px 
   line-height: 1.5em 
 
+.toc
+  a, a:visited
+    color: #555
+    border-left: 3px solid transparent
+    padding-left: 10px
+    padding-right: 20px
+  a.active
+    background-color: #EEF
+    border: none
+    border-left: 3px solid $dark-highlight-color
+
 .fig-in-text pre,
-.fig-in-text code,
-.figures .active pre,
-.figures .active code 
+.fig-in-text code
   border: 1px solid #BBE
   background-color: #DDDDF9
+
+#figure-list .active pre,
+#figure-list .active code 
+  border: 1px solid #BBE
+  background-color: #DDDDF9
+
+.fig-in-figlist
+  border-right: 3px solid transparent
+.fig-in-figlist.active
+  border-right: 3px solid $dark-highlight-color
 
 
 @media screen and (max-width: 1200px) 
@@ -122,8 +144,8 @@ code, pre
   code, pre 
     font-size: 10px
   
-  .text,
-  .figures 
+  #main-text,
+  #figure-list 
     padding-left: 15px
     padding-right: 15px
   
@@ -149,7 +171,7 @@ code, pre
   body, code, pre, .timestamp 
     font-size: 8px
   
-  .text 
+  #main-text 
     padding-left: 10px
     padding-right: 10px
   

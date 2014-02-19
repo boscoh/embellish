@@ -1,0 +1,7 @@
+template: index.haml
+index: True
+sort_key: date
+category: vampire
+sort_reverse: True
+title: Archive of Posts about Vampires
+---

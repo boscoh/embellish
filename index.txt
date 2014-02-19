@@ -1,4 +1,5 @@
-template: lucidity.haml
+template: lucid.haml
+title: embellish docs
 ---
 ---
 

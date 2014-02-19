@@ -1,0 +1,9 @@
+title: Post 3
+template: post.haml
+category: promotion
+---
+Post 3 excerpt
+---
+# Post3 is just as Great
+
+Body

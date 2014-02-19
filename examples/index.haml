@@ -1,0 +1,22 @@
+%head
+  %link{href:'styles.css', rel:'stylesheet'}
+%body
+  .title
+    {{ page.title }}
+  {{ page.content }}
+  %ul  
+    - for subpage in page.subpages:
+      %li
+        %b
+          %a{href:"{{ subpage.rel_site_url }}/{{ subpage.url }}"} 
+            {{ subpage.title }}
+        %br
+        %i {{ subpage.excerpt }}
+        %br
+       .nav
+          - if subpage['category']:
+            category: {{ subpage.category }}
+            %br
+          date: {{ subpage.date.strftime("%d %b %Y") }}    
+        %br
+        %br
