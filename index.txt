@@ -1,4 +1,4 @@
-template: perspex.haml
+template: lucid.haml
 title: embellish docs
 ---
 ---
