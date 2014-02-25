@@ -1,5 +1,5 @@
-template: lucid.haml
-title: embellish docs
+template: dark.haml
+title: embellish - a lightweight static website generator
 ---
 ---
 
@@ -7,16 +7,32 @@ title: embellish docs
 
 # Embellish
 
-_a lightweight static website generator_
+> _a lightweight static website generator_
 
+There are many static website generators out there, but most of them are quite opionated: they demand your posts be put in this directory and your posts ordered in that way, and they often include some tricky custom-defined formats.
 
-Most Python website generators are highly opinionated; they dictate exactly how you must arrange your directories. This one is not.
+Static websites are really quite simple. They're just a bunch of HTML files in a directory. A static website generator simply transforms text files into HTML files, and includes a few goodies like stylesheets and javascript modules.
 
+`embellish` is a lightweight generator, that can build a website from any directory, transforming any text files it finds into HTML, allowing you to organically grow your website. It's also very small, and quite easy to modify. 
 
+As `embellish` is designed around the Python ecosystem, it carefully uses standard Python-like indented-text formats, that have been well-tested, namely:
+
+  - markdown for text
+  - YAML for configuration 
+  - HAML/JINJA2 for HTML templating
+  - coffeescript for javascript 
+  - indented-SASS for CSS stylesheets
+  - flask for running the local webserver 
+
+## Example Websites Built with Embellish
+
+- [Bosco Ho's Emporium of Words](http://boscoh.com) - my personal website
+- [supplescroll](http://boscoh.github.io/supplescroll) - a document decorator used to build this page
+- [the human gene parade](http://boscoh.com/geneparade/human/) - an interactive genome browser
 
 ## Quick & Dirty Websites
 
-`embellish` can make a website out of any directory.
+Other generators dictate your website to be structured their way. `embellish` does not. 
 
 Go to a directory with a `markdown` file (e.g. the `embellish` directory):
 

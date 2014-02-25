@@ -10,7 +10,7 @@ body {
   position: absolute;
   background-color: #EEE;
   width: 200px;
-  padding-top: 140px;
+  padding-top: 160px;
   overflow: auto;
   height: 100%;
 }
@@ -18,8 +18,8 @@ body {
 #main-text {
   position: absolute;
   background-color: white;
-  width: 500px;
-  padding: 0px 60px;
+  width: 420px;
+  padding: 0px 120px 0px 30px;
   height: 100%;
   overflow: auto;
 }
@@ -39,19 +39,19 @@ body {
 
 body {
   font-family: 'Helvetica Neue', sans-serif;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   font-size: 14px;
   color: #333;
   line-height: 1.5em;
 }
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, h5, h6, h7 {
   font-family: "Helvetica Neue", sans-serif;
   color: #333;
   letter-spacing: 0.1em;
-  font-weight: 500;
+  font-weight: 300;
   line-height: 1em;
-  padding-top: 2em;
+  padding-top: 3em;
   padding-bottom: 0;
 }
 
@@ -70,19 +70,12 @@ h2 {
 
 h3, h4, h5, h6, h7 {
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 500;
   text-transform: uppercase;
 }
 
 ul {
   list-style-type: square;
-}
-
-.timestamp {
-  margin-top: 6em;
-  text-align: right;
-  border-top: 1px solid #CCC;
-  font-size: 12px;
 }
 
 blockquote {
@@ -121,7 +114,7 @@ code, pre {
   padding-left: 10px;
   padding-right: 20px;
 }
-.toc a.active {
+.toc a.active, .toc a:visited.active {
   background-color: #EEF;
   border-left: 3px solid #AAE;
 }
@@ -129,9 +122,22 @@ code, pre {
 #main-text a.figlink.active {
   background-color: #EEF;
 }
+#main-text .fig-in-text {
+  background-color: #DDF;
+  padding: 5px 10px;
+}
 #main-text .fig-in-text pre, #main-text .fig-in-text code {
   border: 1px solid #BBE;
   background-color: #DDDDF9;
+}
+#main-text .fig-in-text img {
+  width: 100%;
+}
+#main-text .timestamp {
+  margin-top: 6em;
+  text-align: right;
+  border-top: 1px solid #CCC;
+  font-size: 12px;
 }
 
 #figure-list {
@@ -151,12 +157,6 @@ code, pre {
 }
 
 @media screen and (max-width: 1200px) {
-  body {
-    font-size: 12px;
-  }
-  code, pre {
-    font-size: 10px;
-  }
   #main-text, .fig-in-figlist {
     padding-left: 15px;
     padding-right: 15px;
@@ -169,32 +169,15 @@ code, pre {
     font-size: 18px;
   }
   h3, h4, h5, h6, h7 {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
 @media screen and (max-width: 480px) {
-  body {
-    font-size: 8px;
-  }
-  code, pre {
-    font-size: 7px;
-  }
   h1 {
     font-size: 22px;
   }
-  h2 {
-    font-size: 12px;
-  }
-  h3, h4, h5, h6, h7 {
-    font-size: 8px;
-  }
   .fig-in-text {
     display: block;
-    background-color: #DDF;
-    padding: 5px 10px;
-  }
-  .fig-in-text img {
-    width: 100%;
   }
 }

@@ -123,7 +123,8 @@
     };
 
     FigureList.prototype.make_figlinks = function() {
-      var click_fn, fig, fig_div_dom, fig_href, fig_id, fig_label, figlink, figlink_dom, figlink_href, figlink_id, figlink_label, i, i_fig, n_fig, n_figlink, new_fig_href, num_fig, orig_fig_href, reverse_link, select_fig_fn, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results;
+      var click_fn, fig, fig_div_dom, fig_href, fig_id, fig_label, figlink, figlink_dom, figlink_href, figlink_id, figlink_label, finish, i, i_fig, n_fig, n_figlink, new_fig_href, num_fig, orig_fig_href, reverse_link, select_fig_fn, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2, _results,
+        _this = this;
       this.i_fig_dict = {};
       this.fig_hrefs = [];
       this.fig_href_from_orig = {};
@@ -165,6 +166,10 @@
           figlink_href = '#' + figlink_id;
           reverse_link = $('<a>').append('&lArr;').attr('href', figlink_href);
           select_fig_fn = this.select_figlink_fn(figlink);
+          finish = function() {
+            select_fig_fn();
+            return window.location.hash = _this.selected_figlink.attr('href');
+          };
           click_fn = this.scroll_to_href_in_text_fn(figlink_href, false, select_fig_fn);
           reverse_link.click(click_fn);
           this.figlinks.push(figlink);
@@ -209,7 +214,6 @@
         return;
       }
       finish = function() {
-        window.location.hash = _this.selected_figlink.attr('href');
         _this.is_scrolling_figlist = false;
         if (_this.selected_figlink !== _this.next_figlink) {
           return _this.scroll_to_next_figlink();
@@ -420,14 +424,10 @@
   resize_img_dom = function(img_dom, width) {
     var img_elem;
     img_elem = $(img_dom);
-    if (img_dom.naturalWidth < width) {
-      return img_elem.css({
-        'width': ''
-      });
+    if (img_dom.naturalWidth > 0 && img_dom.naturalWidth < width) {
+      return img_elem.css('width', '');
     } else {
-      return img_elem.css({
-        'width': '100%'
-      });
+      return img_elem.css('width', '100%');
     }
   };
 

@@ -1,5 +1,5 @@
 (function() {
-  var figlist, figlist_href, init, one_columnn_width, resize_window, text, text_href, text_width, toc, toc_href, two_column_width;
+  var figlist, figlist_href, init, max_youtube_video_width, one_columnn_width, resize_window, text, text_href, text_width, toc, toc_href, two_column_width, youtube_video_ratio;
 
   text_href = '#main-text';
 
@@ -10,6 +10,10 @@
   two_column_width = 1200;
 
   one_columnn_width = 480;
+
+  max_youtube_video_width = 500;
+
+  youtube_video_ratio = 9 / 16;
 
   text = null;
 
@@ -27,6 +31,14 @@
       figlist.css('display', 'none');
       supplescroll.set_left(text, 0);
       supplescroll.set_outer_width(text, window_width);
+      $('.fig-in-text iframe[src*="youtube.com"]').each(function() {
+        var height, iframe, parent_width;
+        iframe = $(this);
+        parent_width = iframe.parent().width();
+        iframe.width(parent_width);
+        height = parent_width * youtube_video_ratio;
+        return iframe.height(height);
+      });
     } else if (window_width <= two_column_width) {
       toc.css('display', 'none');
       figlist.css('display', 'block');
@@ -51,6 +63,19 @@
       supplescroll.set_outer_width(figlist, figlist_width);
     }
     if (window_width >= one_columnn_width) {
+      $('.fig-in-figlist iframe[src*="youtube.com"]').each(function() {
+        var height, iframe, parent_width;
+        iframe = $(this);
+        parent_width = iframe.parent().width();
+        if (parent_width < max_youtube_video_width) {
+          iframe.css('width', '100%');
+          height = parent_width * youtube_video_ratio;
+        } else {
+          iframe.css('width', max_youtube_video_width + 'px');
+          height = max_youtube_video_width * youtube_video_ratio;
+        }
+        return iframe.css('height', height + 'px');
+      });
       _ref = $('img');
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -63,11 +88,10 @@
           };
         };
         resize_fn = make_resize_fn(img_dom, parent_width);
-        resize_fn(img_dom, parent_width);
         if (init === true) {
           _results.push(img_elem.load(resize_fn));
         } else {
-          _results.push(void 0);
+          _results.push(resize_fn(img_dom, parent_width));
         }
       }
       return _results;

@@ -1,18 +1,16 @@
-.fig-in-text pre, .fig-in-text code, border: 1px solid #BBE;
-.fig-in-text pre, .fig-in-text code, border-background-color: #DDDDF9;
-
 body {
   padding-left: 3px;
   padding-right: 3px;
-  background-image: url(crossword.png);
+}
+
+#table-of-contents, #main-text, #figure-list {
+  position: absolute;
+  height: 100%;
+  overflow: auto;
 }
 
 #table-of-contents {
-  display: none;
-  position: absolute;
-  overflow: auto;
   width: 180px;
-  height: 100%;
   padding-top: 140px;
   border-left: 1px solid #CCC;
   border-right: 1px solid #CCC;
@@ -20,12 +18,8 @@ body {
 }
 
 #main-text {
-  position: absolute;
-  background-color: white;
   width: 500px;
   padding: 0px 40px;
-  height: 100%;
-  overflow: auto;
   border-left: 1px solid #CCC;
   border-right: 1px solid #CCC;
   margin-left: 3px;
@@ -33,10 +27,6 @@ body {
 }
 
 #figure-list {
-  position: absolute;
-  display: none;
-  height: 100%;
-  overflow: auto;
   border-left: 1px solid #CCC;
   border-right: 1px solid #CCC;
   margin-right: 3px;
@@ -98,53 +88,66 @@ code {
 }
 
 pre {
-  overflow: auto;
   padding: 3px 20px;
 }
 
 code, pre {
-  background-color: #FCFCFC;
+  overflow: auto;
+  background-color: #F9F9F9;
   border: 1px solid #DDD;
   border-radius: 3px;
   font-style: normal;
   color: #333;
-  font-family: courier;
+  font-family: Courier, monospace;
   font-size: 12px;
   line-height: 1.5em;
 }
 
-#table-of-contents h1, #table-of-contents h2, #table-of-contents h3,
-#table-of-contents h4, #table-of-contents h5, #table-of-contents h6,
-#table-of-contents h7 {
+#table-of-contents .toc {
   font-size: 12px;
+}
+#table-of-contents .toc h1, #table-of-contents .toc h2, #table-of-contents .toc h3,
+#table-of-contents .toc h4, #table-of-contents .toc h5, #table-of-contents .toc h6,
+#table-of-contents .toc h7 {
   line-height: 1.2em;
   border: none;
   text-transform: uppercase;
 }
-
-.toc a h1 {
+#table-of-contents .toc a h1 {
   border: none;
 }
-
-.toc a {
+#table-of-contents .toc a {
   border: none;
   text-decoration: none;
 }
-
-.toc a.active {
+#table-of-contents .toc .active {
   background-color: transparent;
   text-decoration: underline;
 }
 
-a.figlink.active {
+#main-text a.figlink.active {
   background-color: #F0F0FF;
 }
-
-a.figlink.active:link, a.figlink.active:visited {
+#main-text a.figlink.active:link, #main-text a.figlink.active:visited {
   color: #666;
 }
-
-.timestamp {
+#main-text .fig-in-text {
+  font-style: italic;
+  background-color: #F0F0FF;
+  padding: 6px;
+}
+#main-text .fig-in-text pre, #main-text .fig-in-text code {
+  border: 1px solid #CCE;
+  background-color: #F0F0FF;
+}
+#main-text .fig-in-text code, #main-text .fig-in-text pre {
+  letter-spacing: 0.05em;
+}
+#main-text .fig-in-text img {
+  padding: 10px;
+  width: 100%;
+}
+#main-text .timestamp {
   margin-top: 6em;
   text-align: right;
   border-top: 1px solid #CCC;
@@ -153,6 +156,9 @@ a.figlink.active:link, a.figlink.active:visited {
 #figure-list {
   line-height: 1.2em;
   font-style: italic;
+}
+#figure-list code, #figure-list pre {
+  letter-spacing: 0.05em;
 }
 #figure-list .fig-in-figlist {
   border-top: 1px solid #CCC;
@@ -170,12 +176,6 @@ a.figlink.active:link, a.figlink.active:visited {
 }
 
 @media screen and (max-width: 1200px) {
-  body {
-    font-size: 12px;
-  }
-  code, pre {
-    font-size: 10px;
-  }
   #main-text {
     padding-left: 10px;
     padding-right: 10px;
@@ -188,33 +188,19 @@ a.figlink.active:link, a.figlink.active:visited {
     font-size: 18px;
   }
   h3, h4, h5, h6, h7 {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
 @media screen and (max-width: 480px) {
-  body {
-    font-size: 8px;
-  }
-  code, pre {
-    font-size: 7px;
-  }
   h1 {
     padding-top: 2em;
     font-size: 24px;
   }
   h2 {
-    font-size: 12px;
-  }
-  h3, h4, h5, h6, h7 {
-    font-size: 10px;
+    font-size: 14px;
   }
   .fig-in-text {
     display: block;
-    background-color: #F0F0FF;
-    padding: 3px;
-  }
-  .fig-in-text img {
-    width: 100%;
   }
 }

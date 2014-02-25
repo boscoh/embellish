@@ -2,9 +2,11 @@
 <head>
   <meta content='initial-scale=1.0' name='viewport' />
   <link href='supplescroll.css' rel='stylesheet' />
-  <link href='lucid.css' rel='stylesheet' />
+  <link href='dark.css' rel='stylesheet' />
+  <link href='http://fonts.googleapis.com/css?family=Cardo:700,400,400italic' type='text/css' rel='stylesheet' />
   
-    <title>embellish docs</title>
+    <title>embellish - a lightweight static website generator</title>
+
   
 </head>
 <body>
@@ -12,10 +14,29 @@
   <div id='main-text' class='touchscroll'>
     <div class='relative_position'>
       <h1>Embellish</h1>
+<blockquote>
 <p><em>a lightweight static website generator</em></p>
-<p>Most Python website generators are highly opinionated; they dictate exactly how you must arrange your directories. This one is not.</p>
+</blockquote>
+<p>There are many static website generators out there, but most of them are quite opionated: they demand your posts be put in this directory and your posts ordered in that way, and they often include some tricky custom-defined formats.</p>
+<p>Static websites are really quite simple. They're just a bunch of HTML files in a directory. A static website generator simply transforms text files into HTML files, and includes a few goodies like stylesheets and javascript modules.</p>
+<p><code>embellish</code> is a lightweight generator, that can build a website from any directory, transforming any text files it finds into HTML, allowing you to organically grow your website. It's also very small, and quite easy to modify. </p>
+<p>As <code>embellish</code> is designed around the Python ecosystem, it carefully uses standard Python-like indented-text formats, that have been well-tested, namely:</p>
+<ul>
+<li>markdown for text</li>
+<li>YAML for configuration </li>
+<li>HAML/JINJA2 for HTML templating</li>
+<li>coffeescript for javascript </li>
+<li>indented-SASS for CSS stylesheets</li>
+<li>flask for running the local webserver </li>
+</ul>
+<h2>Example Websites Built with Embellish</h2>
+<ul>
+<li><a href="http://boscoh.com">Bosco Ho's Emporium of Words</a> - my personal website</li>
+<li><a href="http://boscoh.github.io/supplescroll">supplescroll</a> - a document decorator used to build this page</li>
+<li><a href="http://boscoh.com/geneparade/human/">the human gene parade</a> - an interactive genome browser</li>
+</ul>
 <h2>Quick &amp; Dirty Websites</h2>
-<p><code>embellish</code> can make a website out of any directory.</p>
+<p>Other generators dictate your website to be structured their way. <code>embellish</code> does not. </p>
 <p>Go to a directory with a <code>markdown</code> file (e.g. the <code>embellish</code> directory):</p>
 <div class="codehilite"><pre>&gt; embellish -m .
 </pre></div>
@@ -453,7 +474,7 @@ target: archive/index.html
 <li>relative {{ page.rel_site_url }}/{{ page.url }}</li>
 </ol>
       <div class='timestamp'>
-        <i><a href='http://github.com/boscoh/supplescroll'>supplescroll</a></i>:lucid theme
+        <a href="http://github.com/boscoh/supplescroll">supplescroll</a>:<i>night</i> theme
       </div>
     </div>
   </div>
