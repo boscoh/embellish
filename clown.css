@@ -1,0 +1,217 @@
+body {
+  background-color: #3A6;
+  font-family: 'Helvetica Neue', Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.5em;
+  letter-spacing: 0.05em;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+blockquote {
+  border-left: 5px solid #3A6;
+  margin-left: 0;
+  padding-left: 2em;
+  color: #3A6;
+}
+
+a {
+  text-decoration: underline;
+}
+a:link, a:visited {
+  color: #88A;
+}
+
+h1, h2, h3, h3, h4, h5, h6, h7 {
+  margin: 0;
+  padding-top: 4em;
+  padding-bottom: 0em;
+  font-size: 12px;
+  font-weight: normal;
+  letter-spacing: 0.3em;
+  line-height: 1.2em;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 30px;
+  padding-top: 120px;
+  padding-bottom: 10px;
+}
+
+h2 {
+  font-size: 16px;
+}
+
+code {
+  padding: 1px 4px;
+}
+
+pre {
+  padding: 5px 20px;
+}
+
+code, pre {
+  overflow: auto;
+  background-color: #333;
+  border: 1px solid #555;
+  border-radius: 5px;
+  font-size: 13px;
+  color: #888;
+  line-height: 1.5em;
+}
+
+#table-of-contents, #main-text, #figure-list {
+  position: absolute;
+  height: 100%;
+}
+
+#table-of-contents {
+  width: 250px;
+  padding-top: 180px;
+  background-color: #324;
+}
+
+#main-text {
+  width: 450px;
+  padding-left: 50px;
+  padding-right: 100px;
+}
+
+#table-of-contents {
+  font-size: 10px;
+  font-weight: normal;
+  line-height: 1.5em;
+}
+#table-of-contents .toc h1, #table-of-contents .toc h2, #table-of-contents .toc h3,
+#table-of-contents .toc h4, #table-of-contents .toc h5, #table-of-contents .toc h6,
+#table-of-contents .toc h7 {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin: 0;
+  padding-top: 0em;
+  padding-bottom: 0em;
+  font-style: italic;
+}
+#table-of-contents .toc h1, #table-of-contents .toc h2 {
+  padding-top: 0.2em;
+  font-style: normal;
+}
+#table-of-contents .toc a {
+  display: block;
+  padding-left: 10px;
+  padding-right: 20px;
+}
+#table-of-contents .toc a, #table-of-contents .toc a:visited {
+  color: #99A;
+}
+#table-of-contents .toc a.active {
+  background-color: #900;
+}
+#table-of-contents .toc a.active:link, #table-of-contents .toc a.active:visited {
+  color: #FF6;
+}
+
+#main-text {
+  background-color: #900;
+  color: #A99;
+}
+#main-text h1, #main-text h2, #main-text h3, #main-text h4, #main-text h5,
+#main-text h6, #main-text h7 {
+  color: #FF6;
+}
+#main-text code, #main-text pre {
+  background-color: #522;
+}
+#main-text a.figlink.active {
+  padding: 2px;
+  border-radius: 5px;
+  border: 1px solid #330;
+  background-color: #FF33CC;
+}
+#main-text a.figlink.active:link, #main-text a.figlink.active:visited {
+  color: #330;
+  text-decoration: none;
+}
+#main-text .timestamp {
+  margin-top: 6em;
+  text-align: right;
+  border-top: 1px solid #CCC;
+}
+#main-text .fig-in-text {
+  display: none;
+  font-size: 12px;
+  line-height: 1.2em;
+  text-transform: uppercase;
+  background-color: #FF33CC;
+  color: #330;
+  padding: 10px 10px;
+}
+#main-text .fig-in-text code, #main-text .fig-in-text pre {
+  text-transform: none;
+  background-color: #CC0099;
+  color: #000;
+  border: 1px solid #330;
+}
+#main-text .fig-in-text img {
+  width: 100%;
+}
+
+#figure-list {
+  font-size: 12px;
+  text-transform: uppercase;
+  line-height: 1.2em;
+  background-color: #937;
+  color: #330;
+}
+#figure-list code, #figure-list pre {
+  text-transform: none;
+  background-color: #534;
+}
+#figure-list .fig-in-figlist {
+  padding: 30px 15px 20px 15px;
+}
+#figure-list .fig-in-figlist img {
+  padding-top: 10px;
+  display: block;
+}
+#figure-list .fig-in-figlist a, #figure-list .fig-in-figlist a:link,
+#figure-list .fig-in-figlist a:visited {
+  color: #A77;
+}
+#figure-list .fig-in-figlist.active {
+  background-color: #FF33CC;
+  color: #333;
+}
+#figure-list .fig-in-figlist.active pre, #figure-list .fig-in-figlist.active code {
+  border: 1px solid #330;
+  background-color: #CC0099;
+  color: #000;
+}
+#figure-list .fig-in-figlist.active a:link,
+#figure-list .fig-in-figlist.active a:visited {
+  color: #900;
+}
+
+@media (max-width: 1200px) {
+  #main-text {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  h1 {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 20px;
+    padding-top: 70px;
+  }
+  h2, h3, h4 {
+    font-size: 12px;
+  }
+  #main-text .fig-in-text {
+    display: block;
+  }
+}

@@ -1,0 +1,184 @@
+$title-color: #FF6
+$main-background-color: #900
+$highlight-border-color: #330
+$highlight-background-color: #FF33CC
+$highlight-code-bg-color: #CC0099 
+$highlight-code-color: #000 
+$strip-color: #3A6
+
+/* document fonts
+body
+  background-color: $strip-color
+  font-family: 'Helvetica Neue', Helvetica, sans-serif
+  font-size: 14px
+  line-height: 1.5em
+  letter-spacing: 0.05em
+  padding-left: 40px
+  padding-right: 40px
+blockquote 
+  border-left: 5px solid $strip-color
+  margin-left: 0
+  padding-left: 2em
+  color: $strip-color
+a
+  text-decoration: underline
+  &:link, &:visited
+    color: #88A
+h1, h2, h3, h3, h4, h5, h6, h7
+  margin: 0
+  padding-top: 4em
+  padding-bottom: 0em
+  font-size: 12px
+  font-weight: normal
+  letter-spacing: 0.3em
+  line-height: 1.2em
+  text-transform: uppercase
+h1
+  font-size: 30px
+  padding-top: 120px
+  padding-bottom: 10px
+h2
+  font-size: 16px
+code 
+  padding: 1px 4px 
+pre 
+  padding: 5px 20px 
+code, pre 
+  overflow: auto
+  background-color: #333
+  border: 1px solid #555
+  border-radius: 5px
+  font-size: 13px 
+  color: #888
+  line-height: 1.5em 
+
+
+/* LAYOUT
+#table-of-contents, 
+#main-text,
+#figure-list
+  position: absolute
+  height: 100%
+#table-of-contents
+  width: 250px
+  padding-top: 180px
+  background-color: #324
+#main-text
+  width: 450px
+  padding-left: 50px
+  padding-right: 100px
+
+
+/* supplescroll overrides
+#table-of-contents
+  font-size: 10px
+  font-weight: normal
+  line-height: 1.5em
+  .toc 
+    h1, h2, h3, h4, h5, h6, h7
+      text-transform: uppercase
+      letter-spacing: 0.2em
+      margin: 0
+      padding-top: 0em
+      padding-bottom: 0em
+      font-style: italic
+    h1, h2
+      padding-top: 0.2em
+      font-style: normal
+    a
+      display: block
+      padding-left: 10px
+      padding-right: 20px
+    a, a:visited
+      color: #99A
+    a.active
+      background-color: $main-background-color
+      &:link, &:visited
+        color: $title-color
+
+
+#main-text
+  background-color: $main-background-color
+  color: #A99
+  h1, h2, h3, h4, h5, h6, h7
+    color: $title-color
+  code, pre 
+    background-color: #522
+  a.figlink.active 
+    padding: 2px
+    border-radius: 5px
+    border: 1px solid $highlight-border-color
+    background-color: $highlight-background-color
+    &:link, 
+    &:visited
+      color: $highlight-border-color
+      text-decoration: none
+  .timestamp 
+    margin-top: 6em
+    text-align: right
+    border-top: 1px solid #CCC
+  .fig-in-text
+    display: none
+    font-size: 12px
+    line-height: 1.2em
+    text-transform: uppercase
+    background-color: $highlight-background-color
+    color: $highlight-border-color
+    padding: 10px 10px
+    code, pre
+      text-transform: none
+      background-color: $highlight-code-bg-color
+      color: $highlight-code-color
+      border: 1px solid $highlight-border-color
+    img
+      width: 100%
+
+
+#figure-list
+  font-size: 12px
+  text-transform: uppercase
+  line-height: 1.2em
+  background-color: #937
+  color: $highlight-border-color
+  code, pre 
+    text-transform: none
+    background-color: #534
+  .fig-in-figlist
+    padding: 30px 15px 20px 15px
+    img
+      padding-top: 10px
+      display: block
+    a, a:link, a:visited
+      color: #A77
+    &.active 
+      background-color: $highlight-background-color
+      color: #333
+      pre,
+      code 
+        border: 1px solid $highlight-border-color
+        background-color: $highlight-code-bg-color
+        color: $highlight-code-color
+      a:link, a:visited
+        color: #900
+
+
+@media (max-width: 1200px)
+  #main-text
+    padding-left: 15px
+    padding-right: 15px
+  h1
+    font-size: 25px
+
+
+@media (max-width: 480px)
+  h1
+    font-size: 20px
+    padding-top: 70px
+  h2, h3, h4
+    font-size: 12px
+  #main-text
+    .fig-in-text
+      display: block
+
+
+
