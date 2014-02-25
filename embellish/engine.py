@@ -112,13 +112,13 @@ def read_page(fname):
     raise e
 
   # a little hack to allow adjacent --- to denote sections
-  text = text.replace('\n---\n---\n', '\n---\n@@@haha@@@\n---\n')
-  parts = re.split(r'\n---\n', text)
-  if len(parts) >= 3:
-    parts[2] = '\n---\n'.join(parts[2:])
-    del parts[3:]
-  for i in range(len(parts)):
-    parts[i] = parts[i].replace('@@@haha@@@', '')
+  parts = ['']
+  for line in text.splitlines():
+    if len(parts) < 3:
+      if line.startswith('---') and line.strip() == '---':
+        parts.append('')
+        continue
+    parts[-1] += line + '\n'
 
   if len(parts) > 1:
     try:

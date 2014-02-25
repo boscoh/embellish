@@ -8,9 +8,9 @@ setup(
     version=version,
     author='Bosco Ho',
     author_email='boscoh@gmail.com',
-    url='http://github.com/boscoh/embellish',
+    url='http://boscoh.github.io/embellish',
     description='a lightweight static website generator',
-    long_description='Docs at http://github.com/boscoh/embellish',
+    long_description='Docs at http://boscoh.github.io/embellish',
     license='BSD',
     # linking hamlpy dev version requires a bit of rejigging
     dependency_links = [
