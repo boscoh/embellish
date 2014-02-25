@@ -69,6 +69,7 @@ code, pre {
   width: 250px;
   border-right: 1px solid #595959;
   padding-top: 180px;
+  display: none;
 }
 
 #main-text {
@@ -79,6 +80,7 @@ code, pre {
 
 #figure-list {
   border-left: 1px solid #595959;
+  display: none;
 }
 
 #table-of-contents {

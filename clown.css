@@ -70,12 +70,17 @@ code, pre {
   width: 250px;
   padding-top: 180px;
   background-color: #324;
+  display: none;
 }
 
 #main-text {
   width: 450px;
   padding-left: 50px;
   padding-right: 100px;
+}
+
+#figure-list {
+  display: none;
 }
 
 #table-of-contents {

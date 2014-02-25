@@ -15,6 +15,7 @@ body {
   border-left: 1px solid #CCC;
   border-right: 1px solid #CCC;
   margin-left: 3px;
+  display: none;
 }
 
 #main-text {
@@ -30,6 +31,7 @@ body {
   border-left: 1px solid #CCC;
   border-right: 1px solid #CCC;
   margin-right: 3px;
+  display: none;
 }
 
 body {
