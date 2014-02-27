@@ -170,7 +170,7 @@ With the post, the template, and the style sheet done, we are now ready to make 
 
     > embellish .
 
-Open `index.html` and `archive.html` in your browser.
+Open `post.html` in your browser.
 
 
 ### Index Pages
@@ -334,7 +334,7 @@ And then you run:
 
     > embellish .
 
-Which will generate an archive page for vampir posts `archive.html`.
+Which will generate an index post of all pages in `index.html` and an archive page for vampire posts `archive.html`.
 
 
 
