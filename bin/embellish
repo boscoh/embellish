@@ -34,7 +34,7 @@ parser.add_argument(
   help='force rebuild from scratch')
 parser.add_argument(
   '--recursive', '-r', action="store_true",
-  help='looks only in the directory specified')
+  help='searches all subtrees to find content')
 args = parser.parse_args()
 
 if os.path.isfile(args.target):
