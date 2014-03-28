@@ -5,6 +5,8 @@ _a lightweight static website generator_
 
 `embellish` builds a working static website from a bunch of text files, with optional `HTML` templates and other goodies. It is a lightweight generator, designed to build websites from any directory, allowing you to organically grow your websites.
 
+Docs at <http://boscoh.github.io/embellish>
+
 
 ## Quick & Dirty Websites
 
@@ -28,7 +30,10 @@ Python depencencies should be automatically installed.
 But if you want them manually, they are: `markdown`, `pyyaml`, `python-dateutil`, `jinja2`, `hamlpy`, `jinja2-hamlpy`, `flask` & `sassin`
 
 
-## Docs
+## Changelog
 
-Go to <http://boscoh.github.io/embellish>
+- 0.9.5
+    - added force option
+    - fixed help for recursive option
+
 
