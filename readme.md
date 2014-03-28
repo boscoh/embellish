@@ -32,7 +32,7 @@ But if you want them manually, they are: `markdown`, `pyyaml`, `python-dateutil`
 
 ## Changelog
 
-- 0.9.5
+- 0.9.6
     - added force option
     - fixed help for recursive option
 
