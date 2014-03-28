@@ -324,7 +324,9 @@ _scss_compiler = scss.Scss(scss_opts={'style':'expanded'})
 def scss_to_css(src, dst_dir, site): 
   dst = os.path.join(dst_dir, os.path.basename(src))
   dst = os.path.splitext(dst)[0] + '.css'
-  if not has_extensions(src, '.sass', '.scss') or is_uptodate(src, dst):
+  if not has_extensions(src, '.sass', '.scss'):
+    return False
+  if not site['force'] and is_uptodate(src, dst):
     return False
   if has_extensions(src, '.sass'):
     sass_text = read_text(src)
@@ -346,7 +348,9 @@ def scss_to_css(src, dst_dir, site):
 def jinjahaml_to_html(src, dst_dir, site): 
   dst = os.path.join(dst_dir, os.path.basename(src))
   dst = os.path.splitext(dst)[0] + '.html'
-  if not has_extensions(src, '.haml') or is_uptodate(src, dst):
+  if not has_extensions(src, '.haml'):
+    return False
+  if not site['force'] and is_uptodate(src, dst):
     return False
   # check if it's pure haml and not a haml/jinja template
   text = read_text(src)
@@ -372,7 +376,9 @@ def jinjahaml_to_html(src, dst_dir, site):
 def coffee_compile(src, dst_dir, site): 
   dst = os.path.join(dst_dir, os.path.basename(src))
   dst = os.path.splitext(dst)[0] + '.js'
-  if not has_extensions(src, '.coffee') or is_uptodate(src, dst):
+  if not has_extensions(src, '.coffee'):
+    return False
+  if not site['force'] and is_uptodate(src, dst):
     return False
   try:
     in_text = read_text(src)
@@ -389,7 +395,7 @@ def coffee_compile(src, dst_dir, site):
 
 def direct_copy(src, dst_dir, site):
   dst = os.path.join(dst_dir, os.path.basename(src))
-  if is_uptodate(src, dst):
+  if not site['force'] and is_uptodate(src, dst):
     return False
   try:
     shutil.copy2(src, dst)
@@ -409,7 +415,8 @@ def copy_or_process_sass_and_haml(src, dst_dir, site):
     return
 
 
-def transfer_media_files(site, copy_file_fn=copy_or_process_sass_and_haml):
+def transfer_media_files(
+    site, copy_file_fn=copy_or_process_sass_and_haml):
 
   def copy_tree(src, dst):
     """
@@ -441,6 +448,7 @@ def generate_site(
     copy_file_fn=copy_or_process_sass_and_haml):
 
   print(">>> Recursion mode:", site['recursive'])
+  print(">>> Force mode:", site['force'])
   print(">>> Scanning pages")
   get_pages(site, convert_content_fn, parse_metadata_fn)
 
@@ -463,9 +471,10 @@ def generate_site_incrementally(
   the `pages` data structure for incremental updates.
   """
   cached_pages = get_dict_val(site, 'cached_pages')
-  if os.path.isfile(cached_pages):
-    print(">>> Loading cached pages")
-    site['pages'] = eval(read_text(cached_pages))
+  if not get_dict_val(site, 'force'):
+    if os.path.isfile(cached_pages):
+      print(">>> Loading cached pages")
+      site['pages'] = eval(read_text(cached_pages))
   generate_site(
     site, convert_content_fn, parse_metadata_fn,
     render_template_fn, copy_file_fn)
@@ -484,6 +493,7 @@ default_site = {
   'cached_pages': 'site.cache',  # if not empty, caching file to spend updates
   'ext': '.html',
   'recursive': False,
+  'force': False,
   'pages': [],  # stores all the processed pages found in 'content_dir'
 }
 

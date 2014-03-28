@@ -30,6 +30,9 @@ parser.add_argument(
   help='triggers a local web-server that monitors the'
   ' contents directory')
 parser.add_argument(
+  '--force', '-f', action="store_true",
+  help='force rebuild from scratch')
+parser.add_argument(
   '--recursive', '-r', action="store_true",
   help='looks only in the directory specified')
 args = parser.parse_args()
@@ -47,6 +50,9 @@ else:
 
 if args.recursive:
   site['recursive'] = True
+
+if args.force:
+  site['force'] = args.force
 
 engine.generate_site_incrementally(site)
 
