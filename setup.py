@@ -25,6 +25,7 @@ setup(
         'coffeescript',
         'sassin',
         'flask',
+        'docopt'
     ],
     packages=['embellish',],
     package_data={
