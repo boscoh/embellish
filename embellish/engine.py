@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+
+
 from __future__ import print_function
 import sys
 import os
@@ -34,7 +36,10 @@ except:
 # utility functions
 
 def get_dict_val(my_dict, *keys):
-  "Returns None if key is not found. Extra keys for nested dicts"
+  """
+  Returns the value of a dictionary and if key is not found,
+  will return None.
+  """
   for key in keys:
     if key not in my_dict:
       return None
@@ -51,6 +56,10 @@ def has_extensions(fname, *exts):
 
 
 def relpath(path, mother_path=None):
+  """
+  Returns the relative path in a safe format to use for
+  other file operations.
+  """
   if mother_path is None:
     mother_path = os.getcwd()
   relpath = os.path.relpath(
@@ -61,7 +70,9 @@ def relpath(path, mother_path=None):
 
 
 def write_text(fname, text):
-  "Writes text to file in utf-8 and creates directory if needed."
+  """
+  Writes text to file in utf-8 and creates directory if needed.
+  """
   dirname = os.path.dirname(fname)
   if dirname and not os.path.isdir(dirname):
     os.makedirs(dirname)
@@ -70,13 +81,18 @@ def write_text(fname, text):
 
 
 def read_text(fname):
-  "Reads in utf-8 encoding (includes ascii)"
+  """
+  Reads text in utf-8 encoding (includes ascii).
+  """
   with codecs.open(fname, encoding='utf-8') as f:
     text = f.read()
   return text
 
 
 def is_uptodate(src, dst):
+  """
+  Evaluates if .src has been modified afte the time of .dst.
+  """
   return os.path.isfile(dst) and os.path.getmtime(dst) >= os.path.getmtime(src)
 
 
@@ -84,6 +100,10 @@ def is_uptodate(src, dst):
 
 
 def read_page(fname):
+  """
+  Returns a page dictionary filled in from a text file with some
+  of the fields filled in.
+  """
   page = {
     'template': 'default.haml',  # name of template file
     'filename': fname,  # name of markdown file
@@ -143,7 +163,9 @@ def convert_markdown(text):
 # from http://flask.pocoo.org/snippets/5/
 _punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
 def slugify(text, delim=u'-'):
-  """Generates an slightly worse ASCII-only slug."""
+  """
+  Returns a converted string that is internet-safe for URLs"
+  """
   result = []
   for word in _punct_re.split(text.lower()):
       word = normalize('NFKD', word).encode('ascii', 'ignore')
@@ -152,9 +174,12 @@ def slugify(text, delim=u'-'):
   return unicode(delim.join(result))
 
 
-# default 'parse_page_fn' used in 'read_page'
 def parse_metadata(page, site):
-  # markdown conversion here
+  """
+  Extract page metadata from page, and sets missing metadata
+  to defaults.
+  """
+
   if not get_dict_val(page, 'title'):
     page['title'] = ''
 
@@ -192,7 +217,10 @@ def parse_metadata(page, site):
 def get_pages(
     site, convert_content_fn=convert_markdown, 
     parse_metadata_fn=parse_metadata):
-
+  """
+  Read all text files into site['pages'] with processing of 
+  metadata.
+  """
   cached_pages = { p['filename']:p for p in site['pages'] }
   site['pages'] = []
   top_dir = os.path.abspath(site['content_dir'])
@@ -210,6 +238,7 @@ def get_pages(
             logger.error('skipping ' + relpath(f))
             continue
           try:
+            # markdown conversion happens here
             page['content'] = convert_content_fn(page['content'])
           except Exception, e:
             logger.error('text conversion: error in "{}"'.format(f))
@@ -260,7 +289,9 @@ def get_jinjahaml_template(fname):
 # default 'render_template_fn' used in 'write_pages'
 def render_jinjahaml_template(
     page, site, template_fname, cached_templates):
-  "Returns html string from template in page"
+  """
+  Returns the rendered html of page using template_fname
+  """
   if template_fname not in cached_templates:
     template = get_jinjahaml_template(template_fname)
     cached_templates[template_fname] = template
@@ -346,6 +377,9 @@ def scss_to_css(src, dst_dir, site):
 
 
 def jinjahaml_to_html(src, dst_dir, site): 
+  """
+  Compiles .haml src to a .html file in dst_dir.
+  """
   dst = os.path.join(dst_dir, os.path.basename(src))
   dst = os.path.splitext(dst)[0] + '.html'
   if not has_extensions(src, '.haml'):
@@ -405,6 +439,12 @@ def direct_copy(src, dst_dir, site):
 
 
 def copy_or_process_sass_and_haml(src, dst_dir, site):
+  """
+  Default transfer files, will copy or process .sass and .haml
+  depending on file extension. 
+  """
+  # This is recognized by the target transfer fns, which 
+  # return True if activated.
   if scss_to_css(src, dst_dir, site):
     return
   if coffee_compile(src, dst_dir, site):
@@ -417,11 +457,15 @@ def copy_or_process_sass_and_haml(src, dst_dir, site):
 
 def transfer_media_files(
     site, copy_file_fn=copy_or_process_sass_and_haml):
+  """
+  Transfer files found in the media directory to the target
+  directory using the copy_file_fn to do the transfer.
+  """
 
   def copy_tree(src, dst):
     """
-    Walks directory 'src' to copy file to 'dst'.
-    Calls copy_file_fn to do actual file transfer.
+    Copies files with copy_file_fn from 'src' to 'dst', then 
+    recurses over sub-directories.
     """
     if not os.path.isdir(dst):
       os.makedirs(dst)
@@ -446,7 +490,9 @@ def generate_site(
     parse_metadata_fn=parse_metadata,
     render_template_fn=render_jinjahaml_template,
     copy_file_fn=copy_or_process_sass_and_haml):
-
+  """
+  Generates static web-site based on markdown files.
+  """
   print(">>> Recursion mode:", site['recursive'])
   print(">>> Force mode:", site['force'])
   print(">>> Scanning pages")
@@ -467,8 +513,8 @@ def generate_site_incrementally(
     render_template_fn=render_jinjahaml_template,
     copy_file_fn=copy_or_process_sass_and_haml):
   """
-  A wrapper around 'generate_site' that caches
-  the `pages` data structure for incremental updates.
+  Generates static website incrementally by caching the main-data
+  structure betweend updates.
   """
   cached_pages = get_dict_val(site, 'cached_pages')
   if not get_dict_val(site, 'force'):
@@ -499,6 +545,9 @@ default_site = {
 
 
 def read_config_yaml(config):
+  """
+  Returns a dictionary read from a config file in YAML.
+  """
   load_site = yaml.load(read_text(config))
   for key in load_site:
     if load_site[key] is None:

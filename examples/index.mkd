@@ -2,6 +2,7 @@ template: index.haml
 index: True
 sort_key: date
 sort_reverse: True
+max_subpages: 5
 title: Blog Posts
 ---
 Short excerpt of this post.
