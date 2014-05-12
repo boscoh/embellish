@@ -224,6 +224,9 @@ def get_pages(
   top_dir = os.path.abspath(site['content_dir'])
   for root, dirs, fnames in os.walk(top_dir):
     for f in fnames:
+      if site['files']:
+        if f not in site['files']:
+          continue
       if has_extensions(f, '.mkd', '.markdown', '.md', '.txt'):
         f = os.path.join(root, f)
         if f in cached_pages and \

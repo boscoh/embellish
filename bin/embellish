@@ -16,10 +16,16 @@ EMBELLISH %s: a low friction static website generator.
 Usage: embellish [options] <target>
 
 Options:
-  -m    triggers a local web-server that monitors the
-        contents directory 
-  -f    force rebuild from scratch 
-  -r    searches sub-directories to find content
+  <target>  1. If target is directory, processes all 
+               text files in directory
+            2. If target is a .yaml file, reads it as
+               a configuration file
+            3. Otherwise, this is processed as a text 
+               file.
+  -m  triggers a local web-server that monitors the
+      contents directory 
+  -f  force rebuild from scratch 
+  -r  searches sub-directories to find content
 
 ''' % __version__
 
@@ -29,8 +35,13 @@ args = docopt(__doc__)
 
 site = engine.default_site
 if os.path.isfile(args['<target>']):
-  site.update(engine.read_config_yaml(args['<target>']))
   config_dir = os.path.dirname(args['<target>'])
+  if args['<target>'].endswith('.yaml'):
+    site.update(engine.read_config_yaml(args['<target>']))
+    print('>>> Input is a YAML site configuration file')
+  else:
+    site['files'].append(os.path.basename(args['<target>']))
+    print('>>> Input is a file')
 elif os.path.isdir(args['<target>']):
   os.chdir(args['<target>'])
   config_dir = args['<target>']
