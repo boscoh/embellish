@@ -494,15 +494,15 @@ def generate_site(
   """
   Generates static web-site based on markdown files.
   """
-  print(">>> Recursion mode:", site['recursive'])
-  print(">>> Force mode:", site['force'])
-  print(">>> Scanning pages")
+  logger.info(">>> Recursion mode:", site['recursive'])
+  logger.info(">>> Force mode:", site['force'])
+  logger.info(">>> Scanning pages")
   get_pages(site, convert_content_fn, parse_metadata_fn)
 
-  print(">>> Processing template rendering")
+  logger.info(">>> Processing template rendering")
   write_pages(site, render_template_fn)
   
-  print(">>> Processing media files")
+  logger.info(">>> Processing media files")
   transfer_media_files(site, copy_file_fn)
 
 
@@ -520,13 +520,13 @@ def generate_site_incrementally(
   cached_pages = get_dict_val(site, 'cached_pages')
   if not get_dict_val(site, 'force'):
     if os.path.isfile(cached_pages):
-      print(">>> Loading cached pages")
+      logger.info(">>> Loading cached pages")
       site['pages'] = eval(read_text(cached_pages))
   generate_site(
     site, convert_content_fn, parse_metadata_fn,
     render_template_fn, copy_file_fn)
   if cached_pages:
-    print(">>> Caching pages")
+    logger.info(">>> Caching pages")
     write_text(cached_pages, repr(site['pages']))
 
 
