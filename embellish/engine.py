@@ -9,7 +9,6 @@ import codecs
 import datetime
 from hashlib import md5
 import re
-import pprint
 from unicodedata import normalize
 import logging
 
@@ -101,8 +100,8 @@ def is_uptodate(src, dst):
 
 def read_page(fname):
   """
-  Returns a page dictionary filled in from a text file with some
-  of the fields filled in.
+  Returns a page dictionary with text from fname, and fields 
+  overriden by metadata found in fname.
   """
   page = {
     'template': 'default.haml',  # name of template file
@@ -176,8 +175,7 @@ def slugify(text, delim=u'-'):
 
 def parse_metadata(page, site):
   """
-  Extract page metadata from page, and sets missing metadata
-  to defaults.
+  Processes the page metadata into proper Python objects.
   """
 
   if not get_dict_val(page, 'title'):
@@ -537,6 +535,7 @@ default_site = {
   'output_dir': '.',  # generated files and static files put here
   'media_dir': '.',  # files to be correctly directly into the output file
   'cached_pages': 'site.cache',  # if not empty, caching file to spend updates
+  'files': [],
   'ext': '.html',
   'recursive': False,
   'force': False,
@@ -552,8 +551,6 @@ def read_config_yaml(config):
   for key in load_site:
     if load_site[key] is None:
       load_site[key] = ''
-  print('>>> Site configuration:')
-  pprint.pprint(load_site)
   site = default_site
   site.update(load_site)
   return site

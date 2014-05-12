@@ -3,60 +3,52 @@ from __future__ import print_function
 
 import sys
 import os
-import argparse
 import logging
+import pprint
+
+from docopt import docopt
 
 from embellish import engine, server, __version__
 
-usage = '''
-=======================================================
+__doc__ = '''
 EMBELLISH %s: a low friction static website generator.
-======================================================= 
-Looks for markdown files (*markdown, *mkd, *md, *txt) and
-converts them into HTML pages using HAML/jinja2
-templates (*haml) with a little SASS and HAML processing.
+
+Usage: embellish [options] <target>
+
+Options:
+  -m    triggers a local web-server that monitors the
+        contents directory 
+  -f    force rebuild from scratch 
+  -r    searches sub-directories to find content
+
 ''' % __version__
 
 logging.basicConfig(level=logging.INFO)
 
-print(usage)
+args = docopt(__doc__)
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-  'target', 
-  help='web directory of source and output, or a site.yaml configuration file')
-parser.add_argument(
-  '--monitor', '-m', action="store_true",
-  help='triggers a local web-server that monitors the'
-  ' contents directory')
-parser.add_argument(
-  '--force', '-f', action="store_true",
-  help='force rebuild from scratch')
-parser.add_argument(
-  '--recursive', '-r', action="store_true",
-  help='searches all subtrees to find content')
-args = parser.parse_args()
-
-if os.path.isfile(args.target):
-  site = engine.read_config_yaml(args.target)
-  config_dir = os.path.dirname(args.target)
-elif os.path.isdir(args.target):
-  os.chdir(args.target)
-  site = engine.default_site
-  config_dir = args.target
+site = engine.default_site
+if os.path.isfile(args['<target>']):
+  site.update(engine.read_config_yaml(args['<target>']))
+  config_dir = os.path.dirname(args['<target>'])
+elif os.path.isdir(args['<target>']):
+  os.chdir(args['<target>'])
+  config_dir = args['<target>']
 else:
-  logging.error('can\'t figure out {0}.'.format(args.target))
+  logging.error('can\'t figure out {0}.'.format(args['<target>']))
   sys.exit(1)
 
-if args.recursive:
-  site['recursive'] = True
+print('>>> Site configuration:')
+pprint.pprint(site)
 
-if args.force:
-  site['force'] = args.force
+if args['-r']:
+  site['recursive'] = args['-r']
+if args['-f']:
+  site['force'] = args['-f']
 
 engine.generate_site_incrementally(site)
 
-if args.monitor:
+if args['-m']:
   site_dir = os.path.abspath(
       os.path.join(config_dir, site['output_dir']))
 
