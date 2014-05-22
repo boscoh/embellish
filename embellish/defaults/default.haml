@@ -14,7 +14,7 @@
     h1, h2, h3, h4, h5, h6, h7 {
       font-family: "Helvetica Neue";
       text-transform: uppercase;
-      color: #666;
+      color: #333;
       font-size: 18px;
       letter-spacing: 0.05em;
       font-weight: 500;
@@ -24,14 +24,18 @@
     h1 {
       font-size: 38px; 
       letter-spacing: 0.2em;
+      text-transform: uppercase;
       line-height: 1em; 
       margin-top: 3em;
       margin-bottom: 1em }
     h2 {
-      font-size: 22px;
+      font-size: 28px;
+      text-transform: none;
       line-height: 1em; 
       margin-top: 3em;
-      margin-bottom: 1em;
+      margin-bottom: 0em;
+      border-bottom: 1px solid #999;
+      padding-bottom: 0.2em;
     }
     .timestamp {
       margin-top: 6em;
@@ -50,9 +54,11 @@
       color: #888;
     }
     code {
-      padding: 0px 2px; }
+      padding: 0px 5px; 
+    }
     pre {
       margin: 0;
+      padding: 0px 10px;
     }
     .codehilite {
       overflow: auto;
@@ -60,8 +66,10 @@
       }
     code, .codehilite {
       background-color: #F9F9FF;
-      border: 2px solid #EEF;
-      color: #777;
+      border: 1px solid #EEE;
+      padding: 2px;
+      border-radius: 5px;
+      color: #333;
       font-size: 12px; 
       line-height: 1.5em; }
 
@@ -76,9 +84,6 @@
         padding-right: 20px } }
 
 %body
-  - if page.title:
-    %h1 {{ page.title }}
-
   {{ page.content }}
 
   .timestamp

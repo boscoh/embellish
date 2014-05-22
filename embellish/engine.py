@@ -494,8 +494,8 @@ def generate_site(
   """
   Generates static web-site based on markdown files.
   """
-  logger.info(">>> Recursion mode:", site['recursive'])
-  logger.info(">>> Force mode:", site['force'])
+  logger.info(">>> Recursion mode: " + str(site['recursive']))
+  logger.info(">>> Force mode: " + str(site['force']))
   logger.info(">>> Scanning pages")
   get_pages(site, convert_content_fn, parse_metadata_fn)
 
