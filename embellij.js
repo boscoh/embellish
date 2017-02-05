@@ -23,7 +23,7 @@ const yaml = require('yamljs');
 const dateFormat = require('dateformat');
 const commonmark = require('commonmark');
 const crypto = require('crypto');
-
+const yamlFront = require('yaml-front-matter');
 
 function isFile(f) {
   try {
@@ -117,15 +117,6 @@ function getModifiedDate(file) {
   return new Date(stats.mtime);
 }
 
-function readPage(markdown) {
-  const text = fs.readFileSync(markdown, 'utf8');
-  const pieces = splitByThreeDashes(text, 2);
-  let page = _.assign({}, yaml.parse(pieces[0]));
-  page.filename = markdown;
-  page.content = pieces[1];
-  return page;
-}
-
 let defaultPage = {
   template: 'default.pug',  // name of template file
   filename: null,  // name of markdown file
@@ -169,8 +160,9 @@ function readPages(site) {
     if (_.has(cachedPages, file)) {
       _.assign(page, cachedPages[file]);
     }
-    _.assign(page, readPage(file));
+    page.filename = file;
 
+    _.assign(page, yamlFront.loadFront(file, 'content'))
     page.content = convertCommonmarkToHtml(page.content)
 
     if (page.date) {
