@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "commonmark": "^0.27.0",
+    "crypto": "^0.0.3",
+    "dateformat": "^1.0.12",
+    "fs-extra": "^2.0.0",
+    "globule": "^1.1.0",
+    "lodash": "^4.17.2",
+    "nopt": "^4.0.1",
+    "normalization": "^1.1.1",
+    "pug": "^2.0.0-beta6",
+    "slug": "^0.9.1",
+    "yamljs": "^0.2.8"
+  }
+}
