@@ -1,12 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Rewrite of my embellish.py package.
- * Improvements:
- *  - commonark instead of vanilla markdown
- *  - pug instead of pyhaml
- *  - yaml frontmatter consistent with jeckyl
- *  - better JSON integration
+ * embellij - simple static web site generator
  */
 
 "use strict";
@@ -54,22 +49,6 @@ function pprint(name, obj) {
 function stripExtOfPathname(filename) {
   let n = filename.length - path.extname(filename).length;
   return filename.substring(0, n);
-}
-
-function splitByThreeDashes(text, nMaxPiece) {
-	let lines = text.split(/\r?\n/);
-	let pieces = [];
-	pieces.push("");
-	let iPiece = 0;
-	for (let line of lines) {
-		if (line.match(/^---/) && (iPiece < nMaxPiece-1)) {
-			pieces.push("");
-			iPiece += 1;
-		} else {
-			pieces[iPiece] += line + "\n";
-		}
-	}
-	return pieces;
 }
 
 function convertUnicodeCharsToHtml(str) {
@@ -229,14 +208,7 @@ function getTemplateDir(page, site) {
   return null
 }
 
-function formatPageDates(page, dateFormatString) {
-  page.date = dateFormat(page.date, dateFormatString);
-
-}
-
 function writePages(site) {
-
-  // must change all pages first due to referencing through subpages
   let nSkip = 0;
   for (let page of site.pages) {
 
@@ -244,15 +216,13 @@ function writePages(site) {
     if (page.dateFormatString) {
       dateFormatString = page.dateFormatString;
     }
-    for (let subpage of page.subpages) {
-      formatPageDates(subpage, dateFormatString);
+    let pages = _.concat([page], page.subpages);
+    for (let page of pages) {
+      page.date = dateFormat(page.date, dateFormatString);
     }
-    formatPageDates(page, dateFormatString);
 
     let outHtml = path.join(site.outputDir, page.target);
-
     let template = getTemplateDir(page, site);
-
     let modified = getModifiedDate(page.filename);
 
     let isChecksumSame = true;
@@ -261,7 +231,6 @@ function writePages(site) {
       isChecksumSame = false;
       page.checksum = checksum;
     }
-
     if (isChecksumSame) {
       nSkip += 1;
       continue;

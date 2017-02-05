@@ -10,7 +10,6 @@
     "normalization": "^1.1.1",
     "pug": "^2.0.0-beta6",
     "slug": "^0.9.1",
-    "yaml-front-matter": "^3.4.0",
-    "yamljs": "^0.2.8"
+    "yaml-front-matter": "^3.4.0"
   }
 }
