@@ -1,4 +1,11 @@
 {
+  "name": "embellij",
+  "version": "0.5.0",
+  "author": "Bosco Ho <apposite@gmail.com (http://boscoh.com/)",
+  "license": "MIT",
+  "bin": {
+    "embellij": "embellij.js"
+  },
   "dependencies": {
     "commonmark": "^0.27.0",
     "crypto": "^0.0.3",
@@ -10,6 +17,7 @@
     "normalization": "^1.1.1",
     "pug": "^2.0.0-beta6",
     "slug": "^0.9.1",
-    "yaml-front-matter": "^3.4.0"
+    "yaml-front-matter": "^3.4.0",
+    "yamljs": "^0.2.8"
   }
 }

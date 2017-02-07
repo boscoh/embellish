@@ -105,6 +105,7 @@ let defaultPage = {
   title: '',  // title for indexing and for large display
   category: '',  // category of article for indexing
   relSiteUrl: '',  // the top site directory relative to this page
+  dateFormatString: null, // dateFormat formatting string
   date: null,  // published date
   slug: null,  // url-safe name of article used to make url and files
   url: '',   // relative url used for links in index files
@@ -125,6 +126,7 @@ function readPages(site) {
     let files = getFiles(site.contentDir, readExts, recursive);
     site.files = _.concat(site.files, files);
   }
+  site.files = _.uniq(site.files);
 
   let cachedPages = {};
   for (let page of site.pages) {
@@ -211,7 +213,6 @@ function getTemplateDir(page, site) {
 function writePages(site) {
   let nSkip = 0;
   for (let page of site.pages) {
-
     let dateFormatString = site.dateFormatString;
     if (page.dateFormatString) {
       dateFormatString = page.dateFormatString;
@@ -227,11 +228,11 @@ function writePages(site) {
 
     let isChecksumSame = true;
     let checksum = hash(page.content);
-    if (checksum != page.checksum) {
+    if (checksum !== page.checksum) {
       isChecksumSame = false;
       page.checksum = checksum;
     }
-    if (isChecksumSame) {
+    if (isChecksumSame && isFile(outHtml)) {
       nSkip += 1;
       continue;
     }
@@ -304,7 +305,7 @@ function processSite(site) {
     pages: [],  // stores all the processed pages found in 'content_dir'
     templateDir: '.',  // look for templates
     mediaDir: '.',  // files to be copied directly into the output directory
-    cachedPages: 'site.cache',  // if not empty, caching file to spend updates
+    cachedPages: '',  // if not empty, caching file to spend updates
     readExts: ['.md', '.txt'],
     writeExt: '.html', // extensions to converted html
     dateFormatString: "fullDate", // the formatting of page.date 
@@ -316,18 +317,16 @@ function processSite(site) {
   site.force = parsed.force;
 
   if (parsed.site) {
-    console.log(`loadSiteConfig ${parsed.site}`);
+    console.log(`Load site config ${parsed.site}`);
     let text = fs.readFileSync(parsed.site, 'utf8')
     _.assign(site, yaml.parse(text))
   }
 
   for (let file of parsed.argv.remain) {
     if (isFile(file)) {
-      console.log(`readSiteFiles (file) => ${file}`);
       site.files.push(file);
     }
     if (isDirectory(file)) {
-      console.log(`readSiteFiles (directory) => ${file}`);
       let files = getFiles(file, site.readExts, site.recursive)
       site.files = _.concat(site.files, files);
     }
