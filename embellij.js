@@ -139,6 +139,7 @@ function readPages(site) {
   }
   site.pages = [];
 
+  let nSkip = 0;
   console.log(`readSiteFiles ${site.files.length}`);
   for (let file of site.files) {
 
@@ -147,12 +148,15 @@ function readPages(site) {
       _.assign(page, cachedPages[file]);
     }
     page.filename = file;
+
     let modified = getModifiedDate(file);
     if (Date.parse(modified) != Date.parse(page.modified)) {
       _.assign(page, yamlFront.loadFront(file, 'content'));
       page.content = convertCommonmarkToHtml(page.content)
+      page.modified = modified;
+    } else {
+      nSkip += 1;
     }
-    page.modified = modified;
 
     if (page.date) {
       page.date = new Date(page.date);
@@ -177,6 +181,11 @@ function readPages(site) {
 
     site.pages.push(page);
   }
+
+  if (nSkip) {
+    console.log(`readPages no changes ${nSkip} files`)
+  }
+
 }
 
 function generateIndexableSubpages(site) {
@@ -235,8 +244,10 @@ function writePages(site) {
     if (isFile(outHtml)) {
       let writeTime = getModifiedDate(outHtml);
       if (Date.parse(writeTime) == Date.parse(page.writeTime)) {
-        nSkip += 1;
-        continue;
+        if (Date.parse(writeTime) >= Date.parse(page.modified)) {
+          nSkip += 1;
+          continue;
+        }
       }
     }
 
@@ -252,7 +263,7 @@ function writePages(site) {
     }
 
     console.log(`writeSiteFiles (${template}) => ${outHtml}`);
-    fs.ensureDir(path.dirname(outHtml));
+    fs.ensureDirSync(path.dirname(outHtml));
     fs.writeFileSync(outHtml, text);
     page.writeTime = getModifiedDate(outHtml);
 
