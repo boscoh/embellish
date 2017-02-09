@@ -40,4 +40,16 @@ To install:
 ## Changelog
 
 - 1.0 5/2/2017
-    + translated from python embellish
+    - translated to javascript 
+    - ES2015
+    - pug templates
+    - commonmark
+    - simplified architecture 
+    - standard yaml front-matter
+- 0.9.7
+    - added single file mode 
+    - docstring cleanup
+    - docopt in binary
+- 0.9.6
+    - added force option
+    - fixed help for recursive option

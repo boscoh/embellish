@@ -1,10 +1,19 @@
 #!/usr/bin/env node
 
+"use strict";
+
 /**
  * embellij - simple static web site generator
+ * - yaml front matter
+ * - commonmark markdown
+ * - pug templates 
  */
 
-"use strict";
+const doc = `
+embellij - a static site generator
+
+usage: embelij [-s SITE.yaml] [-r] (markdown | directory)
+`;
 
 const fs = require('fs-extra');
 const path = require('path');
@@ -14,11 +23,11 @@ const slug = require('slug');
 const globule = require('globule');
 const pug = require("pug");
 const normalize = require('normalization');
-const yaml = require('yamljs');
+const yaml = require('js-yaml');
 const dateFormat = require('dateformat');
 const commonmark = require('commonmark');
-const crypto = require('crypto');
 const yamlFront = require('yaml-front-matter');
+
 
 function isFile(f) {
   try {
@@ -36,10 +45,6 @@ function isDirectory(file) {
   catch (e) {
     return false;
   }
-}
-
-function hash(text) {
-  return crypto.createHash('md5').update(text).digest("hex");
 }
 
 function pprint(name, obj) {
@@ -142,9 +147,12 @@ function readPages(site) {
       _.assign(page, cachedPages[file]);
     }
     page.filename = file;
-
-    _.assign(page, yamlFront.loadFront(file, 'content'))
-    page.content = convertCommonmarkToHtml(page.content)
+    let modified = getModifiedDate(file);
+    if (Date.parse(modified) != Date.parse(page.modified)) {
+      _.assign(page, yamlFront.loadFront(file, 'content'));
+      page.content = convertCommonmarkToHtml(page.content)
+    }
+    page.modified = modified;
 
     if (page.date) {
       page.date = new Date(page.date);
@@ -223,29 +231,31 @@ function writePages(site) {
     }
 
     let outHtml = path.join(site.outputDir, page.target);
+
+    if (isFile(outHtml)) {
+      let writeTime = getModifiedDate(outHtml);
+      if (Date.parse(writeTime) == Date.parse(page.writeTime)) {
+        nSkip += 1;
+        continue;
+      }
+    }
+
     let template = getTemplateDir(page, site);
-    let modified = getModifiedDate(page.filename);
 
-    let isChecksumSame = true;
-    let checksum = hash(page.content);
-    if (checksum !== page.checksum) {
-      isChecksumSame = false;
-      page.checksum = checksum;
-    }
-    if (isChecksumSame && isFile(outHtml)) {
-      nSkip += 1;
-      continue;
-    }
-    
-    if (!_.endsWith(template, 'pug')) {
-      continue;
-    }
-    let compileWithMetadata = pug.compileFile(template, { pretty: true });
-    let text = compileWithMetadata({page, site});
+    let text = page.content;
 
-    fs.ensureDir(path.dirname(outHtml));
+    let metadata = {page, site};
+
+    if (_.endsWith(template, 'pug')) {
+      let compileWithMetadata = pug.compileFile(template, { pretty: true });
+      text = compileWithMetadata(metadata);
+    }
+
     console.log(`writeSiteFiles (${template}) => ${outHtml}`);
+    fs.ensureDir(path.dirname(outHtml));
     fs.writeFileSync(outHtml, text);
+    page.writeTime = getModifiedDate(outHtml);
+
   }
 
   if (nSkip) {
@@ -273,21 +283,16 @@ function processSite(site) {
 }
 
 
-{
-  const doc = `
-  embelij - a static site generator
-
-  usage: embelij [-s SITE.yaml] [-r] (markdown | directory)
-  `;
+if (require.main === module) {
 
   let knownOpts = {
-    "site": [String, null],
-    "recursive": Boolean
+    site: [String, null],
+    recursive: Boolean
   };
 
   let shortHands = {
-    "r": ["--recursive"],
-    "s": ["--site"]
+    r: ["--recursive"],
+    s: ["--site"]
   };
 
   let parsed = nopt(knownOpts, shortHands, process.argv, 2);
@@ -301,12 +306,12 @@ function processSite(site) {
     url: '', // if '' then use relative urls
     outputDir: '.',  // generated files and static files put here
     files: [], // list of all files to be converted
-    contentDir: '.',  // look for markdown files
+    contentDir: '',  // look for markdown files
     pages: [],  // stores all the processed pages found in 'content_dir'
     templateDir: '.',  // look for templates
     mediaDir: '.',  // files to be copied directly into the output directory
     cachedPages: '',  // if not empty, caching file to spend updates
-    readExts: ['.md', '.txt'],
+    readExts: ['.md', '.txt', '.mkd', '.markdown'],
     writeExt: '.html', // extensions to converted html
     dateFormatString: "fullDate", // the formatting of page.date 
     recursive: false, // search all subdirectories in contentDir
@@ -319,7 +324,7 @@ function processSite(site) {
   if (parsed.site) {
     console.log(`Load site config ${parsed.site}`);
     let text = fs.readFileSync(parsed.site, 'utf8')
-    _.assign(site, yaml.parse(text))
+    _.assign(site, yaml.safeLoad(text))
   }
 
   for (let file of parsed.argv.remain) {
