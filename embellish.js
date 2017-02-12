@@ -3,16 +3,16 @@
 "use strict";
 
 /**
- * embellij - simple static web site generator
- * - yaml front matter
- * - commonmark markdown
- * - pug templates 
+ * embellish - simple static web site generator
+ * - yaml front matter - consistent with other generators
+ * - commonmark markdown - markdown in <div> tags
+ * - pug templates - better compilation
  */
 
 const doc = `
-embellij - a static site generator
+embellish - a static site generator
 
-usage: embelij [-s SITE.yaml] [-r] (markdown | directory)
+usage: embellish [-s SITE.yaml] [-r] (markdown | directory)
 `;
 
 const fs = require('fs-extra');

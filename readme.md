@@ -1,5 +1,5 @@
 
-# Embellij
+# embellish
 
 _a lightweight static website generator_
 
@@ -12,7 +12,7 @@ Docs at <http://boscoh.github.io/embellish>
 
 Other generators dictate your directories to be structured their way. `embellish` does not. Go to the `embellish` directory and type:
 
-    > embellij -r .
+    > embellish -r .
 
 Boom! 
 
@@ -29,23 +29,24 @@ Boom!
 
 To install:
 
-    npm install embellij
+    npm install embellish
 
 ## Todo
-- modified files check to save files
 - modified file check for media transfers
 - keep track of templates and modifications
 - add a watcher for processing
+- static webserver
 
 ## Changelog
 
-- 1.0 5/2/2017
-    - translated to javascript 
-    - ES2015
-    - pug templates
-    - commonmark
+- 2.0.0-alpha 5/2/2017
+    - translated to javascript ES2015
+    - pug templates - much better templating system than pyhaml, different templating language
+    - commonmark - allows markdown in <div> tags
     - simplified architecture 
-    - standard yaml front-matter
+    - standard yaml front-matter - different template semantics
+    - removed lots of pre-processing from the python version
+    - use file comparison for efficent caching
 - 0.9.7
     - added single file mode 
     - docstring cleanup

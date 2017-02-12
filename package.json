@@ -1,10 +1,10 @@
 {
-  "name": "embellij",
-  "version": "0.5.0",
+  "name": "embellish",
+  "version": "2.0.0-alpha",
   "author": "Bosco Ho <apposite@gmail.com (http://boscoh.com/)",
   "license": "MIT",
   "bin": {
-    "embellij": "embellij.js"
+    "embellish": "embellish.js"
   },
   "dependencies": {
     "commonmark": "^0.27.0",
