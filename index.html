@@ -1,92 +1,57 @@
-<!DOCTYPE html>
+<html>
 <head>
-  <meta content='initial-scale=1.0' name='viewport' />
-  <link href='supplescroll.css' rel='stylesheet' />
-  <link href='dark.css' rel='stylesheet' />
-  <link href='http://fonts.googleapis.com/css?family=Cardo:700,400,400italic' type='text/css' rel='stylesheet' />
-  
+    <meta content="initial-scale=1.0" name="viewport">
     <title>embellish - a lightweight static website generator</title>
-
-  
-</head>
+    <script> window.is_rename = true </script>
+<link href="supplescroll.css" rel="stylesheet"><link href="sphinx.css" rel="stylesheet"></head>
 <body>
-  <div id='table-of-contents' class='touchscroll'></div>
-  <div id='main-text' class='touchscroll'>
-    <div class='relative_position'>
-      <h1>Embellish</h1>
+    <div id="banner">embellish - a lightweight static website generator</div>
+    <h1>Embellish</h1>
 <blockquote>
 <p><em>a lightweight static website generator</em></p>
 </blockquote>
 <p>There are many static website generators out there, but most of them are quite opionated: they demand your posts be put in this directory and your posts ordered in that way, and they often include some tricky custom-defined formats.</p>
-<p>Static websites are really quite simple. They're just a bunch of HTML files in a directory. A static website generator simply transforms text files into HTML files, and includes a few goodies like stylesheets and javascript modules.</p>
-<p><code>embellish</code> is a lightweight generator, that can build a website from any directory, transforming any text files it finds into HTML, allowing you to organically grow your website. It's also very small, and quite easy to modify. </p>
+<p>Static websites are really quite simple. They&apos;re just a bunch of HTML files in a directory. A static website generator simply transforms text files into HTML files, and includes a few goodies like stylesheets and javascript modules.</p>
+<p><code>embellish</code> is a lightweight generator, that can build a website from any directory, transforming any text files it finds into HTML, allowing you to organically grow your website. It&apos;s also very small, and quite easy to modify.</p>
 <p>As <code>embellish</code> is designed around the Python ecosystem, it carefully uses standard Python-like indented-text formats, that have been well-tested, namely:</p>
 <ul>
 <li>markdown for text</li>
-<li>YAML for configuration </li>
-<li>HAML/JINJA2 for HTML templating</li>
-<li>coffeescript for javascript </li>
-<li>indented-SASS for CSS stylesheets</li>
-<li>flask for running the local webserver </li>
+<li>YAML front-matter</li>
+<li>pug templates</li>
 </ul>
 <h2>Example Websites Built with Embellish</h2>
 <ul>
-<li><a href="http://boscoh.com">Bosco Ho's Emporium of Words</a> - my personal website</li>
+<li><a href="http://boscoh.com">Bosco Ho&apos;s Emporium of Words</a> - my personal website</li>
 <li><a href="http://boscoh.github.io/supplescroll">supplescroll</a> - a document decorator used to build this page</li>
 <li><a href="http://boscoh.com/geneparade/human/">the human gene parade</a> - an interactive genome browser</li>
 </ul>
 <h2>Quick &amp; Dirty Websites</h2>
-<p>Other generators dictate your website to be structured their way. <code>embellish</code> does not. </p>
+<p>Other generators dictate your website to be structured their way. <code>embellish</code> does not.</p>
 <p>Go to a directory with a <code>markdown</code> file (e.g. the <code>embellish</code> directory):</p>
-<div class="codehilite"><pre>&gt; embellish -m .
-</pre></div>
-
-
-<p>Boom! </p>
+<pre><code>&gt; embellish .
+</code></pre>
+<p>Boom!</p>
 <p><code>readme.html</code> is generated and opened in a browser.</p>
 <p>Now edit <code>readme.txt</code>, save, and refresh the browser.</p>
 <h2>Installation</h2>
 <p>The project is hosted at <a href="https://github.com/boscoh/embellish">github</a>.</p>
-<p>Have <code>python</code> and <code>pip</code>? Then:</p>
-<div class="codehilite"><pre>  &gt; pip install embellish
-</pre></div>
-
-
+<p>Have <code>node</code> installed? Then:</p>
+<pre><code>  &gt; npm install -g embellish
+</code></pre>
 <p>Or install manually using the <a href="https://github.com/boscoh/embellish/archive/master.zip">zip file</a>:</p>
-<div class="codehilite"><pre>&gt; python setup.py install
-</pre></div>
-
-
+<pre><code>&gt; npm link
+</code></pre>
 <p>All the following examples can be found in the <code>examples</code> directory of the zip file.</p>
-<p>Dependencies (which should have been installed by <code>pip</code>): </p>
-<ul>
-<li>markdown</li>
-<li>pyyaml</li>
-<li>hamlpy</li>
-<li>jinja2</li>
-<li>jinja2_hamlpy</li>
-<li>flask</li>
-<li>dateutil</li>
-<li>sassin</li>
-</ul>
 <h2>Blog with Categories</h2>
-<p>Any litmus test for a static website generator is to make a blog. Here's a quick guide using <code>embellish</code> where <code>markdown</code> is used for the text, <code>YAML</code> for metadata, and <code>haml</code> to write the HTML.</p>
+<p>Any litmus test for a static website generator is to make a blog. Here&apos;s a quick guide using <code>embellish</code> where <code>markdown</code> is used for the text, <code>YAML</code> for metadata, and <code>haml</code> to write the HTML.</p>
 <p><code>embellish</code> will recognize files with extensions <code>.txt</code>, <code>.md</code>, <code>.mkd</code> and <code>.markdown</code> as post/article pages.</p>
 <h3>Article page</h3>
-<p>The structure of a content page has three sections separated by <code>---</code>:</p>
-<ol>
-<li>header</li>
-<li>excerpt</li>
-<li>markdown text</li>
-</ol>
-<p>such as in <code>post.mkd</code> <a href="#fig-post"></a>.</p>
+<p><code>embellish</code> expects a text page with an optional YAML front-matter defined  by <code>---</code>  such as in <code>post.mkd</code> <a href="#fig-post"></a>.</p>
 <div id="fig-post">
   <code>post.mkd</code> - example of a Markdown Post
-  <pre class="codehilite">
+<pre><code>---
 title: The Title of this Post
-template: post.haml
----
-Excerpt of post
+template: post.pug
 ---
 # Great Post in Markdown
 
@@ -94,39 +59,34 @@ Excerpt of post
 
 This is the _body_ of the text 
 written in markdown
-  </pre>
+</code></pre>
 </div>
-
-<p>Both the header and the excerpt are optional. If only two sections are given, then it's assumed that it's a header and body, and an excerpt is auto-generated.</p>
-<p><code>embellish</code> reads the header as <a href="https://github.com/Animosity/CraftIRC/wiki/Complete-idiot's-introduction-to-yaml">YAML</a> metadata. There are a few fields used by <code>embellish</code> but you can add anything you want. This metadata will be made available to you in the template as a dictionary called <code>page</code>.</p>
-<p>To generate an HTML page from this article post, a template is required. In this case, the template referred to in the header is <code>post.haml</code>. If no template is given, a default one is used that is located in the embllish directory under <code>defaults/default.haml</code>.</p>
+<p>The front-matter is optional. <code>embellish</code> reads the header as <a href="https://github.com/Animosity/CraftIRC/wiki/Complete-idiot&apos;s-introduction-to-yaml">YAML</a> metadata. There are a few fields used by <code>embellish</code> but you can add anything you want. This metadata will be made available to you in the template as a dictionary called <code>page</code>.</p>
+<p>To generate an HTML page from this article post, a template is required. In this case, the template referred to in the header is <code>post.pug</code>. If no template is given, a default one is used that is located in the embllish directory under <code>defaults/default.pug</code>.</p>
 <h3>Templates and Style Sheets</h3>
 <p>Templates are used to generate HTML files from text files and their attendant header information.</p>
-<p><code>embellish</code> uses the <a href="https://github.com/jessemiller/HamlPy/blob/master/reference.md">jinja2-haml</a> format for templates. A simple example is <code>post.haml</code> <a href="#fig-template"></a>, which was referred in <code>post.txt</code> above.</p>
+<p><code>embellish</code> uses <a href="https://pugjs.org/api/getting-started.html">pug</a> templates. A simple example is <code>post.pug</code> <a href="#fig-template"></a>, which was referred in <code>post.txt</code> above.</p>
 <div id="fig-template"> 
-  <code>post.haml</code> - example of a simple HAML template to generate an article HTML
-  <pre class="codehilite">
-%head
-  %link{href:'styles.css', rel:'stylesheet'}
-%body
+  <code>post.pug</code> - example of a simple HAML template to generate an article HTML
+<pre><code>head
+  link(href=&apos;styles.css&apos; rel=&apos;stylesheet&apos;)
+body
   .title
-    {{ page.title }}
+    | #{ page.title }
   .nav
-    category: 
-    {{ page.category }} &#183;
-    published: 
-    {{ page.date.strftime("%d %b %Y") }}
-  %hr
-  {{ page.content }}
-  </pre>
+    | category: 
+    | #{ page.category } &amp;#183;
+    | published: 
+    | #{ page.date }#
+  hr
+  | !{ page.content }
+</code></pre>
 </div>
-
 <p>For details on how templates work in <code>embellish</code>, see the Template Guide below.</p>
-<p>Notice that there is a link to a style sheet <code>styles.css</code> <a href="#fig-template"></a>. Now, you could simply creat your own <code>styles.css</code> and put it in the directory, but I strongly recommend you to write <a href="https://github.com/boscoh/sassin">SASS</a> style sheets such as <code>styles.sass</code> <a href="#fig-sass"></a>, which will be automatically compiled into <code>styles.css</code> for you.</p>
+<p>Notice that there is a link to a style sheet <code>styles.css</code> <a href="#fig-template"></a>. Now, you could simply creat your own <code>styles.css</code> and put it in the directory, but I strongly recommend you to write <a href="https://github.com/boscoh/sassin">SASS</a> style sheets such as <code>styles.sass</code> <a href="#fig-sass"></a>, and use <a href="http://sass-lang.com/"><code>sass</code></a> to compile into <code>styles.css</code>. <strong>note</strong> in previous versions, this was done for you but it was rather fragile and difficult to debug. Now, you should just compile to css yourself.</p>
 <div id="fig-sass"> 
   <code>style.sass</code> - a SASS file to generate <code>style.css</code>
-  <pre class="codehilite">
-body
+<pre><code>body
   background-color: #FFF
   font-family: Helvetica
   width: 450px
@@ -139,165 +99,130 @@ body
 .nav
   font-style: italic
   font-size: 12px
-  </pre>
+</code></pre>
 </div>
-
 <p>With the post, the template, and the style sheet done, we are now ready to make the blog:</p>
-<div class="codehilite"><pre>&gt; embellish .
-</pre></div>
-
-
+<pre><code>&gt; embellish .
+</code></pre>
 <p>Open <code>post.html</code> in your browser.</p>
 <h3>Index Pages</h3>
-<p>To really get the blog going, though, we will need to build an index page. First, we create a text file that will generate an index of posts <code>index.mkd</code> <a href="#fig-index-mkd"></a>.</p>
+<p>To really get the blog going, though, we will need to build an index page to list a bunch of posts. First, we create a text file that will generate an index of posts <code>index.mkd</code> <a href="#fig-index-mkd"></a>.</p>
 <div id="fig-index-mkd"> <code>index.mkd</code> - example of a markdown file that generates a blog index file
-<pre class="codehilite">
-template: index.haml
+<pre><code>---
+template: index.pug
 index: True
-sort_key: date
-sort_reverse: True
-max_subpages: 5
+sortKey: date
+sortReverse: True
+maxSubpages: 5
 title: Blog Posts
----
-Short excerpt of this post.
 ---
 Some words to describe the following list of 
 posts that are arranged in reverse chronological 
 order.
-</pre>
+</code></pre>
 </div>
-
 <p>In the header of the post, the key flag is:</p>
-<div class="codehilite"><pre>index: True
-</pre></div>
-
-
+<pre><code>index: True
+</code></pre>
 <p>which tells <code>embellish</code> to send a list of posts into the template during compilation of the HTML file. Since in this case, no <code>category</code> was given, all the posts found by <code>embellish</code> will be used.</p>
 <p>The posts will be sorted by date as indicated by:</p>
-<div class="codehilite"><pre>sort_key: date
-</pre></div>
-
-
-<p>Other fields could have been used, but let's start with date. We'd also like to do it in reverse order as fits blogging convention:</p>
-<div class="codehilite"><pre>sort_reverse: True
-</pre></div>
-
-
-<p>And we don't want too many posts, so</p>
-<div class="codehilite"><pre>max_subpages: 5
-</pre></div>
-
-
+<pre><code>sortKey: date
+</code></pre>
+<p>Any other field could have been used, but let&apos;s start with date. We&apos;d also like to do it in reverse order as fits blogging convention:</p>
+<pre><code>sortReverse: True
+</code></pre>
+<p>And we don&apos;t want too many posts, so</p>
+<pre><code>maxSubpages: 5
+</code></pre>
 <h3>Templating Index Pages</h3>
-<p>Okay now the text file is done, let's make the template for an index file <code>index.haml</code> <a href="#fig-index-haml"></a>.</p>
-<div id="fig-index-haml"> <code>index.haml</code> - example of a HAML template that generates the HTML code for an index markdown file
-<pre class="codehilite">
-%head
-  %link{href:'styles.css', rel:'stylesheet'}
-%body
+<p>Okay now the text file is done, let&apos;s make the template for an index file <code>index.pug</code> <a href="#fig-index-haml"></a>.</p>
+<div id="fig-index-haml"> <code>index.pug</code> - example of a HAML template that generates the HTML code for an index markdown file
+<pre><code>head
+  link(href=&apos;styles.css&apos; rel=&apos;stylesheet&apos;)
+body
   .title
-    {{ page.title }}
-  {{ page.content }}
-  %ul  
-    - for subpage in page.subpages:
-      %li
-        %b
-          %a{href:"{{ page.rel_site_url }}/{{ subpage.url }}"} 
-            {{ subpage.title }}
-        %br
-        %i {{ subpage.excerpt }}
-        %br
-       .nav
-          - if subpage['category']:
-            category: {{ subpage.category }}
-            %br
-          date: {{ subpage.date.strftime("%d %b %Y") }}    
-        %br
-        %br
-</pre>
+    | #{ page.title }
+  | !{ page.content }
+  ul  
+    each subpage in page.subpages
+      li
+        b
+          a(href= `${subpage.relSiteUrl}/${subpage.url}`)= subpage.title
+        br
+        i= subpage.excerpt
+        br
+        .nav
+          if subpage.category
+            | category: #{ subpage.category }
+            br
+          | date: #{subpage.date}
+        br
+        br
+
+</code></pre>
 </div>
-
-<p>How it works is that during compilation, <code>embellish</code> will package all the information for the page into a dictionary <code>page</code> and send it into the template. As well another dictionary <code>site</code> will also be sent that includes the site configuration finformation. These will be described in detail below in the Templating Guide.</p>
-<p>The header of the template is pretty similar to <code>post.haml</code> <a href="#fig-template"></a> above, with the big difference in that <code>index.haml</code> <a href="#fig-index-haml"></a> can handle a special field called <code>page.subpages</code>. </p>
-<p><code>page.subpages</code> holds a list of all the pages found by <code>embellish</code> that belong to this index page. If a <code>category</code> was given, then only pages with the same <code>category</code> are found in the list. And since no <code>category</code> was given here, all pages are given.</p>
-<p>To handle the display of all the <code>page.subpages</code>, there is a jinja2-haml loop:</p>
-<div class="codehilite"><pre>- for subpage in page.subpages:
-    {{ subpage.title }}
-    {{ subpage.excerpt }}
-</pre></div>
-
-
-<p>Note: it's important you use <code>subpage</code> as the looping variable, as <code>page</code> would otherwise clash with the main <code>page</code> dictionary.</p>
-<p>Now if you did not provide an excerpt, an automatic 50 word excerpt will be generated for you from the text.</p>
-<p>You might have noticed that there is no pagination. I detest pagination, so did not implement it. Just put them all in one page. Please.</p>
+<p>How it works is that during compilation, <code>embellish</code> will package all the information for the page into a dictionary <code>page</code> and send it into the template. As well another dictionary <code>site</code> will also be sent that includes the site configuration information. These will be described in detail below in the Templating Guide.</p>
+<p>The header of the template is pretty similar to <code>post.pug</code> <a href="#fig-template"></a> above, with the big difference in that <code>index.pug</code> <a href="#fig-index-haml"></a> can handle a special field called <code>page.subpages</code>.</p>
+<p><code>page.subpages</code> holds a list of all the pages found by <code>embellish</code> that belong to this index page. If a <code>category</code> was given, then only pages with the same <code>category</code> will be kept in the list. Here, since no <code>category</code> was given, all pages are given.</p>
+<p>To handle the display of all the <code>page.subpages</code>, there is a pug control loop:</p>
+<pre><code>each subpage in page.subpages
+    | #{ subpage.title }
+    | #{ subpage.excerpt }
+</code></pre>
+<p><strong>Note</strong>: it&apos;s important you use <code>subpage</code> as the looping variable, as <code>page</code> would otherwise clash with the main <code>page</code> dictionary.</p>
+<p>You might have noticed that there is no pagination. I hate pagination, so I did not implement it. Just put all posts in one page.</p>
 <h3>Referring to URLs</h3>
-<p>It's important to get the URL's right to show up in the template.</p>
+<p>It&apos;s important to get the URL&apos;s right to show up in the template.</p>
 <p>First we need the site URL, and there are two ways to get it:</p>
 <ol>
-<li>The site's absolute URL, which is <code>{{ site.url }}</code></li>
-<li>The site's relative URL which depends on the location of the page in question <code>{{ page.rel_site_url }}</code></li>
+<li>The site&apos;s absolute URL, which is <code>#{ site.url }</code></li>
+<li>The site&apos;s relative URL which depends on the location of the page in question <code>#{page.relSiteUrl}</code></li>
 </ol>
-<p>The URL of a page thus combines the site's URL with the page's URL. </p>
-<p>If you want the absolute URL, you do this:</p>
-<div class="codehilite"><pre>{{ site.url }}/{{ page.url }}
-</pre></div>
-
-
+<p>The URL of a page thus combines the site&apos;s URL with the page&apos;s URL.</p>
+<p>If you want the absolute URL, you can construct the url using this interpolated string (notice the use of back-ticks):</p>
+<pre><code>`${site.url}/${page.url}` 
+</code></pre>
 <p>For the relative URL of a page, which is more flexible, but more prone to breaking during deployment :</p>
-<div class="codehilite"><pre>{{ page.rel_site_url }}/{{ page.url }}
-</pre></div>
-
-
-<p>In <code>index.haml</code> <a href="#fig-index-haml"></a>, relative links are used for the <code>subpage</code> in the looping through the collected posts, so the link is:</p>
-<div class="codehilite"><pre>{{ subpage.rel_site_url }}/{{ subpage.url }}
-</pre></div>
-
-
+<pre><code>`${site.relSiteUrl}/${page.url}` 
+</code></pre>
+<p>In <code>index.pug</code> <a href="#fig-index-haml"></a>, relative links are used for the <code>subpage</code> in the looping through the collected posts, so the link is:</p>
+<pre><code>`${subpage.relSiteUrl}/${supbage.url}`
+</code></pre>
 <h3>Archiving With Categories</h3>
-<p>Now with blog posts, you might want to archive posts under different categories. </p>
-<p>Let's say you have a post about vampires <code>vampire.mkd</code> <a href="#fig-vampire-post"></a>. You give it a category in the header by:</p>
-<div class="codehilite"><pre>category: vampire
-</pre></div>
-
-
+<p>Now with blog posts, you might want to archive posts under different categories.</p>
+<p>Let&apos;s say you have a post about vampires <code>vampire.mkd</code> <a href="#fig-vampire-post"></a>. You give it a category in the header by:</p>
+<pre><code>category: vampire
+</code></pre>
 <div id="fig-vampire-post"> <code>vampire.mkd</code> - a post with a category of vampire.
-<pre class="codehilite">
+<pre><code>---
 title: The Vampire Post
-template: post.haml
+template: post.pug
 category: vampire
----
-Excerpt of vampire post
 ---
 # This is Vampire Post
 
-## There's Vampire as Category!
+## There&apos;s Vampire as Category!
 
 This is also in __markdown__.
-</pre>
+</code></pre>
 </div>
-
 <div id="fig-archive-index"> <code>archive.mkd</code> - a post with a category of vampire.
-<pre class="codehilite">
-template: index.haml
+<pre><code>---
+template: index.pug
 index: True
-sort_key: date
+sortKey: date
 category: vampire
-sort_reverse: True
+sortReverse: True
 title: Archive of Posts about Vampires
 ---
-</pre>
+</code></pre>
 </div>
-
 <p>Then, to collect all your vampire posts in an archive, you can create an index file <code>archive.mkd</code> <a href="#fig-archive-index"></a>, where the only difference from <code>index.mkd</code> <a href="#fig-index-mkd"></a>, is that a category is given:</p>
-<div class="codehilite"><pre>category: vampire
-</pre></div>
-
-
+<pre><code>category: vampire
+</code></pre>
 <p>And then you run:</p>
-<div class="codehilite"><pre>&gt; embellish .
-</pre></div>
-
-
+<pre><code>&gt; embellish .
+</code></pre>
 <p>Which will generate an index post of all pages in <code>index.html</code> and an archive page for vampire posts <code>archive.html</code>.</p>
 <h2>Larger Websites</h2>
 <h3>Configuration Files</h3>
@@ -305,99 +230,41 @@ title: Archive of Posts about Vampires
 <p>To tell <code>embellish</code> where the directories are, you create a configuration file in the YAML format, such as <code>site.yaml</code> <a href="#fig-config"></a>:</p>
 <div id="fig-config"> <code>site.yaml</code> a YAML configuration file for a larger website
 <pre class="codehilite">
-url: http://boscoh.com # if empty then use relative urls
-content_dir: content  # look for markdown files
-template_dir: templates  # look for templates
-output_dir: site  # generated files and static files put here
-media_dir: media  # files to be correctly directly into the output file
-ext: .html
+url: http://boscoh.com # if  then use relative urls
+contentDir: content  # look for markdown files
+templateDir: templates  # look for templates
+cachedPages: site.cache
+outputDir: site  # generated files and static files put here
+recursive: True # recursively searches through directories
+mediaDir: media  # files to be copied directly into the output directory
+writeExt: .html
 </pre>
 </div>
-
 <p>To whit:</p>
 <ul>
 <li><code>url</code>: the hard-coded URL of your website. If given, this is available in any templates you make as <code>site.url</code>.</li>
-<li><code>content_dir</code>: the directory where you put all your posts and index files.</li>
-<li><code>template_dir</code>: for holding templates</li>
-<li><code>media_dir</code>: your supporting files - javascript, css style sheets, images, movies, etc. These will be copied directly into the <code>output_dir</code></li>
-<li><code>output_dir</code>: the directory where all compiled contents and contents of <code>media_dir</code> are put</li>
-<li><code>ext</code>: the extension for the html files, typically <code>.html</code> or <code>.htm</code></li>
+<li><code>contentDir</code>: the directory where you put all your posts and index files.</li>
+<li><code>templateDir</code>: for holding templates</li>
+<li><code>mediaDir</code>: your supporting files - javascript, css style sheets, images, movies, etc. These will be copied directly into the <code>outputDir</code></li>
+<li><code>outputDir</code>: the directory where all compiled contents and contents of <code>mediaDir</code> are put</li>
+<li><code>writeExt</code>: the extension for the html files, typically <code>.html</code> or <code>.htm</code></li>
 </ul>
 <p>To run <code>embellish</code> against this configuration file:</p>
-<div class="codehilite"><pre>embellish site.yaml
-</pre></div>
-
-
-<p>And the result will be in the <code>output_dir</code>.</p>
+<pre><code>embellish site.yaml
+</code></pre>
+<p>And the result will be in the <code>outputDir</code>.</p>
 <p>Note: when using <code>embellish</code> with a directory as the argument, such as:</p>
-<div class="codehilite"><pre> &gt; embellish .
-</pre></div>
-
-
-<p>Internally, <code>embellish</code> sets these fields in <code>site</code> - <code>content_dir</code>, <code>template_dir</code>, <code>media_dir</code>, <code>output_dir</code> - to the current directory. <code>embellish</code> will skip the copying of files, and thus the website is made in place!</p>
+<pre><code> &gt; embellish .
+</code></pre>
+<p>Internally, <code>embellish</code> sets these fields in <code>site</code> - <code>contentDir</code>, <code>templateDir</code>, <code>mediaDir</code>, <code>outputDir</code> - to the current directory. <code>embellish</code> will skip the copying of files, and thus the website is made in place!</p>
 <h3>Recursive Directory Processing</h3>
-<p>Since <code>embellish</code> is meant to be a quick-and-dirty website generator, the default is to search only in the directory specified for content files. </p>
+<p>Since <code>embellish</code> is meant to be a quick-and-dirty website generator, the default is to search only in the directory specified for content files.</p>
 <p>This avoids accidentally telling <code>embellish</code> to search through a very large forest of subdirectories.</p>
 <p>But you can tell <code>embellish</code> to exhaustively process all subdirectories with the <code>-r</code> option:</p>
-<div class="codehilite"><pre>&gt; embellish -r .
-</pre></div>
-
-
-<h3>A Bit of Media Processing</h3>
-<p>Another useful thing that <code>embellish</code> does during the copying from  the <code>media_dir</code> files, some extra file processing is done:</p>
-<ul>
-<li><code>.sass</code> files are compiled to <code>.css</code> style sheets</li>
-<li><code>.scss</code> files are compiled to <code>.css</code> style sheets</li>
-<li>straight <code>.haml</code> with no template tags are compiled into <code>.html</code> files</li>
-<li><code>.coffee</code> files are compiled to <code>.js</code> javascript files</li>
-</ul>
-<p>So potentially, your directory could just consist of <code>.haml</code> files and</p>
-<div class="codehilite"><pre>&gt; embellish .
-</pre></div>
-
-
-<p>will make a nice website consisting of compiled <code>.html</code> files.</p>
-<h2>Debugging Websites</h2>
-<h3>Local Webserver</h3>
-<p>To iterate designs quickly, it's important you see the compiled websites easily. Like other static website generators, <code>embellish</code> provides a local webserver to do this.</p>
-<p>Why? </p>
-<p>Opening local <code>.html</code> pages through a browser is a crippled process. Browsers can't figure out <code>index.html</code> files from directory names and relative URL's get all messed up. These are features that are typically available through your remote webserver, your ultimate destination.</p>
-<p>So, if you test relative URLs, it's a nightmare. If you use test absolute URLs, it's also a nightmare.</p>
-<p>To help with that, <code>embellish</code> comes with a local web-server written in <code>flask</code> that emulates common Apache <code>.htaccess</code> features such as:</p>
-<ul>
-<li>adding trailing <code>/</code> to directories</li>
-<li>processing implied <code>index.html</code> in directories</li>
-<li>adding implied <code>.html</code> to clean urls</li>
-</ul>
-<p>To run the <code>embellish</code> local web-server:</p>
-<div class="codehilite"><pre>embellish -m .
-</pre></div>
-
-
-<p>Or if you have a configuration file:</p>
-<div class="codehilite"><pre>embellish -m site.yaml
-</pre></div>
-
-
-<p>The local web-server will pick a random port so that you can run different servers for different websites at the same time.</p>
-<p>As well the <code>embellish</code> server:</p>
-<ul>
-<li>monitors modfications in directories </li>
-<li>regenerates site if modifications detected</li>
-<li>caches previous regenerations, for faster iterations</li>
-<li>opens <code>index.html</code>, or <code>readme.html</code> in browser on startup</li>
-</ul>
-<p>Meaning, if you refresh the page in the browser, the local web-server will scan the source files for changes, recompile, and serve you the new <code>.html</code> page.</p>
-<h3>Debugging Coffeescript/SASS/Haml files</h3>
-<p>Because of the media processing, I use the <code>embellish</code> server to set-up my environment for debugging <code>.coffeescript</code>, <code>.sass</code> and <code>.haml</code> files.</p>
-<p>Just run the server over my directory:</p>
-<div class="codehilite"><pre>embellish -m .
-</pre></div>
-
-
-<p>Then edit the source files and refresh in the browser to compile. The server output in the terminal will show compilation errors. And the developer console is opened in the refreshed page, showing <code>console.log</code> messages from the javascript.</p>
+<pre><code>&gt; embellish -r .
+</code></pre>
 <h2>Templating guide</h2>
-<p>To write custom templates in <code>jinja2-haml</code>, you'll have to understand the data model <code>embellish</code> uses to compile templates.</p>
+<p>To write custom templates in <code>jinja2-haml</code>, you&apos;ll have to understand the data model <code>embellish</code> uses to compile templates.</p>
 <p>During compilation, two dictionaries are passed into every template:</p>
 <ol>
 <li>
@@ -410,77 +277,59 @@ ext: .html
 <h3>Page Metadata</h3>
 <p>Every <code>page</code> dictionary comes equiped with a set of default metadata. The best way to show this is from the Python source code <a href="#fig-page-dictionary"></a>:</p>
 <div id="fig-page-dictionary"> <code>page</code> - the python dictionary that is piped into every template
-<pre class="codehilite">
-page = {
-  'template': 'default.haml',  # name of template file
-  'filename': fname,  # name of markdown file
-  'modified': os.path.getmtime(fname),  # unix time number of file  
-  'checksum': '', # checksum used to check final output to avoid redundant writes
-  'excerpt': '', # text to put in excerpt, no tags please!
-  'content': '',  # main text of article
-  'title': '',  # title for indexing and for large display
-  'category': '',  # category of article for indexing 
-  'rel_site_url': '',  # the top site directory relative to this page
-  'date': None,  # published date
-  'slug': None,  # url-safe name of article used to make url and files
-  'url': '',   # relative url used for links in index files
-  'target': '',    # target filename, maybe different to url due to redirection
-  'index': False,   # indicates if this is an indexing page
-  'sort_key': None,  # the field on which to sort under in indexing
-  'sort_reverse': True,  # ascending or descing order for sorting
-  'subpages': [],   # in indexing, pages belonging to the index placed here
-  'max_subpages': None,  # a maximum limit of files to put in subpages
-}
-</pre>
+<pre><code>let defaultPage = {
+  template: &apos;default.pug&apos;,  // name of template file
+  filename: null,  // name of markdown file
+  checksum: &apos;&apos;, // checksum used to check final output to avoid redundant writes
+  excerpt: &apos;&apos;, // text to put in excerpt, no tags please!
+  content: &apos;&apos;,  // main text of article
+  title: &apos;&apos;,  // title for indexing and for large display
+  category: &apos;&apos;,  // category of article for indexing
+  relSiteUrl: &apos;&apos;,  // the top site directory relative to this page
+  dateFormatString: null, // dateFormat formatting string
+  date: null,  // published date
+  slug: null,  // url-safe name of article used to make url and files
+  url: &apos;&apos;,   // relative url used for links in index files
+  target: &apos;&apos;,    // target filename, maybe different to url due to redirection
+  index: false,   // indicates if this is an indexing page
+  sortKey: null,  // the field on which to sort under in indexing
+  sortReverse: true,  // ascending or descing order for sorting
+  subpages: [],   // in indexing, pages belonging to the index placed here
+  maxSubpages: null,  // a maximum limit of files to put in subpages
+};
+</code></pre>
 </div>
-
-<p>This relevant fields in the <code>page</code> dictionary is then overriden by the YAML header of the corresponding source file. </p>
-<p>In a <code>jinja2-haml</code> template, these fields are accessible in the form of:</p>
-<div class="codehilite"><pre>{{ page.title }}
-</pre></div>
-
-
+<p>This relevant fields in the <code>page</code> dictionary is then overriden by the YAML header of the corresponding source file.</p>
+<p>In a <code>pug</code> template, these fields are accessible in the form of:</p>
+<pre><code>#{ page.title }
+</code></pre>
 <p>In particular, dates are converted to standard Python datetime objects, and can be passed into the jinja templates by calling the datetime string method:</p>
-<div class="codehilite"><pre>{{ page.date.strftime(&quot;%d %b %Y&quot;) }}
-</pre></div>
-
-
+<pre><code>#{ page.date }
+</code></pre>
 <p>If excerpts are not given, <code>page.excerpt</code> is set to the first 50 non-tag words in the main text.</p>
 <h3>Filenames and Directory Structure</h3>
-<p>Two design principles of <code>embellish</code> is that it lets you determine the URL and file placement as much as possible, and that relative URLs should work. No matter what, <code>page.target</code> will contain the filename of the target HTML file, which is written in the <code>site.output_dir</code> directory. If <code>page.url</code> or <code>page.target</code> are specified, these will be used.</p>
-<p>Most of the time <code>page.url</code> will match <code>page.target</code>. If <code>page.url</code> is not specified, then it is assumed that the path of the markdown file with respect to the <code>site.content_dir</code> represents the <code>page.url</code> and the <code>page.target</code>. In flat-file mode, this means the <code>.html</code> file will appear in the same directory as the markdown file. </p>
+<p>Two design principles of <code>embellish</code> is that it lets you determine the URL and file placement as much as possible, and that relative URLs should work. No matter what, <code>page.target</code> will contain the filename of the target HTML file, which is written in the <code>site.outputDir</code> directory. If <code>page.url</code> or <code>page.target</code> are specified, these will be used.</p>
+<p>Most of the time <code>page.url</code> will match <code>page.target</code>. If <code>page.url</code> is not specified, then it is assumed that the path of the markdown file with respect to the <code>site.contentDir</code> represents the <code>page.url</code> and the <code>page.target</code>. In flat-file mode, this means the <code>.html</code> file will appear in the same directory as the markdown file.</p>
 <p>A common exception to this are index.html files in subdirectories. Because browsers default to <code>dir/</code> for <code>dir/index.html</code>, a useful motif in the header for <code>index.html</code> files is:</p>
-<div class="codehilite"><pre>url: archive/
+<pre><code>url: archive/
 target: archive/index.html
-</pre></div>
-
-
+</code></pre>
 <p>Two other fields need to be mentioned. Sometimes legitimate filenames cannot serve as URLs, so a conversion is done to turn the basename of the filename into a <code>page.slug</code>. This can be directly overriden if the <code>page.slug</code> field is given.</p>
 <p>Finally, the extension of the output files are normally assumed to be <code>.html</code> but this can be overriden in <code>site.ext</code> in the configuration file.</p>
 <h3>Absolute &amp; Relative URLs</h3>
-<p>To reiterate, the site's URL is given in:</p>
+<p>To reiterate, the site&apos;s URL is given in:</p>
 <ol>
-<li>an absolute form {{ site.url }}</li>
-<li>a relative form, relative to the page {{ page.rel_site_url }}</li>
+<li>an absolute form <code>#{site.url}</code></li>
+<li>a relative form, relative to the page <code>#{page.relSiteurl}</code></li>
 </ol>
 <p>Where for instance if <code>embellish</code> was run in the current directory, and so is the file, then:</p>
-<div class="codehilite"><pre>page.rel_site_url = &#39;&#39;
-</pre></div>
-
-
-<p>The page's URL is thus a combination of the site URL and the page's relative URL:</p>
+<pre><code>page.relSiteurl = &apos;&apos;
+</code></pre>
+<p>The page&apos;s URL is thus a combination of the site URL and the page&apos;s relative URL:</p>
 <ol>
-<li>absolute: {{ site.url }}/{{ page.url }}</li>
-<li>relative {{ page.rel_site_url }}/{{ page.url }}</li>
+<li>absolute: <code>`${site.url }/${ page.url}`</code></li>
+<li>relative <code>`${page.relSiteurl}/${ page.url}`</code></li>
 </ol>
-      <div class='timestamp'>
-        <a href="http://github.com/boscoh/supplescroll">supplescroll</a>:<i>night</i> theme
-      </div>
-    </div>
-  </div>
-  <div id='figure-list' class='touchscroll'></div>
-</body>
-<script src='jquery-2.0.3.js' type='text/javascript'></script>
-<script src='jquery.scrollTo.js' type='text/javascript'></script>
-<script src='supplescroll.js' type='text/javascript'></script>
-<script src='page.js' type='text/javascript'></script>
+
+<script src="supplescroll.min.js"></script></body>
+</html>

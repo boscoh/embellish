@@ -1,0 +1,182 @@
+/* document fonts */
+body {
+  background-color: #fcfcfc;
+  font-family: "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5em;
+  color: #404040; }
+
+blockquote {
+  font-family: "Incosolata", "Consolata", "Monaco", monospace;
+  font-size: 12px;
+  line-height: 1.5em;
+  border-left: 5px solid #CCC;
+  margin-left: 0;
+  padding-left: 0.8em;
+  color: #888; }
+
+a {
+  text-decoration: none; }
+  a:link {
+    color: #2980b9; }
+  a:visited {
+    color: #9b59b6; }
+
+h1, h2, h3, h3, h4, h5, h6, h7 {
+  font-family: "Roboto Slab", "ff-tisa-web-pro", "Georgia", Arial, sans-serif;
+  font-size: 16px;
+  text-transform: uppercase;
+  margin: 0;
+  padding-top: 1.5em;
+  padding-bottom: 0em;
+  font-weight: bold;
+  line-height: 1.2em; }
+
+hr {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border: 0px;
+  background: 0;
+  border-top: 1px solid #CCC;
+  height: 1px; }
+
+h1 {
+  font-size: 30px; }
+
+h1:first-of-type {
+  padding-top: 0; }
+
+h2 {
+  font-size: 16px; }
+
+code {
+  padding: 1px 4px; }
+
+pre {
+  padding: 5px 20px; }
+
+pre code {
+  border: 0px; }
+
+code, pre {
+  overflow: auto;
+  font-family: "Incosolata", "Consolata", "Monaco", monospace;
+  background-color: #FFF;
+  border: 1px solid #CCC;
+  border-radius: 5px;
+  color: #888;
+  font-size: 12px;
+  line-height: 1.5em; }
+
+#navbar, #table-of-contents, #main-text, #figure-list {
+  border: 0px; }
+
+#navbar {
+  font-family: "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  font-weight: normal;
+  letter-spacing: 0.1em;
+  background-color: #2980b9;
+  text-align: left;
+  padding: 10px 20px; }
+  #navbar, #navbar a:link, #navbar a:visited {
+    color: #fcfcfc; }
+
+#table-of-contents {
+  padding-top: 25px;
+  background-color: #343131;
+  padding-top: 0;
+  padding-bottom: 0; }
+  #table-of-contents .toc {
+    padding-top: 1em; }
+    #table-of-contents .toc h1, #table-of-contents .toc h2, #table-of-contents .toc h3, #table-of-contents .toc h4, #table-of-contents .toc h5, #table-of-contents .toc h6, #table-of-contents .toc h7 {
+      font-family: "Lato", "proxima-nova", "Helvetica Neue", Arial, sans-serif;
+      font-size: 12px;
+      text-transform: none;
+      font-weight: normal;
+      letter-spacing: 0.1em;
+      color: #b3b3b3;
+      line-height: 1.2em; }
+    #table-of-contents .toc h1, #table-of-contents .toc h2 {
+      margin-top: 4px;
+      line-height: 1.2em; }
+    #table-of-contents .toc a.active {
+      background-color: #5C5A5A; }
+
+#main-text {
+  padding-top: 25px; }
+  #main-text a.figlink.active {
+    padding: 4px 0px;
+    background-color: #EEF; }
+  #main-text .timestamp {
+    margin-top: 6em;
+    text-align: right;
+    border-top: 1px solid #CCC; }
+  #main-text .fig-in-text {
+    font-size: 12px;
+    text-transform: none;
+    font-weight: normal;
+    line-height: 1.2em;
+    letter-spacing: 0.1em;
+    background-color: #E8E8FF;
+    padding: 10px 10px; }
+    #main-text .fig-in-text code, #main-text .fig-in-text pre {
+      font-size: 12px;
+      text-transform: none; }
+    #main-text .fig-in-text a, #main-text .fig-in-text a:link, #main-text .fig-in-text a:visited {
+      color: #99A; }
+    #main-text .fig-in-text img {
+      padding-top: 10px;
+      display: block; }
+    #main-text .fig-in-text pre, #main-text .fig-in-text code {
+      border: 1px solid #BBC;
+      background-color: #EEF; }
+
+#figure-list {
+  background-color: #edf0f2; }
+  #figure-list .fig-in-figlist {
+    font-size: 12px;
+    text-transform: none;
+    font-weight: normal;
+    line-height: 1.2em;
+    letter-spacing: 0.1em; }
+    #figure-list .fig-in-figlist code, #figure-list .fig-in-figlist pre {
+      font-size: 12px;
+      text-transform: none; }
+    #figure-list .fig-in-figlist a, #figure-list .fig-in-figlist a:link, #figure-list .fig-in-figlist a:visited {
+      color: #99A; }
+    #figure-list .fig-in-figlist img {
+      padding-top: 10px;
+      display: block; }
+    #figure-list .fig-in-figlist.active {
+      background-color: #E8E8FF; }
+      #figure-list .fig-in-figlist.active pre, #figure-list .fig-in-figlist.active code {
+        border: 1px solid #BBC;
+        background-color: #EEF; }
+  #figure-list code, #figure-list pre {
+    background-color: #F8F8F8; }
+  #figure-list .reference {
+    line-height: 1.2em;
+    margin-bottom: 0.4em;
+    text-indent: -1em;
+    margin-left: 1em; }
+
+pre code,
+#figure-list .fig-in-figlist pre code,
+#figure-list .fig-in-figlist.active pre code,
+#main-text .fig-in-text pre code {
+  border: 0px; }
+
+@media (max-width: 1200px) {
+  #main-text {
+    padding-left: 15px;
+    padding-right: 15px; }
+
+  h1 {
+    font-size: 25px; } }
+@media (max-width: 480px) {
+  h1 {
+    font-size: 20px;
+    margin-top: 70px; } }
+
+/*# sourceMappingURL=sphinx.css.map */

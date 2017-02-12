@@ -20,21 +20,20 @@ html, body {
   position: relative;
 }
 
+pre {
+  border: 1px solid #AAA;
+  padding: 10px 20px;
+  overflow: auto;
+}
+
 .toc h1, .toc h2, .toc h3, .toc h4, .toc h5, .toc h6, .toc h7 {
   font-size: 1em;
   padding: 0;
   margin: 0;
-  font-weight: normal;
-  letter-spacing: 0.1em;
-  line-height: 1.2em;
-  text-transform: none;
 }
 .toc h1 {
-  text-transform: uppercase;
-  padding-top: 0.5em;
 }
 .toc h2 {
-  padding-top: 0.5em;
 }
 .toc h3 {
   padding-left: 0.5em;
@@ -53,19 +52,23 @@ html, body {
 }
 .toc a, .toc a:visited {
   display: block;
-  padding: 3px 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
   text-decoration: none;
   color: #333;
 }
-.toc a.active {
+.active {
   background-color: #CECEF6;
+}
+.toc a.active {
+  margin-left: -20px;
+  padding-left: 20px;
+  margin-right: -50px;
+  padding-right: 50px;
 }
 
 a.figlink {
   text-decoration: none;
-}
-a.figlink.active {
-  background-color: #CECEF6;
 }
 a.figlink.active:link, a.figlink.active:visited {
   color: #339;
@@ -73,7 +76,13 @@ a.figlink.active:link, a.figlink.active:visited {
 
 .fig-in-text {
   display: none;
-  padding: 20px 20px 10px 20px;
+  padding: 20px 50px 10px 20px;
+  margin-left: -20px;
+  margin-right: -50px;
+  border-top: 1px solid #AAA;
+  border-bottom: 1px solid #AAA;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 .fig-in-text img {
   display: block;
@@ -81,12 +90,17 @@ a.figlink.active:link, a.figlink.active:visited {
   padding-bottom: 10px;
   width: 100%;
 }
+.fig-in-text img.inline-graphic {
+  display: inline;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  width: '';
+}
 
 .fig-in-figlist {
-  padding: 20px 20px 10px 20px;
+  padding: 20px 50px 10px 20px;
 }
 .fig-in-figlist .active {
-  background-color: #CECEF6;
   color: #339;
 }
 .fig-in-figlist a {
@@ -96,4 +110,66 @@ a.figlink.active:link, a.figlink.active:visited {
   display: block;
   padding-top: 10px;
   padding-bottom: 10px;
+}
+.fig-in-figlist img.inline-graphic {
+  display: inline;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  width: '';
+}
+
+#figure-list .fig-in-figlist {
+  padding: 20px 50px 20px 20px;
+}
+
+#divider1, #divider2 {
+  position: absolute;
+  z-index: 100;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#table-of-contents, #main-text, #figure-list {
+  position: absolute;
+  height: 100%;
+  overflow: auto;
+}
+
+#table-of-contents {
+  padding: 20px 50px 0px 20px;
+  border-right: 1px solid #AAA;
+}
+
+#main-text {
+  padding-left: 20px;
+  padding-right: 50px;
+  border-right: 1px solid #AAA;
+}
+
+#navbar {
+  position: absolute;
+  overflow: hidden;
+  width: 100%;
+  white-space: nowrap;
+  border-bottom: 1px solid #AAA;
+  padding: 10px 0px 10px 20px;
+  line-height: 2em;
+  height: 2em;
+}
+
+#toc-trigger {
+  font-size: 2em;
+  float: left;
+  cursor: pointer;
+  margin-right: 1em;
+}
+
+@media (max-width: 480px) {
+  .fig-in-text {
+    display: block;
+  }
 }
