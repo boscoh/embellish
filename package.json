@@ -2,6 +2,7 @@
   "name": "embellish",
   "version": "2.0.0-alpha",
   "author": "Bosco Ho <apposite@gmail.com (http://boscoh.com/)",
+  "repository": "https://github.com/boscoh/embellish",
   "license": "MIT",
   "bin": {
     "embellish": "embellish.js"
