@@ -1,5 +1,5 @@
 
-# Embellish
+# Embellij
 
 _a lightweight static website generator_
 
@@ -12,26 +12,40 @@ Docs at <http://boscoh.github.io/embellish>
 
 Other generators dictate your directories to be structured their way. `embellish` does not. Go to the `embellish` directory and type:
 
-    > embellish -m .
+    > embellij -r .
 
 Boom! 
 
 `readme.html` is generated and opened in a browser. Now edit `readme.md`, save, and refresh the browser.
 
 
+## Modules
+
+- uses `commonmark` to translate your markdown.
+- `yaml` front-matter to store meta-data
+- `pug` templates to generate HTML files.
+
 ## Installation
 
 To install:
 
-    pip install embellish
+    npm install embellij
 
-Python depencencies should be automatically installed. 
-
-But if you want them manually, they are: `markdown`, `pyyaml`, `python-dateutil`, `jinja2`, `hamlpy`, `jinja2-hamlpy`, `flask` & `sassin`
-
+## Todo
+- modified files check to save files
+- modified file check for media transfers
+- keep track of templates and modifications
+- add a watcher for processing
 
 ## Changelog
 
+- 1.0 5/2/2017
+    - translated to javascript 
+    - ES2015
+    - pug templates
+    - commonmark
+    - simplified architecture 
+    - standard yaml front-matter
 - 0.9.7
     - added single file mode 
     - docstring cleanup
@@ -39,5 +53,3 @@ But if you want them manually, they are: `markdown`, `pyyaml`, `python-dateutil`
 - 0.9.6
     - added force option
     - fixed help for recursive option
-
-
