@@ -50,7 +50,7 @@ The project is hosted at [github](https://github.com/boscoh/embellish).
 
 Have `node` installed? Then:
 
-	  > npm install -g embellish
+	  > npm install -g embellishjs
 
 Or install manually using the [zip file](https://github.com/boscoh/embellish/archive/master.zip):
 
