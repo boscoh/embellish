@@ -7,7 +7,6 @@ _a lightweight static website generator_
 
 Docs at <http://boscoh.github.io/embellish>
 
-
 ## Quick & Dirty Websites
 
 Other generators dictate your directories to be structured their way. `embellish` does not. Go to the `embellish` directory and type:
@@ -18,18 +17,17 @@ Boom!
 
 `readme.html` is generated and opened in a browser. Now edit `readme.md`, save, and refresh the browser.
 
-
 ## Modules
 
-- uses `commonmark` to translate your markdown.
+- `commonmark` to translate markdown - allows markdown in html tags!
 - `yaml` front-matter to store meta-data
-- `pug` templates to generate HTML files.
+- `pug` templates to generate HTML files and RSS feeds
 
 ## Installation
 
 To install:
 
-    npm install embellish
+    npm install embellishjs
 
 ## Todo
 - modified file check for media transfers
@@ -38,7 +36,8 @@ To install:
 ## Changelog
 
 - 2.0.0-beta 16/2/2017
-    - added watch and static server
+    - added watch
+    - added static server
 - 2.0.0-alpha 5/2/2017
     - translated to javascript ES2015
     - pug templates - much better templating system than pyhaml, different templating language

@@ -240,6 +240,7 @@ function getTemplateDir(page, site) {
 
 function writePages(site) {
   let nSkip = 0;
+
   for (let page of site.pages) {
     let dateFormatString = site.dateFormatString;
     if (page.dateFormatString) {
@@ -277,7 +278,6 @@ function writePages(site) {
     fs.ensureDirSync(path.dirname(outHtml));
     fs.writeFileSync(outHtml, text);
     page.writeTime = getModifiedDate(outHtml);
-
   }
 
   if (nSkip) {
