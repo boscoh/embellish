@@ -34,8 +34,6 @@ To install:
 ## Todo
 - modified file check for media transfers
 - keep track of templates and modifications
-- add a watcher for processing
-- static webserver
 
 ## Changelog
 
