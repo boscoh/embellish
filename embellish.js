@@ -38,6 +38,7 @@ function isFile(f) {
   }
 }
 
+
 function isDirectory(file) {
   try {
     return fs.lstatSync(file).isDirectory();
@@ -47,14 +48,17 @@ function isDirectory(file) {
   }
 }
 
+
 function pprint(name, obj) {
   console.log(name, '=', JSON.stringify(obj, null, 2));
 }
+
 
 function stripExtOfPathname(filename) {
   let n = filename.length - path.extname(filename).length;
   return filename.substring(0, n);
 }
+
 
 function convertUnicodeCharsToHtml(str) {
     let strLength = str.length;
@@ -75,6 +79,7 @@ function convertUnicodeCharsToHtml(str) {
     return result;
 }
 
+
 function getFiles(dir, exts, recursive) {
   let files = [];
   let fileTag;
@@ -89,6 +94,7 @@ function getFiles(dir, exts, recursive) {
   return files;
 }
 
+
 function convertCommonmarkToHtml(text) {
 	let reader = new commonmark.Parser();
 	let writer = new commonmark.HtmlRenderer();
@@ -96,10 +102,12 @@ function convertCommonmarkToHtml(text) {
 	return convertUnicodeCharsToHtml(writer.render(parsed));
 }
 
+
 function getModifiedDate(file) {
   let stats = fs.statSync(file);
   return new Date(stats.mtime);
 }
+
 
 let defaultPage = {
   template: 'default.pug',  // name of template file
@@ -188,6 +196,7 @@ function readPages(site) {
 
 }
 
+
 function generateIndexableSubpages(site) {
   for (let page of site.pages) {
     if (page.index) {
@@ -211,6 +220,7 @@ function generateIndexableSubpages(site) {
   }
 }
 
+
 function getTemplateDir(page, site) {
   let templateDirs = [
     path.dirname(page.filename),
@@ -226,6 +236,7 @@ function getTemplateDir(page, site) {
   }
   return null
 }
+
 
 function writePages(site) {
   let nSkip = 0;
@@ -274,6 +285,7 @@ function writePages(site) {
   }
 }
 
+
 function processSite(site) {
   if (!site.forced &&isFile(site.cachedPages)) {
     console.log(`processSite cachedPages ${site.cachedPages}`);
@@ -294,8 +306,26 @@ function processSite(site) {
 }
 
 
-if (require.main === module) {
+function watchSite(site) {
+  let finalhandler = require('finalhandler');
+  let serveStatic = require('serve-static');
+  let serve = serveStatic(site.outputDir);
 
+  require('http')
+    .createServer(
+      (req, res) => serve(req, res, finalhandler(req, res)))
+    .listen(8000);
+
+  console.log('Serving on http://localhost:8000')
+
+  require("watch").watchTree(
+    site.contentDir, (f) => processSite(site));
+
+  console.log(`Watching files in ${site.contentDir}`);
+}
+
+
+function parseOptions() {
   let knownOpts = {
     site: [String, null],
     recursive: Boolean,
@@ -312,8 +342,16 @@ if (require.main === module) {
 
   if (!parsed.site && parsed.argv.remain.length == 0) {
     console.log(doc);
-    return
+    process.exit();
   }
+
+  return parsed;
+}
+
+
+if (require.main === module) {
+
+  parsed = parseOptions();
 
   let site = {
     url: '', // if '' then use relative urls
@@ -331,14 +369,15 @@ if (require.main === module) {
     force: false, // don't use cache, process all files
   };
 
-  site.recursive = parsed.recursive;
-  site.force = parsed.force;
-
   if (parsed.site) {
     console.log(`Load site config ${parsed.site}`);
     let text = fs.readFileSync(parsed.site, 'utf8')
     _.assign(site, yaml.safeLoad(text))
   }
+
+  // override if set in options
+  site.recursive = parsed.recursive;
+  site.force = parsed.force;
 
   for (let file of parsed.argv.remain) {
     if (isFile(file)) {
@@ -350,29 +389,10 @@ if (require.main === module) {
     }
   }
 
-  if (!parsed.watch) {
-
-    processSite(site);
-
+  if (parsed.watch) {
+    watchSite(site);
   } else {
-
-      let finalhandler = require('finalhandler');
-      let serveStatic = require('serve-static');
-      let serve = serveStatic(site.outputDir);
-      require('http')
-        .createServer(
-          (req, res) => serve(req, res, finalhandler(req, res)))
-        .listen(8000);
-
-      console.log('Serving on http://localhost:8000')
-
-      let watch = require("watch");
-      watch.watchTree(site.contentDir, function(f) {
-        processSite(site);
-      });
-
-      console.log(`Watching files in ${site.contentDir}`);
-
+    processSite(site);
   }
 
 }
