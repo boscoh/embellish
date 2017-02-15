@@ -12,7 +12,7 @@
 const doc = `
 embellish - a static site generator
 
-usage: embellish [-s SITE.yaml] [-r] (markdown | directory)
+usage: embellish [-s SITE.yaml] [-w] [-r] (markdown | directory)
 `;
 
 const fs = require('fs-extra');
@@ -298,12 +298,14 @@ if (require.main === module) {
 
   let knownOpts = {
     site: [String, null],
-    recursive: Boolean
+    recursive: Boolean,
+    watch: Boolean,
   };
 
   let shortHands = {
     r: ["--recursive"],
-    s: ["--site"]
+    s: ["--site"],
+    w: ["--watch"],
   };
 
   let parsed = nopt(knownOpts, shortHands, process.argv, 2);
@@ -348,7 +350,30 @@ if (require.main === module) {
     }
   }
 
-  processSite(site);
+  if (!parsed.watch) {
+
+    processSite(site);
+
+  } else {
+
+      let finalhandler = require('finalhandler');
+      let serveStatic = require('serve-static');
+      let serve = serveStatic(site.outputDir);
+      require('http')
+        .createServer(
+          (req, res) => serve(req, res, finalhandler(req, res)))
+        .listen(8000);
+
+      console.log('Serving on http://localhost:8000')
+
+      let watch = require("watch");
+      watch.watchTree(site.contentDir, function(f) {
+        processSite(site);
+      });
+
+      console.log(`Watching files in ${site.contentDir}`);
+
+  }
 
 }
 

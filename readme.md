@@ -39,7 +39,7 @@ To install:
 
 ## Changelog
 
-- 2.0.0-alpha 5/2/2017
+- 2.0.0-beta 5/2/2017
     - translated to javascript ES2015
     - pug templates - much better templating system than pyhaml, different templating language
     - commonmark - allows markdown in <div> tags
@@ -47,6 +47,7 @@ To install:
     - standard yaml front-matter - different template semantics
     - removed lots of pre-processing from the python version
     - use file comparison for efficent caching
+    - added watch and static server
 - 0.9.7
     - added single file mode 
     - docstring cleanup
