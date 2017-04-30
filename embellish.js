@@ -148,7 +148,7 @@ function readPages(site) {
   site.pages = [];
 
   let nSkip = 0;
-  console.log(`readSiteFiles ${site.files.length}`);
+  console.log(`readPages ${site.files.length}`);
   for (let file of site.files) {
 
     let page = _.cloneDeep(defaultPage);
@@ -351,7 +351,7 @@ function parseOptions() {
 
 if (require.main === module) {
 
-  parsed = parseOptions();
+  let parsed = parseOptions();
 
   let site = {
     url: '', // if '' then use relative urls
@@ -375,9 +375,12 @@ if (require.main === module) {
     _.assign(site, yaml.safeLoad(text))
   }
 
-  // override if set in options
-  site.recursive = parsed.recursive;
-  site.force = parsed.force;
+  if (!_.isUndefined(parsed.recursive)) {
+    site.recursive = parsed.recursive;
+  }
+  if (!_.isUndefined(parsed.force)) {
+    site.recursive = parsed.force;
+  }
 
   for (let file of parsed.argv.remain) {
     if (isFile(file)) {
