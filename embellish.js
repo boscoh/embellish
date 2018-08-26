@@ -240,8 +240,10 @@ function writePages(site) {
       let writeTime = getModifiedDate(outHtml);
       if (Date.parse(writeTime) == Date.parse(page.writeTime)) {
         if (Date.parse(writeTime) >= Date.parse(page.modified)) {
-          nSkip += 1;
-          continue;
+          if (!page.index) {
+            nSkip += 1;
+            continue;
+          }
         }
       }
     }
