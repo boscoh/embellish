@@ -27,9 +27,24 @@ const yaml = require("js-yaml");
 const dateFormat = require("dateformat");
 const yamlFront = require("yaml-front-matter");
 
-const commonmark = require("commonmark");
-let reader = new commonmark.Parser();
-let writer = new commonmark.HtmlRenderer();
+// const commonmark = require("commonmark");
+// let reader = new commonmark.Parser();
+// let writer = new commonmark.HtmlRenderer();
+// let render = text => writer.render(reader.parse(text))
+
+const hljs = require('highlight.js')
+const md = require('markdown-it')({
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(lang, str).value;
+      } catch (__) {}
+    }
+
+    return ''; // use external default escaping
+  }
+})
+let render = text => md.render(text)
 
 function isFile(f) {
   try {
@@ -89,11 +104,6 @@ function getFiles(dir, exts, recursive) {
   return files;
 }
 
-function convertCommonmarkToHtml(text) {
-  let html = writer.render(reader.parse(text))
-  return convertUnicodeCharsToHtml(html);
-}
-
 function getModifiedDate(file) {
   let stats = fs.statSync(file);
   return new Date(stats.mtime);
@@ -148,7 +158,9 @@ function readPages(site) {
     let modified = getModifiedDate(file);
     if (Date.parse(modified) != Date.parse(page.modified)) {
       _.assign(page, yamlFront.loadFront(file, "content"));
-      page.content = convertCommonmarkToHtml(page.content);
+      let markdown = page.content
+      let html = convertUnicodeCharsToHtml(render(markdown))
+      page.content = html
       page.modified = modified;
     } else {
       nSkip += 1;
