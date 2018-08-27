@@ -27,11 +27,6 @@ const yaml = require("js-yaml");
 const dateFormat = require("dateformat");
 const yamlFront = require("yaml-front-matter");
 
-// const commonmark = require("commonmark");
-// let reader = new commonmark.Parser();
-// let writer = new commonmark.HtmlRenderer();
-// let render = text => writer.render(reader.parse(text))
-
 const hljs = require('highlight.js')
 const md = require('markdown-it')({
   highlight: function (str, lang) {

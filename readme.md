@@ -35,6 +35,10 @@ To install:
 
 ## Changelog
 
+- 27/8/2018
+    - fixed bug with double-rendering of md -> html
+    - static syntax highlight.js with markdown-it
+    - always compile index pages (otherwise doesn't pick up changes)
 - 2.0.0-beta 16/2/2017
     - added watch
     - added static server
